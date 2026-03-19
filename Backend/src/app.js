@@ -7,15 +7,8 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
-const allowedOrigins = ["http://localhost:5175", "https://interview-myai.vercel.app/"]
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error("Not allowed by CORS"))
-        }
-    },
+    origin: true,
     credentials: true
 }))
 
