@@ -16,7 +16,7 @@ export const useAuth = () => {
             const data = await login({ email, password })
             if(data && data.user) setUser(data.user)
         } catch (err) {
-
+            throw err
         } finally {
             setLoading(false)
         }
@@ -28,7 +28,7 @@ export const useAuth = () => {
             const data = await register({ username, email, password })
             if(data && data.user) setUser(data.user)
         } catch (err) {
-
+            throw err
         } finally {
             setLoading(false)
         }
