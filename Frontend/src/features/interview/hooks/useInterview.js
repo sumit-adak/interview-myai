@@ -2,6 +2,7 @@ import { getAllInterviewReports, generateInterviewReport, getInterviewReportById
 import { useCallback, useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
+import html2pdf from "html2pdf.js"
 
 
 export const useInterview = () => {
@@ -65,35 +66,33 @@ export const useInterview = () => {
 
     const getResumePdf = useCallback(async (interviewReportId) => {
         setLoading(true)
-        // Open window synchronously to avoid popup blockers
-        const newWindow = window.open("", "_blank", "width=800,height=900");
-        if (newWindow) {
-            newWindow.document.write("<h2>Generating Resume PDF, please wait...</h2>");
-        } else {
-            alert("Please allow popups to download the resume.");
-        }
 
         try {
             const htmlResponse = await generateResumePdf({ interviewReportId })
             
-            if (newWindow && !newWindow.closed) {
-                newWindow.document.open();
-                newWindow.document.write(htmlResponse);
-                newWindow.document.close();
-                
-                // Wait for any styling to load before prompting print dialog
-                setTimeout(() => {
-                    if (!newWindow.closed) newWindow.print();
-                }, 1000);
-            }
+            const element = document.createElement('div');
+            element.innerHTML = htmlResponse;
+            // Prevent it from affecting the page layout
+            element.style.position = 'absolute';
+            element.style.left = '-9999px';
+            document.body.appendChild(element);
+
+            const opt = {
+                margin:       10,
+                filename:     `resume_${interviewReportId}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            await html2pdf().set(opt).from(element).save();
+
+            // Cleanup
+            document.body.removeChild(element);
+
         } catch (error) {
             console.log(error)
-            if (newWindow && !newWindow.closed) {
-                newWindow.document.open();
-                newWindow.document.write("<h2 style='color:red; font-family: sans-serif; padding: 20px;'>Failed to generate resume. Please try again.</h2>");
-                newWindow.document.close();
-            }
-            throw error
+            alert("Failed to download resume. Please try again.")
         } finally {
             setLoading(false)
         }
