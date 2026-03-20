@@ -65,21 +65,32 @@ export const useInterview = () => {
 
     const getResumePdf = useCallback(async (interviewReportId) => {
         setLoading(true)
+        // Open window synchronously to avoid popup blockers
+        const newWindow = window.open("", "_blank", "width=800,height=900");
+        if (newWindow) {
+            newWindow.document.write("<h2>Generating Resume PDF, please wait...</h2>");
+        } else {
+            alert("Please allow popups to download the resume.");
+        }
+
         try {
             const htmlResponse = await generateResumePdf({ interviewReportId })
             
-            // Open string into a new window and let the browser print it to PDF!
-            const newWindow = window.open("", "_blank");
-            newWindow.document.write(htmlResponse);
-            newWindow.document.close();
-            
-            // Wait for any styling to load before prompting print dialog
-            setTimeout(() => {
-                newWindow.print();
-            }, 500);
-
+            if (newWindow) {
+                newWindow.document.open();
+                newWindow.document.write(htmlResponse);
+                newWindow.document.close();
+                
+                // Wait for any styling to load before prompting print dialog
+                setTimeout(() => {
+                    newWindow.print();
+                }, 1000);
+            }
         } catch (error) {
             console.log(error)
+            if (newWindow) {
+                newWindow.document.body.innerHTML = "<h2 style='color:red;'>Failed to generate resume. Please try again.</h2>";
+            }
             throw error
         } finally {
             setLoading(false)
