@@ -13,9 +13,21 @@ const Home = () => {
     const navigate = useNavigate()
 
     const handleGenerateReport = async () => {
-        const resumeFile = resumeInputRef.current.files[ 0 ]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-        navigate(`/interview/${data._id}`)
+        const resumeFile = resumeInputRef.current?.files?.[ 0 ]
+        if (!jobDescription || (!selfDescription && !resumeFile)) {
+            alert("Please provide a job description and either a resume or self description.");
+            return;
+        }
+        try {
+            const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+            if (data?._id) {
+                navigate(`/interview/${data._id}`)
+            } else {
+                alert("Failed to generate report. Please try again.")
+            }
+        } catch (error) {
+            alert(error?.response?.data?.message || "Something went wrong")
+        }
     }
 
     if (loading) {

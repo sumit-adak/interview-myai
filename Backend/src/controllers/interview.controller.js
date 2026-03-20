@@ -7,32 +7,31 @@ const interviewReportModel = require("../models/interviewReport.model");
  */
 async function generateInterViewReportController(req, res) {
     try {
-        // ✅ Check file
-        if (!req.file) {
+        const { selfDescription, jobDescription } = req.body;
+
+        if (!jobDescription) {
             return res.status(400).json({
-                message: "Resume file is required"
+                message: "jobDescription is required"
+            });
+        }
+
+        if (!req.file && !selfDescription) {
+            return res.status(400).json({
+                message: "Either a Resume file or selfDescription is required"
             });
         }
 
         // ✅ Parse PDF
-        const pdfData = await pdfParse(req.file.buffer);
-
-        // ✅ Extract text
-        const resumeText = pdfData.text;
-
-        // ✅ Get body data
-        const { selfDescription, jobDescription } = req.body;
-
-        if (!selfDescription || !jobDescription) {
-            return res.status(400).json({
-                message: "selfDescription and jobDescription are required"
-            });
+        let resumeText = "";
+        if (req.file) {
+            const pdfData = await pdfParse(req.file.buffer);
+            resumeText = pdfData.text;
         }
 
         // ✅ Generate AI report
         const aiResponse = await generateInterviewReport({
             resume: resumeText,
-            selfDescription,
+            selfDescription: selfDescription || "",
             jobDescription
         });
 
