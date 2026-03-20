@@ -8,9 +8,16 @@ const Home = () => {
     const { loading, generateReport,reports } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
+    const [ jobCharCount, setJobCharCount ] = useState(0)
     const resumeInputRef = useRef()
 
     const navigate = useNavigate()
+
+    const handleJobDescriptionChange = (e) => {
+        const text = e.target.value
+        setJobDescription(text)
+        setJobCharCount(text.length)
+    }
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current?.files?.[ 0 ]
@@ -61,12 +68,12 @@ const Home = () => {
                             <span className='badge badge--required'>Required</span>
                         </div>
                         <textarea
-                            onChange={(e) => { setJobDescription(e.target.value) }}
+                            onChange={handleJobDescriptionChange}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
                         />
-                        <div className='char-counter'>0 / 5000 chars</div>
+                        <div className='char-counter'>{jobCharCount} / 5000 chars</div>
                     </div>
 
                     {/* Vertical Divider */}
