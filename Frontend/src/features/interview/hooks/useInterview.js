@@ -70,25 +70,19 @@ export const useInterview = () => {
         try {
             const htmlResponse = await generateResumePdf({ interviewReportId })
             
-            const element = document.createElement('div');
-            element.innerHTML = htmlResponse;
-            // Prevent it from affecting the page layout
-            element.style.position = 'absolute';
-            element.style.left = '-9999px';
-            document.body.appendChild(element);
+            // Sometimes AI wraps the HTML string in markdown ```html ... ``` blocks. Strip them.
+            const cleanHtml = htmlResponse.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
 
             const opt = {
                 margin:       10,
                 filename:     `resume_${interviewReportId}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            await html2pdf().set(opt).from(element).save();
-
-            // Cleanup
-            document.body.removeChild(element);
+            // html2pdf accepts a raw HTML string. No need to append to DOM!
+            await html2pdf().set(opt).from(cleanHtml).save();
 
         } catch (error) {
             console.log(error)
