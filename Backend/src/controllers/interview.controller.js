@@ -133,18 +133,17 @@ async function generateResumePdfController(req, res) {
 
         const { resume, jobDescription, selfDescription } = interviewReport;
 
-        const pdfBuffer = await generateResumePdf({
+        const htmlString = await generateResumePdf({
             resume,
             jobDescription,
             selfDescription
         });
 
         res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `attachment; filename=resume_${interviewReportId}.pdf`
+            "Content-Type": "text/html"
         });
 
-        return res.send(pdfBuffer);
+        return res.send(htmlString);
 
     } catch (error) {
         console.error("Error in generateResumePdfController:", error);

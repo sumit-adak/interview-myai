@@ -65,15 +65,19 @@ export const useInterview = () => {
 
     const getResumePdf = useCallback(async (interviewReportId) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateResumePdf({ interviewReportId })
-            const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
-            const link = document.createElement("a")
-            link.href = url
-            link.setAttribute("download", `resume_${interviewReportId}.pdf`)
-            document.body.appendChild(link)
-            link.click()
+            const htmlResponse = await generateResumePdf({ interviewReportId })
+            
+            // Open string into a new window and let the browser print it to PDF!
+            const newWindow = window.open("", "_blank");
+            newWindow.document.write(htmlResponse);
+            newWindow.document.close();
+            
+            // Wait for any styling to load before prompting print dialog
+            setTimeout(() => {
+                newWindow.print();
+            }, 500);
+
         } catch (error) {
             console.log(error)
             throw error

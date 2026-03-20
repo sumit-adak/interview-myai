@@ -57,32 +57,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 
 
-async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch({
-        args: [
-            '--no-sandbox', 
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu'
-        ],
-        headless: true
-    })
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: "load", timeout: 60000 })
-
-    const pdfBuffer = await page.pdf({
-        format: "A4", margin: {
-            top: "20mm",
-            bottom: "20mm",
-            left: "15mm",
-            right: "15mm"
-        }
-    })
-
-    await browser.close()
-
-    return pdfBuffer
-}
+// Removed internal generatePdfFromHtml because cloud hosts like Render lack Chromium libs
 
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
 
@@ -115,9 +90,9 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
 
     const jsonContent = JSON.parse(response.text)
 
-    const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
-
-    return pdfBuffer
+    // Instead of using puppeteer to convert to PDF here which crashes on Render Node Env,
+    // we return the raw HTML so the user's browser can print/save it natively.
+    return jsonContent.html
 
 }
 
