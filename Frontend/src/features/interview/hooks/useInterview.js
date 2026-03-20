@@ -76,20 +76,22 @@ export const useInterview = () => {
         try {
             const htmlResponse = await generateResumePdf({ interviewReportId })
             
-            if (newWindow) {
+            if (newWindow && !newWindow.closed) {
                 newWindow.document.open();
                 newWindow.document.write(htmlResponse);
                 newWindow.document.close();
                 
                 // Wait for any styling to load before prompting print dialog
                 setTimeout(() => {
-                    newWindow.print();
+                    if (!newWindow.closed) newWindow.print();
                 }, 1000);
             }
         } catch (error) {
             console.log(error)
-            if (newWindow) {
-                newWindow.document.body.innerHTML = "<h2 style='color:red;'>Failed to generate resume. Please try again.</h2>";
+            if (newWindow && !newWindow.closed) {
+                newWindow.document.open();
+                newWindow.document.write("<h2 style='color:red; font-family: sans-serif; padding: 20px;'>Failed to generate resume. Please try again.</h2>");
+                newWindow.document.close();
             }
             throw error
         } finally {
