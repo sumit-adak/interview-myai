@@ -54,13 +54,13 @@ const ProgressBar = ({ score }) => {
 
 const Interview = () => {
     const { id } = useParams()
-    const { fetchReportById, activeReport, loading } = useInterview()
+    const { getReportById, report: activeReport, loading } = useInterview()
     const [activeTab, setActiveTab] = useState('technical')
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (id) fetchReportById(id)
-    }, [id])
+        if (id && getReportById) getReportById(id)
+    }, [id, getReportById])
 
     const handleDownloadPdf = () => {
         const element = document.getElementById('report-content')
