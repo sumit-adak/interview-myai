@@ -1,64 +1,130 @@
 import React, { useState } from 'react'
-import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
-import { useParams } from 'react-router'
-
-
+import { useParams, useNavigate } from 'react-router'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '../../../components/ui/button'
+import { Card, CardContent } from '../../../components/ui/card'
+import { MonitorPlay, Users, Map, ChevronDown, DownloadCloud, Sparkles, ChevronLeft } from 'lucide-react'
 
 const NAV_ITEMS = [
-    { id: 'technical', label: 'Technical Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>) },
-    { id: 'behavioral', label: 'Behavioral Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>) },
-    { id: 'roadmap', label: 'Road Map', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>) },
+    { id: 'technical', label: 'Technical Details', icon: <MonitorPlay className="w-5 h-5" /> },
+    { id: 'behavioral', label: 'Behavioral Prep', icon: <Users className="w-5 h-5" /> },
+    { id: 'roadmap', label: 'Preparation Plan', icon: <Map className="w-5 h-5" /> },
 ]
 
-// ── Sub-components ────────────────────────────────────────────────────────────
-const QuestionCard = ({ item, index, isOpen, onToggle }) => (
-    <div className='q-card'>
-        <div className='q-card__header' onClick={onToggle}>
-            <span className='q-card__index'>Q{index + 1}</span>
-            <p className='q-card__question'>{item.question}</p>
-            <span className={`q-card__chevron ${isOpen ? 'q-card__chevron--open' : ''}`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-            </span>
-        </div>
-        {isOpen && (
-            <div className='q-card__body'>
-                <div className='q-card__section'>
-                    <span className='q-card__tag q-card__tag--intention'>Intention</span>
-                    <p>{item.intention}</p>
+const AccordionItem = ({ item, index, isOpen, onToggle, type }) => {
+    return (
+        <Card className={`mb-4 border-white/5 transition-colors overflow-hidden ${isOpen ? (type === 'technical' ? 'border-primary/50 bg-primary/5' : 'border-secondary/50 bg-secondary/5') : 'bg-card/40 hover:bg-white/5 backdrop-blur-sm'}`}>
+            <div 
+                className="p-4 flex items-center justify-between cursor-pointer select-none"
+                onClick={onToggle}
+            >
+                <div className="flex gap-4 items-center pr-8">
+                    <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${type === 'technical' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'}`}>
+                        Q{index + 1}
+                    </div>
+                    <h3 className="text-white font-medium line-clamp-2 md:line-clamp-none leading-tight">{item.question}</h3>
                 </div>
-                <div className='q-card__section'>
-                    <span className='q-card__tag q-card__tag--answer'>Model Answer</span>
-                    <p>{item.answer}</p>
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-180 bg-white/10' : ''}`}>
+                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
                 </div>
             </div>
-        )}
-    </div>
-)
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                        <CardContent className="px-4 pb-4 pt-0 border-t border-white/5 mt-2">
+                            <div className="pt-4 space-y-4">
+                                <div>
+                                    <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset mb-2 ${type === 'technical' ? 'bg-primary/10 text-primary ring-primary/20' : 'bg-secondary/10 text-secondary ring-secondary/20'}`}>
+                                        Intention
+                                    </span>
+                                    <p className="text-sm text-muted-foreground leading-relaxed">{item.intention}</p>
+                                </div>
+                                <div>
+                                    <span className="inline-flex items-center rounded-md bg-white/5 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-white/10 mb-2">
+                                        Model Answer
+                                    </span>
+                                    <p className="text-sm text-white/90 leading-relaxed bg-background/50 p-4 rounded-xl border border-white/5">{item.answer}</p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </Card>
+    )
+}
 
 const RoadMapDay = ({ day }) => (
-    <div className='roadmap-day'>
-        <div className='roadmap-day__header'>
-            <span className='roadmap-day__badge'>Day {day.day}</span>
-            <h3 className='roadmap-day__focus'>{day.focus}</h3>
-        </div>
-        <ul className='roadmap-day__tasks'>
-            {day.tasks.map((task, i) => (
-                <li key={i}>
-                    <span className='roadmap-day__bullet' />
-                    {task}
-                </li>
-            ))}
-        </ul>
-    </div>
+    <Card className="mb-4 border-white/5 bg-card/40 backdrop-blur-sm hover:border-accent/30 transition-colors">
+        <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-4 border-b border-white/5 pb-4">
+                <span className="flex-shrink-0 inline-flex items-center rounded-md bg-accent/10 px-3 py-1 text-sm font-semibold text-accent ring-1 ring-inset ring-accent/20 glow-blue">
+                    Day {day.day}
+                </span>
+                <h3 className="text-lg font-semibold text-white">{day.focus}</h3>
+            </div>
+            <ul className="space-y-3 pl-2">
+                {day.tasks.map((task, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-muted-foreground items-start">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0 glow-blue" />
+                        <span className="leading-relaxed">{task}</span>
+                    </li>
+                ))}
+            </ul>
+        </CardContent>
+    </Card>
 )
 
-// ── Main Component ────────────────────────────────────────────────────────────
+const CircularProgress = ({ value, colorClass, strokeColor }) => {
+    const radius = 60;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (value / 100) * circumference;
+
+    return (
+        <div className="relative flex items-center justify-center w-40 h-40">
+            <svg className="transform -rotate-90 w-40 h-40">
+                <circle
+                    className="text-white/5"
+                    strokeWidth="12"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r={radius}
+                    cx="80"
+                    cy="80"
+                />
+                <circle
+                    className={`${colorClass} transition-all duration-1000 ease-out`}
+                    strokeWidth="12"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    stroke={strokeColor || "currentColor"}
+                    fill="transparent"
+                    r={radius}
+                    cx="80"
+                    cy="80"
+                />
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center">
+                <span className={`text-4xl font-bold ${colorClass.replace('text-', 'text-transparent bg-clip-text bg-gradient-to-br from-white to-')}`}>{value}<span className="text-xl">%</span></span>
+                <span className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">Match</span>
+            </div>
+        </div>
+    )
+}
+
 const Interview = () => {
-    const [ activeNav, setActiveNav ] = useState('technical')
-    const [ openQuestions, setOpenQuestions ] = useState({ technical: null, behavioral: null })
+    const [activeNav, setActiveNav] = useState('technical')
+    const [openQuestions, setOpenQuestions] = useState({ technical: 0, behavioral: 0 })
     const { report, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
+    const navigate = useNavigate()
 
     const toggleQuestion = (idx) => {
         setOpenQuestions(prev => ({
@@ -67,138 +133,159 @@ const Interview = () => {
         }))
     }
 
-    // If we don’t have any report to show, render a fallback.
-    // Prevents `Cannot read properties of null (reading 'matchScore')`.
-    if (!report) {
+    if (!report && loading) {
         return (
-            <main className='loading-screen'>
-                <h1>{loading ? 'Loading your interview plan...' : 'No report found.'}</h1>
-            </main>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+                <div className="relative flex items-center justify-center w-24 h-24 mb-6">
+                    <div className="absolute inset-0 border-4 border-transparent border-t-primary rounded-full animate-spin"></div>
+                    <div className="absolute inset-2 border-4 border-transparent border-r-secondary rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
+                    <div className="absolute inset-4 border-4 border-transparent border-b-accent rounded-full animate-[spin_2s_linear_infinite]"></div>
+                    <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+                </div>
+                <h2 className="text-xl font-bold text-white">Loading Strategy...</h2>
+            </div>
         )
     }
 
-    const scoreColor =
-        report.matchScore >= 80 ? 'score--high' :
-            report.matchScore >= 60 ? 'score--mid' : 'score--low'
+    if (!report && !loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center">
+                <h2 className="text-2xl font-bold text-white mb-2">Report Not Found</h2>
+                <p className="text-muted-foreground mb-6">We couldn't load the strategy for this interview.</p>
+                <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+            </div>
+        )
+    }
 
+    const isHighMatch = report.matchScore >= 80;
+    const isMidMatch = report.matchScore >= 60 && report.matchScore < 80;
+    const scoreColorClass = isHighMatch ? 'text-primary' : isMidMatch ? 'text-secondary' : 'text-accent';
+    const strokeHex = isHighMatch ? '#ff0080' : isMidMatch ? '#7928ca' : '#0070f3';
 
     return (
-        <div className='interview-page'>
-            <div className='interview-layout'>
+        <div className="min-h-screen bg-background text-foreground flex flex-col">
+            {/* Header */}
+            <header className="h-16 flex items-center justify-between px-6 glass sticky top-0 z-40 border-b border-white/5 bg-background/80">
+                <div className="flex items-center gap-4">
+                    <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="rounded-full w-8 h-8 text-muted-foreground hover:text-white bg-white/5">
+                        <ChevronLeft className="w-4 h-4" />
+                    </Button>
+                    <div className="hidden md:flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
+                        <div className="w-6 h-6 rounded-md bg-primary/20 flex items-center justify-center glow-magenta">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                        </div>
+                        <span className="font-bold text-lg text-white">Interview<span className="text-primary">AI</span></span>
+                    </div>
+                </div>
+                <h1 className="text-sm font-semibold text-white/80 line-clamp-1 max-w-sm ml-4 absolute left-1/2 -translate-x-1/2">
+                    {report.title || 'Role Overview'}
+                </h1>
+                <Button variant="outline" size="sm" onClick={() => getResumePdf(interviewId)} className="h-9 px-4 hidden sm:flex">
+                    <DownloadCloud className="w-4 h-4 mr-2" />
+                    Export PDF
+                </Button>
+                <Button variant="outline" size="icon" onClick={() => getResumePdf(interviewId)} className="h-9 w-9 sm:hidden">
+                    <DownloadCloud className="w-4 h-4" />
+                </Button>
+            </header>
 
-                {/* ── Left Nav ── */}
-                <nav className='interview-nav'>
-                    <div className="nav-content">
-                        <p className='interview-nav__label'>Sections</p>
-                        {NAV_ITEMS.map(item => (
+            <main className="flex-1 max-w-[1600px] w-full mx-auto relative flex flex-col lg:flex-row">
+                
+                {/* 1. Left Navigation Sidebar */}
+                <aside className="w-full lg:w-64 lg:border-r border-white/5 p-6 flex flex-col gap-2 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] bg-card/10">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4 pl-2">Strategy Sections</p>
+                    {NAV_ITEMS.map((item) => {
+                        const isActive = activeNav === item.id;
+                        return (
                             <button
                                 key={item.id}
-                                className={`interview-nav__item ${activeNav === item.id ? 'interview-nav__item--active' : ''}`}
                                 onClick={() => setActiveNav(item.id)}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group ${
+                                    isActive 
+                                    ? `bg-white/10 text-white ${item.id==='technical'?'ring-1 ring-primary/30 glow-magenta':item.id==='behavioral'?'ring-1 ring-secondary/30 glow-purple':'ring-1 ring-accent/30 glow-blue'}` 
+                                    : 'text-muted-foreground hover:bg-white/5 hover:text-white'
+                                }`}
                             >
-                                <span className='interview-nav__icon'>{item.icon}</span>
+                                <span className={`transition-transform duration-300 group-hover:scale-110 ${isActive ? (item.id==='technical'?'text-primary':item.id==='behavioral'?'text-secondary':'text-accent') : ''}`}>
+                                    {item.icon}
+                                </span>
                                 {item.label}
                             </button>
-                        ))}
-                    </div>
-                    <button
-                        onClick={() => { getResumePdf(interviewId) }}
-                        className='button primary-button' >
-                        <svg height={"0.8rem"} style={{ marginRight: "0.8rem" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956ZM19.4014 22.6899 19.6482 22.1242C20.0882 21.1156 20.8807 20.3125 21.8695 19.8732L22.6299 19.5353C23.0412 19.3526 23.0412 18.7549 22.6299 18.5722L21.9121 18.2532C20.8978 17.8026 20.0911 16.9698 19.6586 15.9269L19.4052 15.3156C19.2285 14.8896 18.6395 14.8896 18.4628 15.3156L18.2094 15.9269C17.777 16.9698 16.9703 17.8026 15.956 18.2532L15.2381 18.5722C14.8269 18.7549 14.8269 19.3526 15.2381 19.5353L15.9985 19.8732C16.9874 20.3125 17.7798 21.1156 18.2198 22.1242L18.4667 22.6899C18.6473 23.104 19.2207 23.104 19.4014 22.6899Z"></path></svg>
-                        Download Resume
-                    </button>
-                </nav>
+                        )
+                    })}
+                </aside>
 
-                <div className='interview-divider' />
-
-                {/* ── Center Content ── */}
-                <main className='interview-content'>
-                    {activeNav === 'technical' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Technical Questions</h2>
-                                <span className='content-header__count'>{report.technicalQuestions.length} questions</span>
+                {/* 2. Center Content Area */}
+                <div className="flex-1 p-6 lg:p-10 pb-24 overflow-y-auto">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeNav}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="mb-8 border-b border-white/5 pb-6">
+                                <h2 className="text-3xl font-bold text-white mb-2 capitalize">
+                                    {NAV_ITEMS.find(i => i.id === activeNav)?.label}
+                                </h2>
+                                <p className="text-muted-foreground">
+                                    {activeNav === 'technical' && `Core topics and system design questions tailored for ${report.title}.`}
+                                    {activeNav === 'behavioral' && "Questions designed to assess culture fit and previous experience."}
+                                    {activeNav === 'roadmap' && "Your day-by-day action plan to close skill gaps and succeed."}
+                                </p>
                             </div>
-                            <div className='q-list'>
-                                {report.technicalQuestions.map((q, i) => (
-                                    <QuestionCard
-                                        key={i}
-                                        item={q}
-                                        index={i}
-                                        isOpen={openQuestions.technical === i}
-                                        onToggle={() => toggleQuestion(i)}
-                                    />
+
+                            <div className="space-y-4">
+                                {activeNav === 'technical' && report.technicalQuestions.map((q, i) => (
+                                    <AccordionItem key={i} item={q} index={i} isOpen={openQuestions.technical === i} onToggle={() => toggleQuestion(i)} type="technical" />
                                 ))}
-                            </div>
-                        </section>
-                    )}
 
-                    {activeNav === 'behavioral' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Behavioral Questions</h2>
-                                <span className='content-header__count'>{report.behavioralQuestions.length} questions</span>
-                            </div>
-                            <div className='q-list'>
-                                {report.behavioralQuestions.map((q, i) => (
-                                    <QuestionCard
-                                        key={i}
-                                        item={q}
-                                        index={i}
-                                        isOpen={openQuestions.behavioral === i}
-                                        onToggle={() => toggleQuestion(i)}
-                                    />
+                                {activeNav === 'behavioral' && report.behavioralQuestions.map((q, i) => (
+                                    <AccordionItem key={i} item={q} index={i} isOpen={openQuestions.behavioral === i} onToggle={() => toggleQuestion(i)} type="behavioral" />
                                 ))}
-                            </div>
-                        </section>
-                    )}
 
-                    {activeNav === 'roadmap' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Preparation Road Map</h2>
-                                <span className='content-header__count'>{report.preparationPlan.length}-day plan</span>
-                            </div>
-                            <div className='roadmap-list'>
-                                {report.preparationPlan.map((day) => (
+                                {activeNav === 'roadmap' && report.preparationPlan.map((day) => (
                                     <RoadMapDay key={day.day} day={day} />
                                 ))}
                             </div>
-                        </section>
-                    )}
-                </main>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
 
-                <div className='interview-divider' />
-
-                {/* ── Right Sidebar ── */}
-                <aside className='interview-sidebar'>
-
+                {/* 3. Right Sidebar - Score and Analysis */}
+                <aside className="w-full lg:w-80 lg:border-l border-white/5 bg-card/20 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] p-6 lg:p-8 flex flex-col gap-10">
+                    
                     {/* Match Score */}
-                    <div className='match-score'>
-                        <p className='match-score__label'>Match Score</p>
-                        <div className={`match-score__ring ${scoreColor}`}>
-                            <span className='match-score__value'>{report.matchScore}</span>
-                            <span className='match-score__pct'>%</span>
-                        </div>
-                        <p className='match-score__sub'>Strong match for this role</p>
+                    <div className="flex flex-col items-center">
+                        <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6 w-full text-left">Overall Fit</h3>
+                        <CircularProgress value={report.matchScore} colorClass={scoreColorClass} strokeColor={strokeHex} />
+                        <p className="text-sm text-center text-muted-foreground mt-6 font-medium">
+                            {isHighMatch ? "You are a very strong candidate for this role." : isMidMatch ? "You meet the core requirements, focus on your gaps." : "Significant gaps. Dedicated focus required."}
+                        </p>
                     </div>
 
-                    <div className='sidebar-divider' />
-
                     {/* Skill Gaps */}
-                    <div className='skill-gaps'>
-                        <p className='skill-gaps__label'>Skill Gaps</p>
-                        <div className='skill-gaps__list'>
+                    <div>
+                        <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Identified Skill Gaps</h3>
+                        <div className="flex flex-wrap gap-2">
                             {report.skillGaps.map((gap, i) => (
-                                <span key={i} className={`skill-tag skill-tag--${gap.severity}`}>
+                                <span key={i} className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border ${
+                                    gap.severity === 'high' ? 'bg-destructive/10 text-destructive border-destructive/20 glow-magenta' :
+                                    gap.severity === 'medium' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                    'bg-accent/10 text-accent border-accent/20'
+                                }`}>
                                     {gap.skill}
                                 </span>
                             ))}
+                            {report.skillGaps.length === 0 && (
+                                <p className="text-sm text-muted-foreground">No significant skill gaps identified.</p>
+                            )}
                         </div>
                     </div>
 
                 </aside>
-            </div>
+            </main>
         </div>
     )
 }
