@@ -53,15 +53,15 @@ const ProgressBar = ({ score }) => {
 }
 
 const Interview = () => {
-    const { id } = useParams()
+    const { interviewId } = useParams()
     const { getReportById, report: activeReport, loading, getResumePdf } = useInterview()
     const [activeTab, setActiveTab] = useState('technical')
     const [isGeneratingResume, setIsGeneratingResume] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (id && getReportById) getReportById(id)
-    }, [id, getReportById])
+        if (interviewId && getReportById) getReportById(interviewId)
+    }, [interviewId, getReportById])
 
     const handleDownloadPdf = () => {
         const element = document.getElementById('report-content')
@@ -69,7 +69,7 @@ const Interview = () => {
         
         const opt = {
             margin: 1,
-            filename: `interview_strategy_${id}.pdf`,
+            filename: `interview_strategy_${interviewId}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -80,7 +80,7 @@ const Interview = () => {
     const handleGenerateResume = async () => {
         try {
             setIsGeneratingResume(true)
-            await getResumePdf(id)
+            await getResumePdf(interviewId)
         } finally {
             setIsGeneratingResume(false)
         }
