@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../..
 import { 
     Code2, Search, ArrowLeft, Target, Settings, BrainCircuit,
     ChevronDown, Download, AlertCircle, CheckCircle2, ChevronRight,
-    Loader2
+    Loader2, FileText
 } from 'lucide-react'
 import html2pdf from 'html2pdf.js'
 
@@ -54,8 +54,9 @@ const ProgressBar = ({ score }) => {
 
 const Interview = () => {
     const { id } = useParams()
-    const { getReportById, report: activeReport, loading } = useInterview()
+    const { getReportById, report: activeReport, loading, getResumePdf } = useInterview()
     const [activeTab, setActiveTab] = useState('technical')
+    const [isGeneratingResume, setIsGeneratingResume] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -74,6 +75,15 @@ const Interview = () => {
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         }
         html2pdf().set(opt).from(element).save()
+    }
+
+    const handleGenerateResume = async () => {
+        try {
+            setIsGeneratingResume(true)
+            await getResumePdf(id)
+        } finally {
+            setIsGeneratingResume(false)
+        }
     }
 
     if (loading) {
@@ -134,10 +144,19 @@ const Interview = () => {
                     </nav>
                 </div>
 
-                <div className="p-4 border-t border-border sticky bottom-0 bg-card">
+                <div className="p-4 border-t border-border sticky bottom-0 bg-card space-y-2">
+                    <Button 
+                        variant="default" 
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90" 
+                        onClick={handleGenerateResume}
+                        disabled={isGeneratingResume}
+                    >
+                        {isGeneratingResume ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <FileText className="w-4 h-4 mr-2" />}
+                        {isGeneratingResume ? "Optimizing..." : "Download Resume"}
+                    </Button>
                     <Button variant="outline" className="w-full" onClick={handleDownloadPdf}>
                         <Download className="w-4 h-4 mr-2" />
-                        Export PDF
+                        Export Report PDF
                     </Button>
                 </div>
             </aside>
