@@ -3,7 +3,7 @@ import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent } from '../../../components/ui/card'
-import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2 } from 'lucide-react'
+import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight } from 'lucide-react'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Dashboard = () => {
@@ -13,6 +13,7 @@ const Dashboard = () => {
     const [selfDescription, setSelfDescription] = useState("")
     const [isDragging, setIsDragging] = useState(false)
     const [fileName, setFileName] = useState("")
+    const [isRecentExpanded, setIsRecentExpanded] = useState(false)
     const resumeInputRef = useRef()
     const navigate = useNavigate()
 
@@ -70,10 +71,32 @@ const Dashboard = () => {
                         New Evaluation
                     </Button>
                     {reports.length > 0 && (
-                        <Button variant="ghost" className="w-full justify-start font-medium text-muted-foreground">
-                            <History className="mr-2 h-4 w-4" />
-                            Recent Plans ({reports.length})
-                        </Button>
+                        <div className="flex flex-col">
+                            <Button 
+                                variant="ghost" 
+                                className="w-full justify-between font-medium text-muted-foreground"
+                                onClick={() => setIsRecentExpanded(!isRecentExpanded)}
+                            >
+                                <div className="flex items-center">
+                                    <History className="mr-2 h-4 w-4" />
+                                    Recent Plans ({reports.length})
+                                </div>
+                                {isRecentExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                            </Button>
+                            {isRecentExpanded && (
+                                <div className="ml-6 mt-1 flex flex-col gap-1 border-l-2 border-border pl-2">
+                                    {reports.slice(0, 5).map(r => (
+                                        <button 
+                                            key={r._id} 
+                                            onClick={() => navigate(`/interview/${r._id}`)}
+                                            className="text-left text-xs font-medium text-muted-foreground hover:text-foreground py-1.5 px-2 rounded-md hover:bg-muted/50 truncate"
+                                        >
+                                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "Saved Evaluation"} ({r._id?.slice(-4)})
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     )}
                 </nav>
 
