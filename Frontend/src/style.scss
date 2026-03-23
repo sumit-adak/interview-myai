@@ -4,36 +4,36 @@
 
 @layer base {
   :root {
-    /* Subtle Soft Dark Theme based on Slate / Gray */
-    --background: 222.2 84% 4.9%;
+    /* 2025 Modern SaaS Theme (Linear/Vercel inspired) */
+    --background: 221 48% 8%; /* #0b1220 */
     --foreground: 210 40% 98%;
 
-    --card: 222.2 47.4% 11.2%;
+    --card: 221 39% 11%; /* #111827 */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 47.4% 11.2%;
+    --popover: 221 39% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%; /* Blue 600 */
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 221 83% 53%; /* Blue 600 #2563eb */
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 217.2 32.6% 17.5%; /* Slate 800 */
+    --secondary: 215 28% 17%; /* Gray 800 #1f2937 */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 215 16% 65%; /* Gray 400 */
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 215 28% 17%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%; /* Red 500 */
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%; /* Blue 600 focus ring */
+    --border: 217 19% 27%; /* Gray 700 #374151 */
+    --input: 217 19% 27%;
+    --ring: 221 83% 53%; /* Blue 500 equivalent focus ring */
 
-    --radius: 0.5rem; /* Reduced to standard md/lg sizes, no extreme rounding */
+    --radius: 0.75rem; /* rounded-xl baseline */
   }
 }
 

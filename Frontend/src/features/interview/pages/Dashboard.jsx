@@ -54,11 +54,11 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-background text-foreground flex">
-            {/* Standard Sidebar */}
-            <aside className="hidden lg:flex w-64 flex-col border-r border-border bg-card">
+            {/* Formatted Slim Sidebar */}
+            <aside className="hidden lg:flex w-56 flex-col border-r border-border bg-card">
                 <div className="h-16 flex items-center px-6 border-b border-border mb-4">
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
                             <span className="font-bold text-white text-lg">AI</span>
                         </div>
                         <span className="font-semibold text-lg tracking-tight text-foreground">Platform</span>
@@ -123,32 +123,33 @@ const Dashboard = () => {
                     </Button>
                 </header>
 
-                <div className="max-w-5xl mx-auto p-4 lg:p-8 pb-32">
-                    <div className="mb-6">
-                        <h1 className="text-2xl font-bold text-foreground mb-1">Create Evaluation</h1>
+                <div className="max-w-6xl mx-auto px-6 py-8 pb-32">
+                    <div className="mb-8 pl-1">
+                        <h1 className="text-2xl font-bold text-foreground mb-1.5 tracking-tight">Create Evaluation</h1>
                         <p className="text-sm text-muted-foreground">Provide the target role details and your profile data.</p>
                     </div>
 
-                    <div className="grid lg:grid-cols-[1fr_400px] gap-6">
+                    <div className="grid lg:grid-cols-[1fr_400px] gap-8">
                         {/* Left Column - Job Description */}
                         <div className="flex flex-col h-full">
-                            <Card className="flex-1 border-border shadow-sm flex flex-col">
+                            <Card className="flex-1 bg-card border border-border shadow-sm rounded-2xl flex flex-col">
                                 <CardContent className="p-6 flex flex-col h-full">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <div className="flex items-center gap-2 font-semibold text-foreground">
+                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
+                                        <div className="flex items-center gap-2 font-medium text-foreground">
                                             <Building className="w-4 h-4 text-primary" />
                                             Target Job Description
                                         </div>
-                                        <span className="text-xs font-medium px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">Required</span>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 tracking-wider uppercase">Required</span>
                                     </div>
                                     <textarea
                                         value={jobDescription}
                                         onChange={(e) => setJobDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[300px] resize-none rounded-md border border-input bg-transparent p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+                                        className="flex-1 w-full min-h-[350px] resize-none rounded-xl border border-border bg-transparent p-4 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary placeholder:text-muted-foreground transition-all duration-200"
                                         placeholder={`Paste the full job description here...\n\ne.g. 'Senior Frontend Engineer requires proficiency in React, TypeScript...'`}
                                     />
-                                    <div className="mt-2 text-right text-xs text-muted-foreground">
-                                        {jobDescription.length} / 5000 chars
+                                    <div className="mt-3 text-right text-xs text-muted-foreground flex justify-between items-center">
+                                        <span>Paste the exact text from the job board for highest accuracy.</span>
+                                        <span>{jobDescription.length} / 5000 chars</span>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -158,18 +159,19 @@ const Dashboard = () => {
                         <div className="flex flex-col gap-6">
                             
                             {/* Resume Upload */}
-                            <Card className="border-border shadow-sm">
+                            <Card className="bg-card border border-border shadow-sm rounded-2xl">
                                 <CardContent className="p-6">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <div className="flex items-center gap-2 font-semibold text-foreground">
-                                            <UserSquare2 className="w-4 h-4 text-foreground" />
-                                            Professional Profile
+                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
+                                        <div className="flex items-center gap-2 font-medium text-foreground">
+                                            <UploadCloud className="w-4 h-4 text-primary" />
+                                            Resume Upload
                                         </div>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border tracking-wider uppercase">Preferred</span>
                                     </div>
 
                                     <div 
-                                        className={`relative border border-dashed rounded-md p-6 transition-colors flex flex-col items-center justify-center text-center cursor-pointer
-                                            ${isDragging ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:bg-muted/50'}`}
+                                        className={`relative border border-dashed rounded-xl p-8 transition-all duration-200 flex flex-col items-center justify-center text-center cursor-pointer group
+                                            ${isDragging ? 'border-primary bg-primary/5' : 'border-border bg-transparent hover:border-primary hover:bg-secondary/20'}`}
                                         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                                         onDragLeave={() => setIsDragging(false)}
                                         onDrop={(e) => {
@@ -183,12 +185,12 @@ const Dashboard = () => {
                                         }}
                                         onClick={() => resumeInputRef.current?.click()}
                                     >
-                                        <UploadCloud className="w-8 h-8 text-muted-foreground mb-3" />
-                                        <p className="text-sm font-medium text-foreground mb-1">
-                                            {fileName ? fileName : "Upload Resume"}
+                                        <FileText className={`w-8 h-8 mb-4 transition-colors ${fileName ? 'text-primary' : 'text-muted-foreground group-hover:text-primary/70'}`} />
+                                        <p className="text-sm font-medium text-foreground mb-1.5">
+                                            {fileName ? fileName : "Click or drag file to upload"}
                                         </p>
                                         <p className="text-xs text-muted-foreground">
-                                            PDF or DOCX (Max 5MB)
+                                            {fileName ? 'Ready for analysis' : 'PDF or DOCX (Max 5MB)'}
                                         </p>
                                         <input
                                             ref={resumeInputRef}
@@ -198,42 +200,51 @@ const Dashboard = () => {
                                             onChange={handleFileChange}
                                         />
                                     </div>
+                                    <div className="mt-4 text-xs text-muted-foreground">
+                                        Your resume provides context for specialized technical probing.
+                                    </div>
                                 </CardContent>
                             </Card>
 
                             {/* OR Divider */}
-                            <div className="flex items-center">
-                                <div className="flex-grow border-t border-border"></div>
-                                <span className="mx-4 text-xs font-medium text-muted-foreground uppercase">OR</span>
-                                <div className="flex-grow border-t border-border"></div>
+                            <div className="flex items-center py-2">
+                                <div className="flex-grow border-t border-secondary"></div>
+                                <span className="mx-4 text-xs font-semibold tracking-wider text-muted-foreground uppercase">OR</span>
+                                <div className="flex-grow border-t border-secondary"></div>
                             </div>
 
                             {/* Self Description */}
-                            <Card className="border-border shadow-sm flex-[1]">
+                            <Card className="bg-card border border-border shadow-sm rounded-2xl flex-[1]">
                                 <CardContent className="p-6 flex flex-col h-full">
-                                    <label className="text-sm font-medium text-foreground mb-3 flex items-center justify-between">
-                                        Quick Self-Description
-                                        <span className="text-xs font-normal text-muted-foreground">Optional</span>
-                                    </label>
+                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
+                                        <div className="flex items-center gap-2 font-medium text-foreground">
+                                            <UserSquare2 className="w-4 h-4 text-muted-foreground" />
+                                            Quick Summary
+                                        </div>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-transparent text-muted-foreground border border-border tracking-wider uppercase">Optional</span>
+                                    </div>
                                     <textarea
                                         value={selfDescription}
                                         onChange={(e) => setSelfDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[140px] resize-none rounded-md border border-input bg-transparent p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+                                        className="flex-1 w-full min-h-[140px] resize-none rounded-xl border border-border bg-transparent p-4 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary placeholder:text-muted-foreground transition-all duration-200"
                                         placeholder="Briefly describe your experience, key skills, and years of experience..."
                                     />
+                                    <div className="mt-3 text-xs text-muted-foreground">
+                                        Used as a fallback if no resume is uploaded.
+                                    </div>
                                 </CardContent>
                             </Card>
                         </div>
                     </div>
 
                     {/* Bottom Sticky Action Bar */}
-                    <div className="fixed bottom-0 left-0 lg:left-64 right-0 p-4 border-t border-border bg-background/95 backdrop-blur z-30 flex items-center justify-between">
-                        <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground px-4">
-                            Strategy generation takes approx ~30s
+                    <div className="fixed bottom-0 left-0 lg:left-56 right-0 p-4 border-t border-border bg-background/80 backdrop-blur-md z-30 flex items-center justify-between shadow-sm">
+                        <div className="hidden md:flex items-center gap-2 text-sm font-medium text-muted-foreground px-4">
+                            Analysis engine takes approx ~30s
                         </div>
                         <Button
                             size="lg"
-                            className="w-full md:w-auto ml-auto font-semibold"
+                            className="w-full md:w-auto ml-auto font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 shadow-sm transition-all duration-200"
                             onClick={handleGenerateReport}
                             disabled={!jobDescription || (!selfDescription && !fileName)}
                         >
