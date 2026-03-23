@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
-import { motion } from 'framer-motion'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent } from '../../../components/ui/card'
-import { Sparkles, UploadCloud, Briefcase, FileText, LayoutDashboard, History, LogOut } from 'lucide-react'
+import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2 } from 'lucide-react'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Dashboard = () => {
@@ -44,93 +43,85 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/90 backdrop-blur-sm">
-                <div className="relative flex items-center justify-center w-24 h-24 mb-6">
-                    <div className="absolute inset-0 border-4 border-transparent border-t-primary rounded-full animate-spin"></div>
-                    <div className="absolute inset-2 border-4 border-transparent border-r-secondary rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
-                    <div className="absolute inset-4 border-4 border-transparent border-b-accent rounded-full animate-[spin_2s_linear_infinite]"></div>
-                    <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-                </div>
-                <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-[#b946e6] to-secondary glow-magenta">
-                    Analyzing your profile...
-                </h2>
-                <p className="text-muted-foreground mt-2">Our AI is building your custom strategy</p>
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <h2 className="text-xl font-semibold text-foreground">Generating your report...</h2>
+                <p className="text-muted-foreground mt-2 text-sm">Please wait while our engine analyzes your profile.</p>
             </div>
         )
     }
 
     return (
         <div className="min-h-screen bg-background text-foreground flex">
-            {/* Sidebar Desktop */}
-            <aside className="hidden lg:flex w-64 flex-col border-r border-white/5 glass bg-card/30">
-                <div className="h-16 flex items-center px-6 border-b border-white/5 mb-6">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center glow-magenta">
-                            <Sparkles className="w-5 h-5 text-primary" />
+            {/* Standard Sidebar */}
+            <aside className="hidden lg:flex w-64 flex-col border-r border-border bg-card">
+                <div className="h-16 flex items-center px-6 border-b border-border mb-4">
+                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+                        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
+                            <span className="font-bold text-white text-lg">AI</span>
                         </div>
-                        <span className="font-bold text-xl tracking-tight text-white cursor-pointer" onClick={() => navigate('/')}>
-                            Interview<span className="text-primary">AI</span>
-                        </span>
+                        <span className="font-semibold text-lg tracking-tight text-foreground">Platform</span>
                     </div>
                 </div>
                 
-                <nav className="flex-1 px-4 space-y-2">
-                    <Button variant="ghost" className="w-full justify-start bg-white/5 text-white glow-blue" onClick={() => {}}>
-                        <LayoutDashboard className="mr-2 h-5 w-5 text-accent" />
+                <nav className="flex-1 px-4 space-y-1">
+                    <Button variant="secondary" className="w-full justify-start font-medium" onClick={() => {}}>
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
                         New Evaluation
                     </Button>
-                    {/* Just visual mock of history if active */}
                     {reports.length > 0 && (
-                        <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-white">
-                            <History className="mr-2 h-5 w-5" />
+                        <Button variant="ghost" className="w-full justify-start font-medium text-muted-foreground">
+                            <History className="mr-2 h-4 w-4" />
                             Recent Plans ({reports.length})
                         </Button>
                     )}
                 </nav>
 
-                <div className="p-4 border-t border-white/5 mt-auto">
-                    <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={logout}>
-                        <LogOut className="mr-2 h-5 w-5" />
+                <div className="p-4 border-t border-border mt-auto">
+                    <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground" onClick={logout}>
+                        <LogOut className="mr-2 h-4 w-4" />
                         Log out
                     </Button>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto w-full relative">
+            <main className="flex-1 overflow-y-auto w-full relative bg-background">
                 {/* Mobile Header */}
-                <header className="lg:hidden flex items-center justify-between h-16 px-6 glass border-b border-white/5 sticky top-0 z-40 bg-background/80">
+                <header className="lg:hidden flex items-center justify-between h-14 px-4 border-b border-border sticky top-0 z-40 bg-background">
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-6 h-6 rounded-md bg-primary/20 flex items-center justify-center glow-magenta">
-                            <Sparkles className="w-4 h-4 text-primary" />
+                        <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
+                            <span className="font-bold text-white text-sm">AI</span>
                         </div>
-                        <span className="font-bold text-lg text-white">Interview<span className="text-primary">AI</span></span>
+                        <span className="font-semibold text-base text-foreground">Platform</span>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground"><LogOut className="h-5 w-5" /></Button>
+                    <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground">
+                        <LogOut className="h-4 w-4" />
+                    </Button>
                 </header>
 
-                <div className="max-w-6xl mx-auto p-6 lg:p-10 pb-32">
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                        <h1 className="text-3xl lg:text-4xl font-bold text-white tracking-tight mb-2">Create New Strategy</h1>
-                        <p className="text-muted-foreground">Provide the target role details and your profile data to get a custom roadmap.</p>
-                    </motion.div>
+                <div className="max-w-5xl mx-auto p-4 lg:p-8 pb-32">
+                    <div className="mb-6">
+                        <h1 className="text-2xl font-bold text-foreground mb-1">Create Evaluation</h1>
+                        <p className="text-sm text-muted-foreground">Provide the target role details and your profile data.</p>
+                    </div>
 
-                    <div className="grid lg:grid-cols-2 gap-8">
+                    <div className="grid lg:grid-cols-[1fr_400px] gap-6">
                         {/* Left Column - Job Description */}
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                            <Card className="h-full border-white/10 bg-card/40 backdrop-blur-xl">
+                        <div className="flex flex-col h-full">
+                            <Card className="flex-1 border-border shadow-sm flex flex-col">
                                 <CardContent className="p-6 flex flex-col h-full">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="flex items-center gap-2 text-lg font-semibold text-white">
-                                            <Briefcase className="w-5 h-5 text-primary" />
+                                    <div className="flex justify-between items-center mb-4">
+                                        <div className="flex items-center gap-2 font-semibold text-foreground">
+                                            <Building className="w-4 h-4 text-primary" />
                                             Target Job Description
                                         </div>
-                                        <span className="text-xs font-medium px-2 py-1 rounded bg-primary/20 text-primary border border-primary/30">Required</span>
+                                        <span className="text-xs font-medium px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">Required</span>
                                     </div>
                                     <textarea
                                         value={jobDescription}
                                         onChange={(e) => setJobDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[300px] resize-none rounded-xl border border-white/10 bg-background/50 p-4 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary transition-all placeholder:text-muted-foreground/50 scrollbar-thin scrollbar-thumb-white/10"
+                                        className="flex-1 w-full min-h-[300px] resize-none rounded-md border border-input bg-transparent p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
                                         placeholder={`Paste the full job description here...\n\ne.g. 'Senior Frontend Engineer requires proficiency in React, TypeScript...'`}
                                     />
                                     <div className="mt-2 text-right text-xs text-muted-foreground">
@@ -138,25 +129,24 @@ const Dashboard = () => {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </div>
 
                         {/* Right Column - Profile */}
-                        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6">
                             
                             {/* Resume Upload */}
-                            <Card className="border-white/10 bg-card/40 backdrop-blur-xl">
+                            <Card className="border-border shadow-sm">
                                 <CardContent className="p-6">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="flex items-center gap-2 text-lg font-semibold text-white">
-                                            <FileText className="w-5 h-5 text-secondary" />
-                                            Your Profile
+                                    <div className="flex justify-between items-center mb-4">
+                                        <div className="flex items-center gap-2 font-semibold text-foreground">
+                                            <UserSquare2 className="w-4 h-4 text-foreground" />
+                                            Professional Profile
                                         </div>
-                                        <span className="text-xs font-medium px-2 py-1 rounded bg-secondary/20 text-secondary border border-secondary/30">Best Results</span>
                                     </div>
 
                                     <div 
-                                        className={`relative border-2 border-dashed rounded-xl p-8 transition-colors flex flex-col items-center justify-center text-center cursor-pointer group
-                                            ${isDragging ? 'border-primary bg-primary/5' : 'border-white/10 bg-background/30 hover:border-white/20 hover:bg-white/5'}`}
+                                        className={`relative border border-dashed rounded-md p-6 transition-colors flex flex-col items-center justify-center text-center cursor-pointer
+                                            ${isDragging ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:bg-muted/50'}`}
                                         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                                         onDragLeave={() => setIsDragging(false)}
                                         onDrop={(e) => {
@@ -170,13 +160,11 @@ const Dashboard = () => {
                                         }}
                                         onClick={() => resumeInputRef.current?.click()}
                                     >
-                                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-white/10 transition-colors">
-                                            <UploadCloud className="w-6 h-6 text-muted-foreground group-hover:text-white transition-colors" />
-                                        </div>
-                                        <p className="text-sm font-medium text-white mb-1">
-                                            {fileName ? fileName : "Click to upload or drag & drop"}
+                                        <UploadCloud className="w-8 h-8 text-muted-foreground mb-3" />
+                                        <p className="text-sm font-medium text-foreground mb-1">
+                                            {fileName ? fileName : "Upload Resume"}
                                         </p>
-                                        <p className="text-xs text-muted-foreground border-b border-transparent">
+                                        <p className="text-xs text-muted-foreground">
                                             PDF or DOCX (Max 5MB)
                                         </p>
                                         <input
@@ -191,41 +179,42 @@ const Dashboard = () => {
                             </Card>
 
                             {/* OR Divider */}
-                            <div className="relative flex items-center px-4">
-                                <div className="flex-grow border-t border-white/10"></div>
-                                <span className="flex-shrink-0 mx-4 text-xs font-semibold text-muted-foreground uppercase tracking-widest">OR</span>
-                                <div className="flex-grow border-t border-white/10"></div>
+                            <div className="flex items-center">
+                                <div className="flex-grow border-t border-border"></div>
+                                <span className="mx-4 text-xs font-medium text-muted-foreground uppercase">OR</span>
+                                <div className="flex-grow border-t border-border"></div>
                             </div>
 
                             {/* Self Description */}
-                            <Card className="border-white/10 bg-card/40 backdrop-blur-xl flex-1">
-                                <CardContent className="p-6 h-full flex flex-col">
-                                    <label className="text-sm font-medium text-white mb-2 ml-1">Quick Self-Description</label>
+                            <Card className="border-border shadow-sm flex-[1]">
+                                <CardContent className="p-6 flex flex-col h-full">
+                                    <label className="text-sm font-medium text-foreground mb-3 flex items-center justify-between">
+                                        Quick Self-Description
+                                        <span className="text-xs font-normal text-muted-foreground">Optional</span>
+                                    </label>
                                     <textarea
                                         value={selfDescription}
                                         onChange={(e) => setSelfDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[120px] resize-none rounded-xl border border-white/10 bg-background/50 p-4 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary transition-all placeholder:text-muted-foreground/50"
-                                        placeholder="Briefly describe your experience, key skills, and years of experience if you don't have a resume handy..."
+                                        className="flex-1 w-full min-h-[140px] resize-none rounded-md border border-input bg-transparent p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+                                        placeholder="Briefly describe your experience, key skills, and years of experience..."
                                     />
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </div>
                     </div>
 
                     {/* Bottom Sticky Action Bar */}
-                    <div className="fixed bottom-0 left-0 lg:left-64 right-0 p-4 glass border-t border-white/10 z-30 transform-gpu bg-background/80 flex items-center justify-between shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)]">
+                    <div className="fixed bottom-0 left-0 lg:left-64 right-0 p-4 border-t border-border bg-background/95 backdrop-blur z-30 flex items-center justify-between">
                         <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground px-4">
-                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            AI-Powered Strategy Generation (~30s)
+                            Strategy generation takes approx ~30s
                         </div>
                         <Button
                             size="lg"
-                            className="w-full md:w-auto h-12 px-8 text-base glow-magenta ml-auto"
+                            className="w-full md:w-auto ml-auto font-semibold"
                             onClick={handleGenerateReport}
                             disabled={!jobDescription || (!selfDescription && !fileName)}
                         >
-                            <Sparkles className="w-5 h-5 mr-2" />
-                            Generate Interview Strategy
+                            Generate Report
                         </Button>
                     </div>
                 </div>
