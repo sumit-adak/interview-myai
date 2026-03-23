@@ -95,7 +95,7 @@ const Interview = () => {
         )
     }
 
-    const { match_score, technical_questions, behavioral_questions, preparation_strategy, feedback } = activeReport
+    const { matchScore, technicalQuestions, behavioralQuestions, preparationPlan, feedback } = activeReport
 
     const tabs = [
         { id: 'technical', label: 'Technical Assessment', icon: Code2 },
@@ -153,10 +153,10 @@ const Interview = () => {
                     {activeTab === 'technical' && (
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Technical Questions</h2>
-                            {technical_questions?.length > 0 ? (
+                            {technicalQuestions?.length > 0 ? (
                                 <div className="space-y-1">
-                                    {technical_questions.map((q, idx) => (
-                                        <SimpleAccordion key={idx} question={q.question} answer={q.answer} title={q.topicSelected} />
+                                    {technicalQuestions.map((q, idx) => (
+                                        <SimpleAccordion key={idx} question={q.question} answer={q.answer} title={q.intention} />
                                     ))}
                                 </div>
                             ) : (
@@ -168,9 +168,9 @@ const Interview = () => {
                     {activeTab === 'behavioral' && (
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Behavioral Alignment</h2>
-                            {behavioral_questions?.length > 0 ? (
+                            {behavioralQuestions?.length > 0 ? (
                                 <div className="space-y-1">
-                                    {behavioral_questions.map((q, idx) => (
+                                    {behavioralQuestions.map((q, idx) => (
                                         <SimpleAccordion key={idx} question={q.question} answer={q.answer} title={q.intention} />
                                     ))}
                                 </div>
@@ -183,8 +183,15 @@ const Interview = () => {
                     {activeTab === 'roadmap' && (
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Strategic Roadmap</h2>
-                            <div className="prose prose-sm dark:prose-invert max-w-none text-foreground bg-card p-6 rounded-lg border border-border">
-                                {preparation_strategy || "No strategy provided."}
+                            <div className="space-y-4 max-w-none text-foreground bg-card p-6 rounded-lg border border-border">
+                                {preparationPlan?.length > 0 ? preparationPlan.map((plan, idx) => (
+                                    <div key={idx} className="mb-4">
+                                        <h3 className="text-md font-bold text-foreground">Day {plan.day}: <span className="text-primary">{plan.focus}</span></h3>
+                                        <ul className="list-disc pl-5 mt-2 space-y-1 text-sm text-muted-foreground">
+                                            {plan.tasks?.map((task, i) => <li key={i}>{task}</li>)}
+                                        </ul>
+                                    </div>
+                                )) : "No strategy provided."}
                             </div>
                         </div>
                     )}
@@ -204,17 +211,17 @@ const Interview = () => {
             <aside className="w-full lg:w-80 border-l border-border bg-card p-6 flex flex-col gap-8">
                 <div>
                     <h3 className="text-sm font-semibold text-foreground mb-4">Profile Match</h3>
-                    <ProgressBar score={match_score} />
+                    <ProgressBar score={matchScore} />
                 </div>
 
-                {activeReport.skill_gaps && activeReport.skill_gaps.length > 0 && (
+                {activeReport.skillGaps && activeReport.skillGaps.length > 0 && (
                     <div>
                         <h3 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
                             <AlertCircle className="w-4 h-4 text-destructive" />
                             Identified Gaps
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                            {activeReport.skill_gaps.map((gap, i) => (
+                            {activeReport.skillGaps.map((gap, i) => (
                                 <span key={i} className="px-2.5 py-1 text-xs font-medium rounded-md bg-destructive/10 text-destructive border border-destructive/20">
                                     {gap.skill || gap}
                                 </span>
