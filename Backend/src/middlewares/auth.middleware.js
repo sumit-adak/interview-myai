@@ -5,7 +5,8 @@ const tokenBlacklistModel = require("../models/blacklist.model")
 
 async function authUser(req, res, next) {
 
-    const token = req.cookies.token
+    const headerToken = req.headers.authorization?.split(" ")[1]
+    const token = req.cookies.token || headerToken
 
     if (!token) {
         return res.status(401).json({
