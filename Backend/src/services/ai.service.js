@@ -126,6 +126,49 @@ const escapeHtml = (str) => {
         .replace(/'/g, "&#039;")
 }
 
+const generateFallbackResumeHtml = ({ resume, selfDescription, jobDescription }) => {
+    const summary = (selfDescription || resume || "").trim().slice(0, 600) || "Experienced professional with strong interview preparation and industry knowledge."
+
+    const extractSection = (text, label) => {
+        if (!text) return []
+        const regex = new RegExp(`${label}[:\\n]+([\\s\\S]*?)(?:\\n{2,}|$)`, "i")
+        const match = text.match(regex)
+        if (!match) return []
+        return match[1].split(/\\n+/).map(item => item.trim()).filter(Boolean).slice(0, 7)
+    }
+
+    const skills = extractSection(resume || selfDescription, "skills")
+    const experience = extractSection(resume || selfDescription, "experience")
+    const education = extractSection(resume || selfDescription, "education")
+
+    return `<!doctype html><html><head><meta charset='utf-8'><style>
+        body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#fff;line-height:1.5;padding:32px;max-width:900px;margin:auto;}
+        h1{font-size:30px;margin-bottom:4px;color:#111827;}
+        h2{font-size:18px;color:#111827;margin-top:24px;margin-bottom:8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px;}
+        ul{margin:8px 0 18px 20px;}
+        p{margin:0 0 14px 0;}
+        .meta{font-size:13px;color:#4b5563;margin-bottom:18px;}
+    </style></head><body>
+    <h1>Candidate Resume</h1>
+    <p class='meta'>Auto-generated fallback resume content</p>
+
+    <h2>Professional Summary</h2>
+    <p>${escapeHtml(summary)}</p>
+
+    <h2>Skills</h2>
+    <ul>${(skills.length ? skills : ["No explicit skills extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+
+    <h2>Professional Experience</h2>
+    <ul>${(experience.length ? experience : ["No explicit experience details extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+
+    <h2>Education</h2>
+    <ul>${(education.length ? education : ["No explicit education details extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+
+    <h2>Target Job</h2>
+    <p>${escapeHtml(jobDescription || "Not specified")}</p>
+</body></html>`
+}
+
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
 
     const resumePdfSchema = z.object({
@@ -157,22 +200,36 @@ Candidate input data:\n${candidateData}`
             config: {
                 responseMimeType: "application/json",
                 responseSchema: zodToJsonSchema(resumePdfSchema),
-                maxOutputTokens: 1000
+                maxOutputTokens: 1200
             }
         })
 
-        const jsonContent = JSON.parse(response.text)
-        htmlOutput = jsonContent?.html || ""
+        // Attempt JSON parse of official schema response
+        let jsonContent
+        try {
+            jsonContent = JSON.parse(response.text)
+        } catch (parseError) {
+            console.warn("Resume generation response parse failed, trying to salvage HTML from body", parseError)
+        }
+
+        if (jsonContent?.html) {
+            htmlOutput = jsonContent.html
+        } else {
+            // Look for markdown fenced html or raw html in string
+            const codeBlockMatch = response.text.match(/```(?:html\n)?([\s\S]*?)```/i)
+            const rawHtmlMatch = response.text.match(/<html[\s\S]*<\/html>/i)
+
+            if (codeBlockMatch && codeBlockMatch[1]) htmlOutput = codeBlockMatch[1]
+            else if (rawHtmlMatch && rawHtmlMatch[0]) htmlOutput = rawHtmlMatch[0]
+            else if (typeof response.text === 'string') htmlOutput = response.text
+        }
 
     } catch (error) {
         console.error("Error generating resume HTML from AI response:", error)
-        // fall through to a safe basic template
     }
 
     if (!htmlOutput || typeof htmlOutput !== 'string' || !htmlOutput.trim()) {
-        // Fallback HTML in case AI did not return valid html
-        const fallbackText = resume || selfDescription || jobDescription || "No candidate data available"
-        htmlOutput = `<!doctype html><html><head><meta charset='utf-8'><style>body{font-family:Arial,Helvetica,sans-serif;color:#333;line-height:1.4;padding:20px}pre{white-space:pre-wrap;word-break:break-word}</style></head><body><h1>Candidate Resume</h1><pre>${escapeHtml(fallbackText)}</pre></body></html>`
+        htmlOutput = generateFallbackResumeHtml({ resume, selfDescription, jobDescription })
     }
 
     return htmlOutput
