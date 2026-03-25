@@ -3,7 +3,7 @@ import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent } from '../../../components/ui/card'
-import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight } from 'lucide-react'
+import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Dashboard = () => {
