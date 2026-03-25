@@ -9,28 +9,115 @@ const ai = new GoogleGenAI({
 
 
 const interviewReportSchema = z.object({
-    matchScore: z.number().describe("A score between 0 and 100 indicating how well the candidate's profile matches the job describe"),
-    technicalQuestions: z.array(z.object({
-        question: z.string().describe("The technical question can be asked in the interview"),
-        intention: z.string().describe("The intention of interviewer behind asking this question"),
-        answer: z.string().describe("How to answer this question, what points to cover, what approach to take etc.")
-    })).describe("Technical questions that can be asked in the interview along with their intention and how to answer them"),
-    behavioralQuestions: z.array(z.object({
-        question: z.string().describe("The technical question can be asked in the interview"),
-        intention: z.string().describe("The intention of interviewer behind asking this question"),
-        answer: z.string().describe("How to answer this question, what points to cover, what approach to take etc.")
-    })).describe("Behavioral questions that can be asked in the interview along with their intention and how to answer them"),
-    skillGaps: z.array(z.object({
-        skill: z.string().describe("The skill which the candidate is lacking"),
-        severity: z.enum([ "low", "medium", "high" ]).describe("The severity of this skill gap, i.e. how important is this skill for the job and how much it can impact the candidate's chances")
-    })).describe("List of skill gaps in the candidate's profile along with their severity"),
-    preparationPlan: z.array(z.object({
-        day: z.number().describe("The day number in the preparation plan, starting from 1"),
-        focus: z.string().describe("The main focus of this day in the preparation plan, e.g. data structures, system design, mock interviews etc."),
-        tasks: z.array(z.string()).describe("List of tasks to be done on this day to follow the preparation plan, e.g. read a specific book or article, solve a set of problems, watch a video etc.")
-    })).describe("A day-wise preparation plan for the candidate to follow in order to prepare for the interview effectively"),
-    title: z.string().describe("The title of the job for which the interview report is generated"),
-})
+    title: z.string().describe(
+        "The exact job role/title for which the interview analysis is being generated. It should clearly reflect the position (e.g., 'MERN Stack Developer', 'Software Engineer', etc.)."
+    ),
+
+    matchScore: z.number().min(0).max(100).describe(
+        "An in-depth evaluation score (0–100) representing how well the candidate matches the job requirements. This should consider technical skills, practical experience, project relevance, problem-solving ability, and overall readiness for the role."
+    ),
+
+    summary: z.string().describe(
+        "A detailed professional summary of the candidate’s overall profile evaluation. It should highlight strengths, key observations, and a final judgment on readiness for the interview in a concise but impactful paragraph."
+    ),
+
+    technicalQuestions: z.array(
+        z.object({
+            question: z.string().describe(
+                "A highly relevant and role-specific technical interview question designed to test core concepts, coding ability, or system design knowledge."
+            ),
+            difficulty: z.enum(["easy", "medium", "hard"]).describe(
+                "The difficulty level of the question based on industry interview standards."
+            ),
+            intention: z.string().describe(
+                "A clear explanation of what the interviewer intends to assess, such as fundamentals, real-world application, optimization skills, or debugging ability."
+            ),
+            expectedAnswer: z.string().describe(
+                "A structured and high-quality answer explaining key concepts, step-by-step approach, examples, and best practices that the candidate should include."
+            ),
+            tips: z.array(z.string()).describe(
+                "Practical tips and strategies to help the candidate answer this question confidently and effectively during the interview."
+            )
+        })
+    ).min(3).max(8).describe(
+        "A carefully selected list of technical interview questions tailored to the job role, covering a mix of fundamentals, practical problems, and advanced concepts."
+    ),
+
+    behavioralQuestions: z.array(
+        z.object({
+            question: z.string().describe(
+                "A professional behavioral or situational question aimed at evaluating communication, teamwork, leadership, and decision-making skills."
+            ),
+            intention: z.string().describe(
+                "What the interviewer is trying to understand about the candidate’s personality, mindset, and work behavior."
+            ),
+            sampleAnswer: z.string().describe(
+                "A well-structured sample response using frameworks like STAR (Situation, Task, Action, Result) to guide the candidate."
+            ),
+            tips: z.array(z.string()).describe(
+                "Helpful tips on how to present the answer confidently, including tone, structure, and key points to highlight."
+            )
+        })
+    ).min(2).max(5).describe(
+        "A set of behavioral questions designed to assess the candidate’s soft skills and cultural fit within the organization."
+    ),
+
+    skillGaps: z.array(
+        z.object({
+            skill: z.string().describe(
+                "The specific missing or weak skill identified in the candidate’s profile."
+            ),
+            reason: z.string().describe(
+                "Explanation of why this skill is important for the job and why the candidate currently lacks it."
+            ),
+            severity: z.enum(["low", "medium", "high"]).describe(
+                "The impact level of this gap on the candidate’s chances of selection."
+            ),
+            improvementPlan: z.string().describe(
+                "A clear and actionable suggestion on how the candidate can improve this skill."
+            )
+        })
+    ).describe(
+        "A detailed analysis of gaps between the candidate’s current skills and job requirements, along with actionable improvement guidance."
+    ),
+
+    strengths: z.array(z.string()).describe(
+        "Key strengths of the candidate that align well with the job role, such as technical expertise, project experience, or problem-solving ability."
+    ),
+
+    preparationPlan: z.array(
+        z.object({
+            day: z.number().describe(
+                "Day number in the preparation schedule, starting from Day 1."
+            ),
+            focus: z.string().describe(
+                "The primary topic or area to focus on for the day (e.g., DSA, system design, core concepts, mock interviews)."
+            ),
+            tasks: z.array(z.string()).describe(
+                "A list of clear, actionable tasks for the day, such as solving problems, revising concepts, or practicing interviews."
+            ),
+            outcome: z.string().describe(
+                "The expected result or learning outcome after completing the day’s tasks."
+            )
+        })
+    ).min(5).max(14).describe(
+        "A structured, day-by-day preparation roadmap designed to systematically improve the candidate’s chances of cracking the interview."
+    ),
+
+    resources: z.array(
+        z.object({
+            title: z.string().describe("Name of the resource (e.g., article, course, video)."),
+            type: z.enum(["article", "video", "course", "practice"]).describe(
+                "Type of resource to help categorize learning material."
+            ),
+            purpose: z.string().describe(
+                "Why this resource is useful and what the candidate will learn from it."
+            )
+        })
+    ).optional().describe(
+        "Optional but highly recommended learning resources to accelerate preparation."
+    )
+});
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
 
