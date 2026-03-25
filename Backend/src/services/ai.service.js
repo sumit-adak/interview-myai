@@ -80,19 +80,30 @@ const interviewReportSchema = z.object({
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
 
+    const minify = (value = "") => value.toString().trim().slice(0, 5000)
 
-    const prompt = `Generate an interview report for a candidate with the following details:
-                        Resume: ${resume}
-                        Self Description: ${selfDescription}
-                        Job Description: ${jobDescription}
-`
+    const prompt = `Generate an interview report for the candidate. Format output strictly as JSON matching the schema:
+- matchScore (number 0-100)
+- technicalQuestions (array)
+- behavioralQuestions (array)
+- skillGaps (array)
+- preparationPlan (array)
+- title (string)
+
+Use the following data:
+Resume: ${minify(resume)}
+Self Description: ${minify(selfDescription)}
+Job Description: ${minify(jobDescription)}
+
+The report should be concise, action-oriented, and ready to use for interview preparation.`
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-3-mini",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
             responseSchema: zodToJsonSchema(interviewReportSchema),
+            maxOutputTokens: 800
         }
     })
 
@@ -141,11 +152,12 @@ Candidate input data:\n${candidateData}`
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-3-mini",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: zodToJsonSchema(resumePdfSchema),
+                maxOutputTokens: 1000
             }
         })
 
