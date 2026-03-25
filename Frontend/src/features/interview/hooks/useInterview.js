@@ -69,9 +69,18 @@ export const useInterview = () => {
 
         try {
             const htmlResponse = await generateResumePdf({ interviewReportId })
-            
+
+            let rawHtml = ""
+            if (htmlResponse && typeof htmlResponse === 'object' && htmlResponse.html) {
+                rawHtml = htmlResponse.html
+            } else if (typeof htmlResponse === 'string') {
+                rawHtml = htmlResponse
+            } else {
+                rawHtml = "<p>Unable to construct resume content.</p>"
+            }
+
             // Sometimes AI wraps the HTML string in markdown ```html ... ``` blocks. Strip them.
-            const cleanHtml = htmlResponse.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
+            const cleanHtml = rawHtml.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
 
             const opt = {
                 margin:       10,
