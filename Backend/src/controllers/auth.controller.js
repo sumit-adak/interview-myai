@@ -44,8 +44,8 @@ async function registerUserController(req, res) {
 
     const cookieOptions = {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 24 * 60 * 60 * 1000 // 1d
     }
 
@@ -96,8 +96,8 @@ async function loginUserController(req, res) {
 
     const cookieOptions = {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 24 * 60 * 60 * 1000 // 1d
     }
 
@@ -127,8 +127,8 @@ async function logoutUserController(req, res) {
 
     const cookieOptions = {
         httpOnly: true,
-        secure: true,
-        sameSite: "none"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     }
 
     res.clearCookie("token", cookieOptions)

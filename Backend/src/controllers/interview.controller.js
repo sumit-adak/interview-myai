@@ -1,4 +1,5 @@
 const pdfParse = require("pdf-parse/lib/pdf-parse");
+const mammoth = require("mammoth");
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
@@ -21,11 +22,28 @@ async function generateInterViewReportController(req, res) {
             });
         }
 
-        // ✅ Parse PDF
+        // ✅ Parse resume file
         let resumeText = "";
         if (req.file) {
-            const pdfData = await pdfParse(req.file.buffer);
-            resumeText = pdfData.text;
+            const fileMime = req.file.mimetype
+
+            if (fileMime === "application/pdf") {
+                const pdfData = await pdfParse(req.file.buffer)
+                resumeText = pdfData.text
+            } else if (fileMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                const docxResult = await mammoth.extractRawText({ buffer: req.file.buffer })
+                resumeText = docxResult.value
+            } else {
+                return res.status(415).json({
+                    message: "Unsupported resume format. Please upload PDF or DOCX."
+                })
+            }
+
+            if (!resumeText || !resumeText.trim()) {
+                return res.status(400).json({
+                    message: "Resume text could not be extracted; please provide valid PDF or DOCX resume."
+                })
+            }
         }
 
         // ✅ Generate AI report
