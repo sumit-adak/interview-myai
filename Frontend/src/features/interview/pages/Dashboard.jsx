@@ -26,8 +26,8 @@ const Dashboard = () => {
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current?.files?.[0]
-        if (!jobDescription || (!selfDescription && !resumeFile)) {
-            alert("Please provide a job description and either a resume or self description.")
+        if (!jobDescription || !selfDescription) {
+            alert("Please provide both a job description and a self description.")
             return
         }
         try {
@@ -166,7 +166,7 @@ const Dashboard = () => {
                                             <UploadCloud className="w-4 h-4 text-primary" />
                                             Resume Upload
                                         </div>
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border tracking-wider uppercase">Preferred</span>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-transparent text-muted-foreground border border-border tracking-wider uppercase">Optional</span>
                                     </div>
 
                                     <div 
@@ -221,7 +221,7 @@ const Dashboard = () => {
                                             <UserSquare2 className="w-4 h-4 text-muted-foreground" />
                                             Quick Summary
                                         </div>
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-transparent text-muted-foreground border border-border tracking-wider uppercase">Optional</span>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 tracking-wider uppercase">Required</span>
                                     </div>
                                     <textarea
                                         value={selfDescription}
@@ -230,7 +230,7 @@ const Dashboard = () => {
                                         placeholder="Briefly describe your experience, key skills, and years of experience..."
                                     />
                                     <div className="mt-3 text-xs text-muted-foreground">
-                                        Used as a fallback if no resume is uploaded.
+                                        Required to analyze your profile and generate tailored questions.
                                     </div>
                                 </CardContent>
                             </Card>
@@ -246,7 +246,7 @@ const Dashboard = () => {
                             size="lg"
                             className="w-full md:w-auto ml-auto font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 shadow-sm transition-all duration-200"
                             onClick={handleGenerateReport}
-                            disabled={!jobDescription || (!selfDescription && !fileName)}
+                            disabled={!jobDescription || !selfDescription}
                         >
                             Generate Report
                         </Button>

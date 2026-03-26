@@ -16,9 +16,9 @@ async function generateInterViewReportController(req, res) {
             });
         }
 
-        if (!req.file && !selfDescription) {
+        if (!selfDescription) {
             return res.status(400).json({
-                message: "Either a Resume file or selfDescription is required"
+                message: "selfDescription is required"
             });
         }
 

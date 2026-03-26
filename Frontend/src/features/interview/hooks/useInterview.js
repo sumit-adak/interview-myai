@@ -90,8 +90,18 @@ export const useInterview = () => {
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // html2pdf accepts a raw HTML string. No need to append to DOM!
-            await html2pdf().set(opt).from(cleanHtml).save();
+            // html2pdf has issues with full HTML documents because it sets innerHTML which strips <html> and <body>. 
+            // We replace body with div to keep any inline styles the AI put on the body tag!
+            let safeHtml = cleanHtml.replace(/<body/gi, "<div id='resume-body-wrapper'").replace(/<\/body>/gi, "</div>");
+
+            const wrapperHtml = `
+                <div style="background-color: white !important; color: black !important; text-align: left; width: 100%; min-height: 100vh;">
+                    ${safeHtml}
+                </div>
+            `;
+
+            // html2pdf accepts a raw HTML string.
+            await html2pdf().set(opt).from(wrapperHtml).save();
 
         } catch (error) {
             console.log(error)

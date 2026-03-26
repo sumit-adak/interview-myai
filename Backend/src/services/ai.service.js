@@ -142,13 +142,14 @@ const generateFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
     const education = extractSection(resume || selfDescription, "education")
 
     return `<!doctype html><html><head><meta charset='utf-8'><style>
-        body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#fff;line-height:1.5;padding:32px;max-width:900px;margin:auto;}
-        h1{font-size:30px;margin-bottom:4px;color:#111827;}
-        h2{font-size:18px;color:#111827;margin-top:24px;margin-bottom:8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px;}
-        ul{margin:8px 0 18px 20px;}
-        p{margin:0 0 14px 0;}
-        .meta{font-size:13px;color:#4b5563;margin-bottom:18px;}
+        .resume-wrapper{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#fff;line-height:1.5;padding:32px;max-width:900px;margin:auto;text-align:left;}
+        .resume-wrapper h1{font-size:30px;margin-bottom:4px;color:#111827;}
+        .resume-wrapper h2{font-size:18px;color:#111827;margin-top:24px;margin-bottom:8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px;}
+        .resume-wrapper ul{margin:8px 0 18px 20px;}
+        .resume-wrapper p{margin:0 0 14px 0;}
+        .resume-wrapper .meta{font-size:13px;color:#4b5563;margin-bottom:18px;}
     </style></head><body>
+    <div class="resume-wrapper">
     <h1>Candidate Resume</h1>
     <p class='meta'>Auto-generated fallback resume content</p>
 
@@ -166,6 +167,7 @@ const generateFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
 
     <h2>Target Job</h2>
     <p>${escapeHtml(jobDescription || "Not specified")}</p>
+    </div>
 </body></html>`
 }
 
