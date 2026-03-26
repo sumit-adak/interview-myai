@@ -71,6 +71,22 @@ async function generateInterViewReportController(req, res) {
     } catch (error) {
         console.error("Error in generateInterViewReportController:", error);
 
+        // ✅ Provide graceful API error formatting based on the error origin
+        if (error.status === 400 || error.message?.includes("model")) {
+            return res.status(502).json({
+                message: "AI Service Error: The selected model is invalid or unavailable.",
+                error: error.message
+            });
+        }
+        
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+               message: "Database Validation Failed",
+               error: error.message
+            });
+        }
+
+        // Generic fallback
         return res.status(500).json({
             message: "Internal Server Error",
             error: error.message
