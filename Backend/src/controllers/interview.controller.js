@@ -65,36 +65,7 @@ async function generateInterViewReportController(req, res) {
     } catch (error) {
         console.error("Error in generateInterViewReportController:", error);
 
-        // ✅ Provide graceful API error formatting based on the error origin
-        if (error.status === 400 || error.status === 429 || error.message?.toLowerCase().includes("model") || error.message?.toLowerCase().includes("quota")) {
-            const msg = error.message?.toLowerCase() || "";
-            
-            if (msg.includes("quota") || error.status === 429) {
-                return res.status(429).json({
-                    message: "AI Service Error: Your Google API Key has exceeded its quota limits. Please use a new API key or enable billing.",
-                    error: error.message
-                });
-            }
-            
-            if (msg.includes("model")) {
-                return res.status(502).json({
-                    message: "AI Service Error: The selected model is invalid or unavailable.",
-                    error: error.message
-                });
-            }
-
-            return res.status(502).json({
-                message: "AI Service Error: Request failed (Bad prompt, schema constraint, or API rate limit).",
-                error: error.message
-            });
-        }
-        
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-               message: "Database Validation Failed",
-               error: error.message
-            });
-        }
+       
 
         // Generic fallback
         return res.status(500).json({
