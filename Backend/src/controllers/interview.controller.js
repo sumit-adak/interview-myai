@@ -22,27 +22,21 @@ async function generateInterViewReportController(req, res) {
             });
         }
 
-        // ✅ Parse resume file
+        // ✅ Parse resume file (Graceful fallback)
         let resumeText = "";
         if (req.file) {
-            const fileMime = req.file.mimetype
-
-            if (fileMime === "application/pdf") {
-                const pdfData = await pdfParse(req.file.buffer)
-                resumeText = pdfData.text
-            } else if (fileMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                const docxResult = await mammoth.extractRawText({ buffer: req.file.buffer })
-                resumeText = docxResult.value
-            } else {
-                return res.status(415).json({
-                    message: "Unsupported resume format. Please upload PDF or DOCX."
-                })
-            }
-
-            if (!resumeText || !resumeText.trim()) {
-                return res.status(400).json({
-                    message: "Resume text could not be extracted; please provide valid PDF or DOCX resume."
-                })
+            try {
+                const fileMime = req.file.mimetype;
+                if (fileMime === "application/pdf") {
+                    const pdfData = await pdfParse(req.file.buffer);
+                    resumeText = pdfData.text;
+                } else if (fileMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    const docxResult = await mammoth.extractRawText({ buffer: req.file.buffer });
+                    resumeText = docxResult.value;
+                }
+            } catch (parseError) {
+                console.warn("Resume parsing failed, but continuing without resume text:", parseError);
+                resumeText = ""; // Fallback to generating without resume
             }
         }
 
@@ -72,13 +66,25 @@ async function generateInterViewReportController(req, res) {
         console.error("Error in generateInterViewReportController:", error);
 
         // ✅ Provide graceful API error formatting based on the error origin
-        if (error.status === 400 || error.message?.includes("model")) {
-            // Distinguish actual model errors from other bad requests (like schema validation or token limit)
-            const isModelError = error.message?.toLowerCase().includes("model");
+        if (error.status === 400 || error.status === 429 || error.message?.toLowerCase().includes("model") || error.message?.toLowerCase().includes("quota")) {
+            const msg = error.message?.toLowerCase() || "";
+            
+            if (msg.includes("quota") || error.status === 429) {
+                return res.status(429).json({
+                    message: "AI Service Error: Your Google API Key has exceeded its quota limits. Please use a new API key or enable billing.",
+                    error: error.message
+                });
+            }
+            
+            if (msg.includes("model")) {
+                return res.status(502).json({
+                    message: "AI Service Error: The selected model is invalid or unavailable.",
+                    error: error.message
+                });
+            }
+
             return res.status(502).json({
-                message: isModelError 
-                    ? "AI Service Error: The selected model is invalid or unavailable."
-                    : "AI Service Error: Request failed (Bad prompt, schema constraint, or API rate limit).",
+                message: "AI Service Error: Request failed (Bad prompt, schema constraint, or API rate limit).",
                 error: error.message
             });
         }
