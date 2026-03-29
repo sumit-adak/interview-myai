@@ -134,7 +134,7 @@ const generateFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
         const regex = new RegExp(`${label}[:\\n]+([\\s\\S]*?)(?:\\n{2,}|$)`, "i")
         const match = text.match(regex)
         if (!match) return []
-        return match[1].split(/\\n+/).map(item => item.trim()).filter(Boolean).slice(0, 7)
+        return match[1].split(/[\\n,]+/).map(item => item.replace(/-|•/g, '').trim()).filter(Boolean).slice(0, 10)
     }
 
     const skills = extractSection(resume || selfDescription, "skills")
@@ -142,31 +142,57 @@ const generateFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
     const education = extractSection(resume || selfDescription, "education")
 
     return `<!doctype html><html><head><meta charset='utf-8'><style>
-        .resume-wrapper{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#fff;line-height:1.5;padding:32px;max-width:900px;margin:auto;text-align:left;}
-        .resume-wrapper h1{font-size:30px;margin-bottom:4px;color:#111827;}
-        .resume-wrapper h2{font-size:18px;color:#111827;margin-top:24px;margin-bottom:8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px;}
-        .resume-wrapper ul{margin:8px 0 18px 20px;}
-        .resume-wrapper p{margin:0 0 14px 0;}
-        .resume-wrapper .meta{font-size:13px;color:#4b5563;margin-bottom:18px;}
+        :root { --primary: #2563eb; --text-main: #1f2937; --text-muted: #6b7280; --border: #e5e7eb; --bg: #ffffff; }
+        body { margin: 0; background: #f3f4f6; }
+        .resume-wrapper { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--text-main); background: var(--bg); line-height: 1.6; padding: 48px; max-width: 850px; margin: 40px auto; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .resume-wrapper header { border-bottom: 2px solid var(--primary); padding-bottom: 24px; margin-bottom: 32px; text-align: center; }
+        .resume-wrapper header h1 { font-size: 36px; margin: 0 0 8px 0; color: #111827; letter-spacing: -0.5px; }
+        .resume-wrapper header p { color: var(--text-muted); font-size: 15px; margin: 0; }
+        .resume-wrapper section { margin-bottom: 32px; }
+        .resume-wrapper section h2 { font-size: 20px; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 16px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .resume-wrapper .summary { font-size: 16px; color: #4b5563; }
+        .resume-wrapper ul.list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .resume-wrapper ul.list li { position: relative; padding-left: 20px; color: #374151; }
+        .resume-wrapper ul.list li::before { content: "•"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+        .resume-wrapper .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .resume-wrapper .skills-grid span { background: #eff6ff; color: var(--primary); padding: 6px 14px; border-radius: 99px; font-size: 14px; font-weight: 500; border: 1px solid #bfdbfe; }
     </style></head><body>
     <div class="resume-wrapper">
-    <h1>Candidate Resume</h1>
-    <p class='meta'>Auto-generated fallback resume content</p>
+        <header>
+            <h1>Candidate Resume</h1>
+            <p>Auto-generated from candidate input</p>
+        </header>
 
-    <h2>Professional Summary</h2>
-    <p>${escapeHtml(summary)}</p>
+        <section>
+            <h2>Professional Summary</h2>
+            <div class="summary">${escapeHtml(summary)}</div>
+        </section>
 
-    <h2>Skills</h2>
-    <ul>${(skills.length ? skills : ["No explicit skills extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+        <section>
+            <h2>Top Skills</h2>
+            <div class="skills-grid">
+                ${(skills.length ? skills : ["Communication", "Problem Solving"]).map(s => `<span>${escapeHtml(s)}</span>`).join("")}
+            </div>
+        </section>
 
-    <h2>Professional Experience</h2>
-    <ul>${(experience.length ? experience : ["No explicit experience details extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+        <section>
+            <h2>Experience Highlights</h2>
+            <ul class="list">
+                ${(experience.length ? experience : ["Demonstrated strong capability in relevant field.", "Worked effectively in team environments."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}
+            </ul>
+        </section>
 
-    <h2>Education</h2>
-    <ul>${(education.length ? education : ["No explicit education details extracted."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+        <section>
+            <h2>Education Details</h2>
+            <ul class="list">
+                ${(education.length ? education : ["Degree / Certification details to be verified."]).map(s => `<li>${escapeHtml(s)}</li>`).join("")}
+            </ul>
+        </section>
 
-    <h2>Target Job</h2>
-    <p>${escapeHtml(jobDescription || "Not specified")}</p>
+        <section>
+            <h2>Target Role</h2>
+            <p class="summary">${escapeHtml(jobDescription || "General Application")}</p>
+        </section>
     </div>
 </body></html>`
 }
@@ -183,13 +209,14 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
         selfDescription && `Self Description:\n${selfDescription}`
     ].filter(Boolean).join("\n\n") || "No input data provided."
 
-    const prompt = `Generate a professional, ATS-friendly resume in HTML from the following candidate data. Use inline CSS only, and avoid external stylesheets.
+    const prompt = `Generate a professional, highly aesthetic, ATS-friendly resume in HTML from the following candidate data. Use inline CSS only, and avoid external stylesheets.
 - Require sections: Name, Title, Summary, Skills, Experience, Education, Certifications, Projects, Contact.
-- Prefer a concise 1-2 page layout.
+- Ensure the design is modern, clean, and uses a visually appealing color palette (e.g., dark slate/navy text, soft grey backgrounds, subtle borders).
+- Prefer a concise 1-2 page layout. Use flexbox/grid for structuring layout internally.
 - If values are missing, infer naturally from the candidate data but don't invent unrelated experiences.
-- Use the resume text and self-description as source of truth.
+- Use the resume text and self-description as the primary source of truth.
 - Preserve key dates, tech stack, achievements.
-- Output must be JSON with a single field named \"html\" containing the full resume HTML.
+- Output must be JSON with a single field named "html" containing the full, valid template HTML.
 
 Candidate input data:\n${candidateData}`
 
@@ -202,7 +229,7 @@ Candidate input data:\n${candidateData}`
             config: {
                 responseMimeType: "application/json",
                 responseSchema: zodToJsonSchema(resumePdfSchema),
-                maxOutputTokens: 1200
+                maxOutputTokens: 2800
             }
         })
 

@@ -73,8 +73,12 @@ async function generateInterViewReportController(req, res) {
 
         // ✅ Provide graceful API error formatting based on the error origin
         if (error.status === 400 || error.message?.includes("model")) {
+            // Distinguish actual model errors from other bad requests (like schema validation or token limit)
+            const isModelError = error.message?.toLowerCase().includes("model");
             return res.status(502).json({
-                message: "AI Service Error: The selected model is invalid or unavailable.",
+                message: isModelError 
+                    ? "AI Service Error: The selected model is invalid or unavailable."
+                    : "AI Service Error: Request failed (Bad prompt, schema constraint, or API rate limit).",
                 error: error.message
             });
         }
