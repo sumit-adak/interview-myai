@@ -97,7 +97,7 @@ Job Description: ${minify(jobDescription)}
 The report should be concise, action-oriented, and ready to use for interview preparation.`
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.0-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -223,7 +223,7 @@ Candidate input data:\n${candidateData}`
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
+            model: "gemini-3.0-flash",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
