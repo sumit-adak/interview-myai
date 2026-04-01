@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useInterview } from '../hooks/useInterview'
-import { useAuth } from '../../auth/hooks/useAuth'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
 import { 
@@ -57,11 +56,17 @@ const Interview = () => {
     const { getReportById, report: activeReport, loading, getResumePdf } = useInterview()
     const [activeTab, setActiveTab] = useState('technical')
     const [isGeneratingResume, setIsGeneratingResume] = useState(false)
+    const [fetchError, setFetchError] = useState("")
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (interviewId && getReportById) getReportById(interviewId)
-    }, [interviewId, getReportById])
+        if (interviewId) {
+            setFetchError("")
+            getReportById(interviewId).catch((err) => {
+                setFetchError(err?.message || "Could not load this report.")
+            })
+        }
+    }, [interviewId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleDownloadPdf = () => {
         const element = document.getElementById('report-content')
@@ -90,16 +95,19 @@ const Interview = () => {
         return (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
                 <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
-                <h2 className="text-lg font-medium text-foreground">Loading specific report...</h2>
+                <h2 className="text-lg font-medium text-foreground">Loading report...</h2>
             </div>
         )
     }
 
-    if (!activeReport) {
+    if (fetchError || !activeReport) {
         return (
-            <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-                <AlertCircle className="w-12 h-12 text-destructive mb-4" />
-                <h2 className="text-2xl font-semibold text-foreground mb-2">Report Not Found</h2>
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-4">
+                <AlertCircle className="w-12 h-12 text-destructive" />
+                <h2 className="text-2xl font-semibold text-foreground">Report Not Found</h2>
+                <p className="text-sm text-muted-foreground text-center max-w-sm">
+                    {fetchError || "This report does not exist or you don't have permission to view it."}
+                </p>
                 <Button onClick={() => navigate('/dashboard')}>Return to Dashboard</Button>
             </div>
         )

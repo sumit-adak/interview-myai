@@ -1,14 +1,12 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
-import { useCallback, useContext, useEffect } from "react"
+import { useCallback, useContext } from "react"
 import { InterviewContext } from "../interview.context"
-import { useParams } from "react-router"
 import html2pdf from "html2pdf.js"
 
 
 export const useInterview = () => {
 
     const context = useContext(InterviewContext)
-    const { interviewId } = useParams()
 
     if (!context) {
         throw new Error("useInterview must be used within an InterviewProvider")
@@ -18,13 +16,14 @@ export const useInterview = () => {
 
     const generateReport = useCallback(async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
+        setReport(null) // clear any old report
         let response = null
         try {
             response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
         } catch (error) {
-            console.log(error)
-            throw error
+            const msg = error?.response?.data?.message || error?.message || "Failed to generate report. Please try again."
+            throw new Error(msg)
         } finally {
             setLoading(false)
         }
@@ -40,8 +39,8 @@ export const useInterview = () => {
             response = await getInterviewReportById(reportId)
             setReport(response.interviewReport)
         } catch (error) {
-            console.log(error)
-            throw error
+            const msg = error?.response?.data?.message || error?.message || "Failed to fetch report."
+            throw new Error(msg)
         } finally {
             setLoading(false)
         }
@@ -49,20 +48,18 @@ export const useInterview = () => {
     }, [setLoading, setReport])
 
     const getReports = useCallback(async () => {
-        setLoading(true)
+        // Use a separate loading state indicator so it does NOT block the whole page
         let response = null
         try {
             response = await getAllInterviewReports()
             setReports(response.interviewReports)
         } catch (error) {
-            console.log(error)
-            throw error
-        } finally {
-            setLoading(false)
+            console.error("Failed to fetch reports list:", error)
+            setReports([])
         }
 
         return response?.interviewReports
-    }, [setLoading, setReports])
+    }, [setReports])
 
     const getResumePdf = useCallback(async (interviewReportId) => {
         setLoading(true)
@@ -104,20 +101,13 @@ export const useInterview = () => {
             await html2pdf().set(opt).from(wrapperHtml).save();
 
         } catch (error) {
-            console.log(error)
-            alert("Failed to download resume. Please try again.")
+            console.error("Resume PDF generation error:", error)
+            const msg = error?.response?.data?.message || error?.message || "Failed to download resume. Please try again."
+            alert(msg)
         } finally {
             setLoading(false)
         }
     }, [setLoading])
-
-    useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        } else {
-            getReports()
-        }
-    }, [ interviewId, getReportById, getReports ])
 
     return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
 

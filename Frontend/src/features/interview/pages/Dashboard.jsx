@@ -1,21 +1,28 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent } from '../../../components/ui/card'
-import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight, FileText } from 'lucide-react'
+import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight, FileText, AlertCircle } from 'lucide-react'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Dashboard = () => {
-    const { loading, generateReport, reports } = useInterview()
+    const { loading, generateReport, reports, getReports } = useInterview()
     const { logout } = useAuth()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
     const [isDragging, setIsDragging] = useState(false)
     const [fileName, setFileName] = useState("")
     const [isRecentExpanded, setIsRecentExpanded] = useState(false)
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
     const resumeInputRef = useRef()
     const navigate = useNavigate()
+
+    // Fetch past reports on mount (non-blocking — does NOT set global loading)
+    useEffect(() => {
+        getReports()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0]
@@ -26,28 +33,32 @@ const Dashboard = () => {
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current?.files?.[0]
+        setErrorMsg("")
         if (!jobDescription || !selfDescription) {
-            alert("Please provide both a job description and a self description.")
+            setErrorMsg("Please provide both a job description and a self description.")
             return
         }
+        setIsGenerating(true)
         try {
             const data = await generateReport({ jobDescription, selfDescription, resumeFile })
             if (data?._id) {
                 navigate(`/interview/${data._id}`)
             } else {
-                alert("Failed to generate report. Please try again.")
+                setErrorMsg("Failed to generate report. Please try again.")
             }
         } catch (error) {
-            alert(error?.response?.data?.message || "Something went wrong")
+            setErrorMsg(error?.message || "Something went wrong. Please try again.")
+        } finally {
+            setIsGenerating(false)
         }
     }
 
-    if (loading) {
+    if (isGenerating) {
         return (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
                 <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                 <h2 className="text-xl font-semibold text-foreground">Generating your report...</h2>
-                <p className="text-muted-foreground mt-2 text-sm">Please wait while our engine analyzes your profile.</p>
+                <p className="text-muted-foreground mt-2 text-sm">Please wait while our AI engine analyzes your profile. This may take ~30s.</p>
             </div>
         )
     }
@@ -237,6 +248,17 @@ const Dashboard = () => {
                         </div>
                     </div>
 
+                    {/* Error Banner */}
+                    {errorMsg && (
+                        <div className="fixed bottom-20 left-0 lg:left-56 right-0 px-6 z-40">
+                            <div className="max-w-6xl mx-auto bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 flex items-center gap-3 text-sm text-destructive">
+                                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                                <span>{errorMsg}</span>
+                                <button className="ml-auto text-xs underline opacity-70 hover:opacity-100" onClick={() => setErrorMsg("")}>Dismiss</button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Bottom Sticky Action Bar */}
                     <div className="fixed bottom-0 left-0 lg:left-56 right-0 p-4 border-t border-border bg-background/80 backdrop-blur-md z-30 flex items-center justify-between shadow-sm">
                         <div className="hidden md:flex items-center gap-2 text-sm font-medium text-muted-foreground px-4">
@@ -246,9 +268,9 @@ const Dashboard = () => {
                             size="lg"
                             className="w-full md:w-auto ml-auto font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 shadow-sm transition-all duration-200"
                             onClick={handleGenerateReport}
-                            disabled={!jobDescription || !selfDescription}
+                            disabled={isGenerating || !jobDescription || !selfDescription}
                         >
-                            Generate Report
+                            {isGenerating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating...</> : "Generate Report"}
                         </Button>
                     </div>
                 </div>

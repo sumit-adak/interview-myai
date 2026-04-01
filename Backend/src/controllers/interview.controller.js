@@ -65,12 +65,17 @@ async function generateInterViewReportController(req, res) {
     } catch (error) {
         console.error("Error in generateInterViewReportController:", error);
 
-       
+        const msg = error?.message || "Internal Server Error"
 
-        // Generic fallback
+        // Surface quota errors as 429
+        if (msg.includes("quota") || msg.includes("RESOURCE_EXHAUSTED")) {
+            return res.status(429).json({
+                message: "AI service quota exceeded. Please wait a moment and try again."
+            });
+        }
+
         return res.status(500).json({
-            message: "Internal Server Error",
-            error: error.message
+            message: msg || "Internal Server Error"
         });
     }
 }

@@ -96,17 +96,41 @@ Job Description: ${minify(jobDescription)}
 
 The report should be concise, action-oriented, and ready to use for interview preparation.`
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3.0-flash",
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            responseSchema: zodToJsonSchema(interviewReportSchema),
-            maxOutputTokens: 800
+    let response
+    try {
+        response = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: zodToJsonSchema(interviewReportSchema),
+                maxOutputTokens: 4096
+            }
+        })
+    } catch (aiError) {
+        const msg = aiError?.message || ""
+        if (msg.includes("quota") || msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
+            throw new Error("AI quota exceeded. Please try again later or check your Google AI API plan.")
         }
-    })
+        if (msg.includes("not found") || msg.includes("404") || msg.includes("MODEL_NOT_FOUND")) {
+            throw new Error("AI model not found. Please contact support.")
+        }
+        throw aiError
+    }
 
-    return JSON.parse(response.text)
+    if (!response?.text) {
+        throw new Error("AI returned an empty response. Please try again.")
+    }
+
+    let parsed
+    try {
+        parsed = JSON.parse(response.text)
+    } catch (parseErr) {
+        console.error("Failed to parse AI JSON response:", response.text?.slice(0, 500))
+        throw new Error("AI returned malformed data. Please try again.")
+    }
+
+    return parsed
 
 
 }
@@ -223,12 +247,12 @@ Candidate input data:\n${candidateData}`
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3.0-flash",
+            model: "gemini-2.0-flash",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: zodToJsonSchema(resumePdfSchema),
-                maxOutputTokens: 2800
+                maxOutputTokens: 4096
             }
         })
 
