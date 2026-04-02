@@ -479,125 +479,168 @@ const buildAtsFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
     :root {
       --text: #111827;
       --muted: #4b5563;
-      --border: #d1d5db;
-      --soft: #f3f4f6;
+      --line: #cbd5e1;
+      --soft: #f8fafc;
       --accent: #0f172a;
+      --primary: #1e3a8a;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       color: var(--text);
-      font-family: "Calibri", "Arial", sans-serif;
-      line-height: 1.45;
+      font-family: "Helvetica Neue", "Arial", sans-serif;
+      line-height: 1.4;
       background: #ffffff;
-      font-size: 12pt;
+      font-size: 11pt;
     }
     .page {
       width: 210mm;
       margin: 0 auto;
-      padding: 14mm;
+      padding: 12mm 13mm;
+      border: 1px solid var(--line);
+      min-height: 297mm;
+      background: #fff;
+    }
+    .header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
     }
     .name {
-      font-size: 24pt;
+      font-size: 26pt;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.1px;
       color: var(--accent);
-      margin: 0 0 4px 0;
+      margin: 0;
+      line-height: 1.15;
     }
     .title {
-      font-size: 12pt;
+      font-size: 12.5pt;
       font-weight: 600;
-      margin: 0 0 8px 0;
+      color: var(--primary);
+      margin: 4px 0 8px 0;
     }
-    .contact {
-      font-size: 10.5pt;
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+      font-size: 10pt;
       color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-      margin-bottom: 12px;
+    }
+    .section {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      padding: 8px 10px 9px;
+      border-radius: 4px;
+      background: var(--soft);
     }
     h2 {
-      font-size: 11pt;
+      font-size: 10.5pt;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin: 12px 0 6px;
+      letter-spacing: 1px;
+      margin: 0 0 6px 0;
       color: var(--accent);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 3px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
     }
     p {
       margin: 0;
       color: var(--text);
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
     ul {
-      margin: 6px 0 0 18px;
+      margin: 4px 0 0 18px;
       padding: 0;
     }
     li {
-      margin: 3px 0;
+      margin: 2px 0;
       color: var(--text);
+      line-height: 1.45;
     }
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
+      gap: 5px;
+      margin-top: 4px;
     }
     .chip {
-      border: 1px solid var(--border);
-      background: var(--soft);
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 10pt;
-      color: #1f2937;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 9.6pt;
+      font-weight: 600;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media print {
+      body { background: #fff; }
+      .page { border: 1px solid var(--line); }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <h1 class="name">${escapeHtml(profile.name)}</h1>
-    <p class="title">${escapeHtml(profile.roleHint)}</p>
-    <p class="contact">${escapeHtml(profile.email)} | ${escapeHtml(profile.phone)} | ${escapeHtml(profile.linkedin)} | ${escapeHtml(profile.github)}</p>
+    <header class="header">
+      <h1 class="name">${escapeHtml(profile.name)}</h1>
+      <p class="title">${escapeHtml(profile.roleHint)}</p>
+      <div class="contact-grid">
+        <div><strong>Email:</strong> ${escapeHtml(profile.email)}</div>
+        <div><strong>Phone:</strong> ${escapeHtml(profile.phone)}</div>
+        <div><strong>LinkedIn:</strong> ${escapeHtml(profile.linkedin)}</div>
+        <div><strong>GitHub:</strong> ${escapeHtml(profile.github)}</div>
+      </div>
+    </header>
 
-    <section>
+    <section class="section">
       <h2>Professional Summary</h2>
       <p>${escapeHtml(profile.summary)}</p>
     </section>
 
-    <section>
+    <section class="section">
       <h2>Core Skills</h2>
       <div class="chips">
         ${profile.skills.map((skill) => `<span class="chip">${escapeHtml(skill)}</span>`).join("")}
       </div>
     </section>
 
-    <section>
-      <h2>Professional Experience</h2>
-      <ul>
-        ${profile.projects.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-      </ul>
-    </section>
+    <div class="two-col">
+      <section class="section">
+        <h2>Professional Experience</h2>
+        <ul>
+          ${profile.projects.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
 
-    <section>
-      <h2>Projects</h2>
-      <ul>
-        ${profile.projects.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-      </ul>
-    </section>
+      <section class="section">
+        <h2>Projects</h2>
+        <ul>
+          ${profile.projects.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+    </div>
 
-    <section>
-      <h2>Education</h2>
-      <ul>
-        ${profile.education.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-      </ul>
-    </section>
+    <div class="two-col">
+      <section class="section">
+        <h2>Education</h2>
+        <ul>
+          ${profile.education.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
 
-    <section>
-      <h2>Certifications</h2>
-      <ul>
-        <li>Add certifications relevant to ${escapeHtml(profile.roleHint)} (cloud, backend, frontend, testing, security).</li>
-      </ul>
-    </section>
+      <section class="section">
+        <h2>Certifications</h2>
+        <ul>
+          <li>Add certifications relevant to ${escapeHtml(profile.roleHint)} (cloud, backend, frontend, testing, security).</li>
+        </ul>
+      </section>
+    </div>
   </main>
 </body>
 </html>`
@@ -606,6 +649,16 @@ const buildAtsFallbackResumeHtml = ({ resume, selfDescription, jobDescription })
 const parseHtmlFromText = (text = "") => {
     if (!text || typeof text !== "string") return ""
     const trimmed = text.trim()
+
+    const htmlStart = trimmed.search(/<!doctype html|<html/i)
+    if (htmlStart >= 0) {
+        const htmlChunk = trimmed.slice(htmlStart)
+        const htmlEnd = htmlChunk.toLowerCase().lastIndexOf("</html>")
+        if (htmlEnd >= 0) {
+            return htmlChunk.slice(0, htmlEnd + 7)
+        }
+        return htmlChunk
+    }
 
     if (trimmed.startsWith("```")) {
         const codeMatch = trimmed.match(/```(?:html|json)?\n?([\s\S]*?)```/i)

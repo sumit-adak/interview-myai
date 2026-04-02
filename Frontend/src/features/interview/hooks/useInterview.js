@@ -99,7 +99,12 @@ export const useInterview = () => {
             }
 
             // Sometimes AI wraps the HTML string in markdown ```html ... ``` blocks. Strip them.
-            const cleanHtml = rawHtml.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
+            let cleanHtml = rawHtml.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
+
+            const htmlStartIdx = cleanHtml.search(/<!doctype html|<html/i)
+            if (htmlStartIdx >= 0) {
+                cleanHtml = cleanHtml.slice(htmlStartIdx)
+            }
 
             const opt = {
                 margin:       10,
