@@ -3,6 +3,12 @@ const mammoth = require("mammoth");
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
+function inferTitleFromJobDescription(jobDescription = "") {
+    const firstLine = String(jobDescription).split("\n").find(Boolean)?.trim()
+    if (!firstLine) return "Interview Report"
+    return firstLine.slice(0, 120)
+}
+
 /**
  * @description Generate Interview Report
  */
@@ -47,13 +53,24 @@ async function generateInterViewReportController(req, res) {
             jobDescription
         });
 
+        const safeAiResponse = {
+            matchScore: Number.isFinite(aiResponse?.matchScore)
+                ? Math.max(0, Math.min(100, aiResponse.matchScore))
+                : 0,
+            technicalQuestions: Array.isArray(aiResponse?.technicalQuestions) ? aiResponse.technicalQuestions : [],
+            behavioralQuestions: Array.isArray(aiResponse?.behavioralQuestions) ? aiResponse.behavioralQuestions : [],
+            skillGaps: Array.isArray(aiResponse?.skillGaps) ? aiResponse.skillGaps : [],
+            preparationPlan: Array.isArray(aiResponse?.preparationPlan) ? aiResponse.preparationPlan : [],
+            title: (aiResponse?.title || "").trim() || inferTitleFromJobDescription(jobDescription)
+        }
+
         // ✅ Save to DB
         const interviewReport = await interviewReportModel.create({
             user: req.user?.id || null, // safe optional
             resume: resumeText,
             selfDescription,
             jobDescription,
-            ...aiResponse
+            ...safeAiResponse
         });
 
         // ✅ Response
