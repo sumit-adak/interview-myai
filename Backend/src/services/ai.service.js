@@ -6,6 +6,115 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 })
 
+const REPORT_MODEL_CANDIDATES = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite"
+]
+
+const RESUME_MODEL_CANDIDATES = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite"
+]
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const normalizeError = (error) => (error?.message || "").toString()
+const isQuotaError = (error) => {
+    const msg = normalizeError(error)
+    return msg.includes("quota") || msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")
+}
+const isModelNotFoundError = (error) => {
+    const msg = normalizeError(error)
+    return msg.includes("not found") || msg.includes("404") || msg.includes("MODEL_NOT_FOUND")
+}
+
+const clampScore = (value) => {
+    const num = Number(value)
+    if (!Number.isFinite(num)) return 0
+    return Math.max(0, Math.min(100, num))
+}
+
+const extractTopKeywords = (text = "") => {
+    return String(text)
+        .toLowerCase()
+        .split(/[^a-z0-9+#.]+/)
+        .filter(Boolean)
+        .filter((word) => word.length > 2)
+        .filter((word) => !["the", "and", "for", "with", "from", "that", "this", "you", "your", "are", "job", "role", "have", "has"].includes(word))
+        .slice(0, 20)
+}
+
+const buildFallbackInterviewReport = ({ resume = "", selfDescription = "", jobDescription = "" }) => {
+    const jobText = String(jobDescription)
+    const profileText = `${resume}\n${selfDescription}`.toLowerCase()
+    const keywords = extractTopKeywords(jobText)
+    const missing = keywords.filter((kw) => !profileText.includes(kw)).slice(0, 4)
+
+    const title = jobText.split("\n").find(Boolean)?.trim()?.slice(0, 120) || "Interview Report"
+    const matched = keywords.length ? keywords.filter((kw) => profileText.includes(kw)).length : 0
+    const matchScore = keywords.length ? Math.round((matched / keywords.length) * 100) : 55
+
+    return {
+        title,
+        matchScore: clampScore(matchScore),
+        technicalQuestions: [
+            {
+                question: "Walk me through one project most relevant to this role and your technical decisions.",
+                intention: "Checks practical problem solving and depth of ownership.",
+                answer: "Explain context, architecture, tradeoffs, bottlenecks, and measurable outcome."
+            },
+            {
+                question: `How would you approach the core responsibilities in this role: ${title}?`,
+                intention: "Evaluates planning ability and alignment with job expectations.",
+                answer: "Break work into phases, identify risks, tooling, and success metrics."
+            }
+        ],
+        behavioralQuestions: [
+            {
+                question: "Tell me about a difficult deadline and how you delivered quality under pressure.",
+                intention: "Assesses prioritization, communication, and execution discipline.",
+                answer: "Use STAR method with concrete timeline, actions, and outcome."
+            },
+            {
+                question: "Describe a time you disagreed with a teammate and how you resolved it.",
+                intention: "Assesses collaboration maturity and conflict management.",
+                answer: "Show empathy, data-backed discussion, and the final team outcome."
+            }
+        ],
+        skillGaps: missing.map((skill) => ({
+            skill,
+            severity: "medium"
+        })),
+        preparationPlan: [
+            {
+                day: 1,
+                focus: "Role and requirement mapping",
+                tasks: [
+                    "Map each job requirement to one past project example",
+                    "Prepare 5 quantified achievement bullets"
+                ]
+            },
+            {
+                day: 2,
+                focus: "Technical deep-dive",
+                tasks: [
+                    "Practice core technical concepts expected for the role",
+                    "Prepare architecture and tradeoff explanations"
+                ]
+            },
+            {
+                day: 3,
+                focus: "Behavioral and mock interview",
+                tasks: [
+                    "Practice STAR stories for conflict, ownership, and leadership",
+                    "Run one mock interview and refine weak areas"
+                ]
+            }
+        ]
+    }
+}
+
 const interviewReportSchema = z.object({
     matchScore: z.number().describe(
         "A precise evaluation score ranging from 0 to 100 that measures how effectively the candidate’s profile aligns with the job description. This score should consider technical expertise, relevant experience, project exposure, problem-solving ability, and overall job readiness."
@@ -96,42 +205,56 @@ Job Description: ${minify(jobDescription)}
 
 The report should be concise, action-oriented, and ready to use for interview preparation.`
 
-    let response
-    try {
-        response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: zodToJsonSchema(interviewReportSchema),
-                maxOutputTokens: 4096
+    let lastError
+    for (const model of REPORT_MODEL_CANDIDATES) {
+        for (let attempt = 1; attempt <= 2; attempt += 1) {
+            try {
+                const response = await ai.models.generateContent({
+                    model,
+                    contents: prompt,
+                    config: {
+                        responseMimeType: "application/json",
+                        responseSchema: zodToJsonSchema(interviewReportSchema),
+                        maxOutputTokens: 2048
+                    }
+                })
+
+                if (!response?.text) {
+                    throw new Error("AI returned an empty response. Please try again.")
+                }
+
+                const parsed = JSON.parse(response.text)
+                return parsed
+            } catch (aiError) {
+                lastError = aiError
+
+                if (isQuotaError(aiError) && attempt < 2) {
+                    await sleep(1200 * attempt)
+                    continue
+                }
+
+                if (isModelNotFoundError(aiError)) {
+                    break
+                }
+
+                if (!isQuotaError(aiError)) {
+                    break
+                }
             }
-        })
-    } catch (aiError) {
-        const msg = aiError?.message || ""
-        if (msg.includes("quota") || msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
-            throw new Error("AI quota exceeded. Please try again later or check your Google AI API plan.")
         }
-        if (msg.includes("not found") || msg.includes("404") || msg.includes("MODEL_NOT_FOUND")) {
-            throw new Error("AI model not found. Please contact support.")
-        }
-        throw aiError
     }
 
-    if (!response?.text) {
-        throw new Error("AI returned an empty response. Please try again.")
+    if (isQuotaError(lastError)) {
+        console.warn("Quota exceeded while generating AI report. Returning deterministic fallback report.")
+        return buildFallbackInterviewReport({ resume, selfDescription, jobDescription })
     }
-
-    let parsed
-    try {
-        parsed = JSON.parse(response.text)
-    } catch (parseErr) {
-        console.error("Failed to parse AI JSON response:", response.text?.slice(0, 500))
-        throw new Error("AI returned malformed data. Please try again.")
+    if (isModelNotFoundError(lastError)) {
+        throw new Error("AI model not found. Please contact support.")
     }
-
-    return parsed
-
+    if (lastError) {
+        throw lastError
+    }
+    throw new Error("AI report generation failed. Please try again.")
 
 }
 
@@ -246,15 +369,35 @@ Candidate input data:\n${candidateData}`
     let htmlOutput = ""
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: zodToJsonSchema(resumePdfSchema),
-                maxOutputTokens: 4096
+        let response
+        let lastError
+        for (const model of RESUME_MODEL_CANDIDATES) {
+            try {
+                response = await ai.models.generateContent({
+                    model,
+                    contents: prompt,
+                    config: {
+                        responseMimeType: "application/json",
+                        responseSchema: zodToJsonSchema(resumePdfSchema),
+                        maxOutputTokens: 3072
+                    }
+                })
+                break
+            } catch (error) {
+                lastError = error
+                if (isModelNotFoundError(error)) {
+                    continue
+                }
+                if (isQuotaError(error)) {
+                    await sleep(800)
+                    continue
+                }
+                throw error
             }
-        })
+        }
+        if (!response && lastError) {
+            throw lastError
+        }
 
         // Attempt JSON parse of official schema response
         let jsonContent
