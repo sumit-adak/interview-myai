@@ -7,7 +7,13 @@ const Protected = ({children}) => {
 
 
     if(loading){
-        return (<main><h1>Loading...</h1></main>)
+        return (
+            <main className="flex min-h-screen items-center justify-center">
+                <div className="glass-panel rounded-2xl px-6 py-5 text-sm font-medium text-muted-foreground">
+                    Checking your session...
+                </div>
+            </main>
+        )
     }
 
     if(!user){

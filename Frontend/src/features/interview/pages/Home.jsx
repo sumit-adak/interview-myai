@@ -2,83 +2,110 @@ import React from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
-import { BrainCircuit, FileText, Target, ArrowRight } from 'lucide-react'
+import { BrainCircuit, FileText, Target, ArrowRight, ShieldCheck, Sparkles, Gauge, ChartNoAxesCombined } from 'lucide-react'
+
+const features = [
+    {
+        icon: BrainCircuit,
+        title: 'Role-Aware Evaluation',
+        description: 'Deeply matches your profile against job requirements and reveals true readiness.'
+    },
+    {
+        icon: FileText,
+        title: 'ATS Resume Optimizer',
+        description: 'Generates recruiter-friendly, ATS-compliant resumes with measurable bullet quality.'
+    },
+    {
+        icon: Target,
+        title: 'Interview Blueprint',
+        description: 'Creates technical and behavioral preparation plans with daily execution tasks.'
+    }
+]
+
+const highlights = [
+    { icon: Gauge, text: 'Precision match scoring' },
+    { icon: ChartNoAxesCombined, text: 'Gap-focused skill insights' },
+    { icon: ShieldCheck, text: 'Secure auth + private reports' }
+]
 
 const Home = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Standard Navigation Bar */}
-            <nav className="border-b border-border bg-background">
-                <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-                            <span className="font-bold text-white text-lg">AI</span>
+        <div className="min-h-screen text-foreground">
+            <header className="sticky top-0 z-30 border-b border-border/70 bg-background/90 backdrop-blur-sm">
+                <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+                    <button className="flex items-center gap-3" onClick={() => navigate('/')}>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
+                            <Sparkles className="h-4 w-4" />
                         </div>
-                        <span className="font-semibold text-lg tracking-tight text-foreground">InterviewPlatform</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Button variant="ghost" onClick={() => navigate('/login')}>Log In</Button>
-                        <Button onClick={() => navigate('/register')}>Get Started</Button>
+                        <div className="text-left">
+                            <p className="text-sm font-semibold leading-none">Interview AI</p>
+                            <p className="text-xs text-muted-foreground">Professional Prep Suite</p>
+                        </div>
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <Button variant="ghost" onClick={() => navigate('/login')}>Sign in</Button>
+                        <Button onClick={() => navigate('/register')}>Create account</Button>
                     </div>
                 </div>
-            </nav>
+            </header>
 
-            {/* Clean Hero Section */}
-            <main className="max-w-4xl mx-auto px-4 pt-24 pb-16 text-center">
-                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-6">
-                    Analyze Your Resume & Improve Your Interview Chances
-                </h1>
-                <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                    A professional-grade tool to match your profile against real job descriptions. Identify missing skills and generate a targeted roadmap to ace your next technical or behavioral interview.
-                </p>
-                <Button size="lg" className="h-12 px-8 text-base font-medium rounded-md" onClick={() => navigate('/dashboard')}>
-                    Start Free Evaluation
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
+            <main className="mx-auto grid max-w-6xl gap-12 px-4 pb-20 pt-14 lg:grid-cols-[1.1fr_0.9fr]">
+                <section className="space-y-8">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-white/85 px-3 py-1 text-xs font-semibold text-muted-foreground">
+                        <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                        Built for serious interview preparation
+                    </div>
+
+                    <div className="space-y-5">
+                        <h1 className="text-4xl font-bold leading-tight md:text-6xl">
+                            Turn Every Job Application Into a
+                            <span className="block text-primary">Focused Interview Strategy</span>
+                        </h1>
+                        <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                            Upload your profile, map to any role, and get a professional report with targeted questions,
+                            actionable gaps, and an ATS-friendly resume you can use immediately.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                        <Button size="lg" onClick={() => navigate('/dashboard')}>
+                            Start evaluation
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                        <Button size="lg" variant="outline" onClick={() => navigate('/login')}>
+                            View my reports
+                        </Button>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-3">
+                        {highlights.map((item, idx) => (
+                            <div key={idx} className="glass-panel rounded-xl px-3 py-3 text-sm text-muted-foreground">
+                                <item.icon className="mb-1 h-4 w-4 text-primary" />
+                                {item.text}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="grid gap-4">
+                    {features.map((feature) => (
+                        <Card key={feature.title} className="overflow-hidden border-border/70">
+                            <CardHeader className="pb-3">
+                                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-accent">
+                                    <feature.icon className="h-5 w-5 text-accent-foreground" />
+                                </div>
+                                <CardTitle>{feature.title}</CardTitle>
+                                <CardDescription>{feature.description}</CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-0 text-xs text-muted-foreground">
+                                Professional output quality designed for recruiters and hiring panels.
+                            </CardContent>
+                        </Card>
+                    ))}
+                </section>
             </main>
-
-            {/* Flat Feature Cards */}
-            <section className="max-w-6xl mx-auto px-4 py-16">
-                <div className="grid md:grid-cols-3 gap-6">
-                    <Card className="border-border bg-card">
-                        <CardHeader>
-                            <div className="w-10 h-10 rounded bg-muted flex items-center justify-center mb-2">
-                                <BrainCircuit className="w-5 h-5 text-foreground" />
-                            </div>
-                            <CardTitle>AI Matching Engine</CardTitle>
-                            <CardDescription className="text-sm mt-1">
-                                Understand exactly how well your profile aligns with actual required qualifications.
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <Card className="border-border bg-card">
-                        <CardHeader>
-                            <div className="w-10 h-10 rounded bg-muted flex items-center justify-center mb-2">
-                                <FileText className="w-5 h-5 text-foreground" />
-                            </div>
-                            <CardTitle>Contextual Parse</CardTitle>
-                            <CardDescription className="text-sm mt-1">
-                                Extract your core experiences and identify potential red flags instantly before hiring managers do.
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <Card className="border-border bg-card">
-                        <CardHeader>
-                            <div className="w-10 h-10 rounded bg-muted flex items-center justify-center mb-2">
-                                <Target className="w-5 h-5 text-foreground" />
-                            </div>
-                            <CardTitle>Targeted Roadmap</CardTitle>
-                            <CardDescription className="text-sm mt-1">
-                                Receive a structured step-by-step action plan, practice questions, and behavioral guides based on identified gaps.
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                </div>
-            </section>
         </div>
     )
 }

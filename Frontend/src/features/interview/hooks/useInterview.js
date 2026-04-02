@@ -76,6 +76,28 @@ export const useInterview = () => {
                 rawHtml = "<p>Unable to construct resume content.</p>"
             }
 
+            // Sometimes backend/model returns JSON string like {"html":"..."} as text.
+            if (typeof rawHtml === "string") {
+                const trimmed = rawHtml.trim()
+                if (trimmed.startsWith("{") && trimmed.includes("\"html\"")) {
+                    try {
+                        const parsed = JSON.parse(trimmed)
+                        if (parsed?.html && typeof parsed.html === "string") {
+                            rawHtml = parsed.html
+                        }
+                    } catch {
+                        const match = trimmed.match(/"html"\\s*:\\s*"([\\s\\S]*?)"\\s*\\}?$/i)
+                        if (match?.[1]) {
+                            try {
+                                rawHtml = JSON.parse(`"${match[1]}"`)
+                            } catch {
+                                // keep original rawHtml
+                            }
+                        }
+                    }
+                }
+            }
+
             // Sometimes AI wraps the HTML string in markdown ```html ... ``` blocks. Strip them.
             const cleanHtml = rawHtml.replace(/```html\n?/gi, "").replace(/```\n?/g, "").trim();
 

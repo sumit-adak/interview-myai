@@ -1,280 +1,274 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { useInterview } from '../hooks/useInterview.js'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
-import { Card, CardContent } from '../../../components/ui/card'
-import { UploadCloud, Building, UserSquare2, LayoutDashboard, History, LogOut, Loader2, ChevronDown, ChevronRight, FileText, AlertCircle } from 'lucide-react'
-import { useAuth } from '../../auth/hooks/useAuth.js'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
+import { useInterview } from '../hooks/useInterview'
+import { useAuth } from '../../auth/hooks/useAuth'
+import {
+    UploadCloud,
+    Briefcase,
+    UserSquare2,
+    FileText,
+    Loader2,
+    AlertCircle,
+    Sparkles,
+    LogOut,
+    Clock3,
+    ChartNoAxesCombined
+} from 'lucide-react'
 
 const Dashboard = () => {
-    const { loading, generateReport, reports, getReports } = useInterview()
-    const { logout } = useAuth()
-    const [jobDescription, setJobDescription] = useState("")
-    const [selfDescription, setSelfDescription] = useState("")
-    const [isDragging, setIsDragging] = useState(false)
-    const [fileName, setFileName] = useState("")
-    const [isRecentExpanded, setIsRecentExpanded] = useState(false)
-    const [isGenerating, setIsGenerating] = useState(false)
-    const [errorMsg, setErrorMsg] = useState("")
-    const resumeInputRef = useRef()
     const navigate = useNavigate()
+    const { generateReport, reports, getReports } = useInterview()
+    const { user, logout } = useAuth()
 
-    // Fetch past reports on mount (non-blocking â€” does NOT set global loading)
+    const [jobDescription, setJobDescription] = useState('')
+    const [selfDescription, setSelfDescription] = useState('')
+    const [errorMsg, setErrorMsg] = useState('')
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [isDragging, setIsDragging] = useState(false)
+    const [fileName, setFileName] = useState('')
+
+    const resumeInputRef = useRef(null)
+
     useEffect(() => {
         getReports()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleFileChange = (e) => {
-        const file = e.target.files?.[0]
-        if (file) {
-            setFileName(file.name)
+    const latestScore = useMemo(() => {
+        if (!reports?.length) return null
+        const first = reports[0]
+        const parsed = Number(first?.matchScore)
+        return Number.isFinite(parsed) ? parsed : null
+    }, [reports])
+
+    const onFileChange = (file) => {
+        if (!file) return
+
+        const validTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ]
+
+        if (!validTypes.includes(file.type)) {
+            setErrorMsg('Only PDF and DOCX files are supported.')
+            return
         }
+
+        if (file.size > 5 * 1024 * 1024) {
+            setErrorMsg('Resume file is too large. Max allowed size is 5MB.')
+            return
+        }
+
+        setErrorMsg('')
+        setFileName(file.name)
     }
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current?.files?.[0]
-        setErrorMsg("")
-        if (!jobDescription || !selfDescription) {
-            setErrorMsg("Please provide both a job description and a self description.")
+        setErrorMsg('')
+
+        if (!jobDescription.trim() || !selfDescription.trim()) {
+            setErrorMsg('Please provide both job description and your profile summary.')
             return
         }
+
         setIsGenerating(true)
         try {
-            const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-            if (data?._id) {
-                navigate(`/interview/${data._id}`)
-            } else {
-                setErrorMsg("Failed to generate report. Please try again.")
+            const report = await generateReport({
+                jobDescription: jobDescription.trim(),
+                selfDescription: selfDescription.trim(),
+                resumeFile
+            })
+
+            if (report?._id) {
+                navigate(`/interview/${report._id}`)
+                return
             }
+
+            setErrorMsg('Report generated but could not be opened. Please try again.')
         } catch (error) {
-            setErrorMsg(error?.message || "Something went wrong. Please try again.")
+            setErrorMsg(error?.message || 'Failed to generate report.')
         } finally {
             setIsGenerating(false)
         }
     }
 
-    if (isGenerating) {
-        return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-                <h2 className="text-xl font-semibold text-foreground">Generating your report...</h2>
-                <p className="text-muted-foreground mt-2 text-sm">Please wait while our AI engine analyzes your profile. This may take ~30s.</p>
-            </div>
-        )
-    }
-
     return (
-        <div className="min-h-screen bg-background text-foreground flex">
-            {/* Formatted Slim Sidebar */}
-            <aside className="hidden lg:flex w-56 flex-col border-r border-border bg-card">
-                <div className="h-16 flex items-center px-6 border-b border-border mb-4">
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
-                            <span className="font-bold text-white text-lg">AI</span>
-                        </div>
-                        <span className="font-semibold text-lg tracking-tight text-foreground">Platform</span>
+        <div className="min-h-screen px-4 py-6 md:px-6 md:py-8">
+            <div className="mx-auto max-w-7xl space-y-6">
+                <header className="glass-panel flex flex-col justify-between gap-4 rounded-3xl p-5 md:flex-row md:items-center md:p-7">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Workspace</p>
+                        <h1 className="mt-1 text-3xl font-bold">Welcome, {user?.username || 'Candidate'}</h1>
+                        <p className="mt-2 text-sm text-muted-foreground">Build professional interview strategy reports tailored to each role.</p>
                     </div>
-                </div>
-                
-                <nav className="flex-1 px-4 space-y-1">
-                    <Button variant="secondary" className="w-full justify-start font-medium" onClick={() => {}}>
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        New Evaluation
-                    </Button>
-                    {reports.length > 0 && (
-                        <div className="flex flex-col">
-                            <Button 
-                                variant="ghost" 
-                                className="w-full justify-between font-medium text-muted-foreground"
-                                onClick={() => setIsRecentExpanded(!isRecentExpanded)}
-                            >
-                                <div className="flex items-center">
-                                    <History className="mr-2 h-4 w-4" />
-                                    Recent Plans ({reports.length})
-                                </div>
-                                {isRecentExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                            </Button>
-                            {isRecentExpanded && (
-                                <div className="ml-6 mt-1 flex flex-col gap-1 border-l-2 border-border pl-2">
-                                    {reports.slice(0, 5).map(r => (
-                                        <button 
-                                            key={r._id} 
-                                            onClick={() => navigate(`/interview/${r._id}`)}
-                                            className="text-left text-xs font-medium text-muted-foreground hover:text-foreground py-1.5 px-2 rounded-md hover:bg-muted/50 truncate"
-                                        >
-                                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "Saved Evaluation"} ({r._id?.slice(-4)})
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </nav>
-
-                <div className="p-4 border-t border-border mt-auto">
-                    <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground" onClick={logout}>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Log out
-                    </Button>
-                </div>
-            </aside>
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto w-full relative bg-background">
-                {/* Mobile Header */}
-                <header className="lg:hidden flex items-center justify-between h-14 px-4 border-b border-border sticky top-0 z-40 bg-background">
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-                            <span className="font-bold text-white text-sm">AI</span>
-                        </div>
-                        <span className="font-semibold text-base text-foreground">Platform</span>
-                    </div>
-                    <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground">
-                        <LogOut className="h-4 w-4" />
-                    </Button>
-                </header>
-
-                <div className="max-w-6xl mx-auto px-6 py-8 pb-32">
-                    <div className="mb-8 pl-1">
-                        <h1 className="text-2xl font-bold text-foreground mb-1.5 tracking-tight">Create Evaluation</h1>
-                        <p className="text-sm text-muted-foreground">Provide the target role details and your profile data.</p>
-                    </div>
-
-                    <div className="grid lg:grid-cols-[1fr_400px] gap-8">
-                        {/* Left Column - Job Description */}
-                        <div className="flex flex-col h-full">
-                            <Card className="flex-1 bg-card border border-border shadow-sm rounded-2xl flex flex-col">
-                                <CardContent className="p-6 flex flex-col h-full">
-                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
-                                        <div className="flex items-center gap-2 font-medium text-foreground">
-                                            <Building className="w-4 h-4 text-primary" />
-                                            Target Job Description
-                                        </div>
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 tracking-wider uppercase">Required</span>
-                                    </div>
-                                    <textarea
-                                        value={jobDescription}
-                                        onChange={(e) => setJobDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[350px] resize-none rounded-xl border border-border bg-transparent p-4 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary placeholder:text-muted-foreground transition-all duration-200"
-                                        placeholder={`Paste the full job description here...\n\ne.g. 'Senior Frontend Engineer requires proficiency in React, TypeScript...'`}
-                                    />
-                                    <div className="mt-3 text-right text-xs text-muted-foreground flex justify-between items-center">
-                                        <span>Paste the exact text from the job board for highest accuracy.</span>
-                                        <span>{jobDescription.length} / 5000 chars</span>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Right Column - Profile */}
-                        <div className="flex flex-col gap-6">
-                            
-                            {/* Resume Upload */}
-                            <Card className="bg-card border border-border shadow-sm rounded-2xl">
-                                <CardContent className="p-6">
-                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
-                                        <div className="flex items-center gap-2 font-medium text-foreground">
-                                            <UploadCloud className="w-4 h-4 text-primary" />
-                                            Resume Upload
-                                        </div>
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-transparent text-muted-foreground border border-border tracking-wider uppercase">Optional</span>
-                                    </div>
-
-                                    <div 
-                                        className={`relative border border-dashed rounded-xl p-8 transition-all duration-200 flex flex-col items-center justify-center text-center cursor-pointer group
-                                            ${isDragging ? 'border-primary bg-primary/5' : 'border-border bg-transparent hover:border-primary hover:bg-secondary/20'}`}
-                                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                                        onDragLeave={() => setIsDragging(false)}
-                                        onDrop={(e) => {
-                                            e.preventDefault()
-                                            setIsDragging(false)
-                                            const file = e.dataTransfer.files?.[0]
-                                            if (file) {
-                                                resumeInputRef.current.files = e.dataTransfer.files
-                                                setFileName(file.name)
-                                            }
-                                        }}
-                                        onClick={() => resumeInputRef.current?.click()}
-                                    >
-                                        <FileText className={`w-8 h-8 mb-4 transition-colors ${fileName ? 'text-primary' : 'text-muted-foreground group-hover:text-primary/70'}`} />
-                                        <p className="text-sm font-medium text-foreground mb-1.5">
-                                            {fileName ? fileName : "Click or drag file to upload"}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            {fileName ? 'Ready for analysis' : 'PDF or DOCX (Max 5MB)'}
-                                        </p>
-                                        <input
-                                            ref={resumeInputRef}
-                                            type="file"
-                                            className="hidden"
-                                            accept=".pdf,.docx"
-                                            onChange={handleFileChange}
-                                        />
-                                    </div>
-                                    <div className="mt-4 text-xs text-muted-foreground">
-                                        Your resume provides context for specialized technical probing.
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* OR Divider */}
-                            <div className="flex items-center py-2">
-                                <div className="flex-grow border-t border-secondary"></div>
-                                <span className="mx-4 text-xs font-semibold tracking-wider text-muted-foreground uppercase">OR</span>
-                                <div className="flex-grow border-t border-secondary"></div>
-                            </div>
-
-                            {/* Self Description */}
-                            <Card className="bg-card border border-border shadow-sm rounded-2xl flex-[1]">
-                                <CardContent className="p-6 flex flex-col h-full">
-                                    <div className="flex justify-between items-center mb-5 pb-4 border-b border-secondary/50">
-                                        <div className="flex items-center gap-2 font-medium text-foreground">
-                                            <UserSquare2 className="w-4 h-4 text-muted-foreground" />
-                                            Quick Summary
-                                        </div>
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 tracking-wider uppercase">Required</span>
-                                    </div>
-                                    <textarea
-                                        value={selfDescription}
-                                        onChange={(e) => setSelfDescription(e.target.value)}
-                                        className="flex-1 w-full min-h-[140px] resize-none rounded-xl border border-border bg-transparent p-4 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary placeholder:text-muted-foreground transition-all duration-200"
-                                        placeholder="Briefly describe your experience, key skills, and years of experience..."
-                                    />
-                                    <div className="mt-3 text-xs text-muted-foreground">
-                                        Required to analyze your profile and generate tailored questions.
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
-
-                    {/* Error Banner */}
-                    {errorMsg && (
-                        <div className="fixed bottom-20 left-0 lg:left-56 right-0 px-6 z-40">
-                            <div className="max-w-6xl mx-auto bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 flex items-center gap-3 text-sm text-destructive">
-                                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                <span>{errorMsg}</span>
-                                <button className="ml-auto text-xs underline opacity-70 hover:opacity-100" onClick={() => setErrorMsg("")}>Dismiss</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Bottom Sticky Action Bar */}
-                    <div className="fixed bottom-0 left-0 lg:left-56 right-0 p-4 border-t border-border bg-background/80 backdrop-blur-md z-30 flex items-center justify-between shadow-sm">
-                        <div className="hidden md:flex items-center gap-2 text-sm font-medium text-muted-foreground px-4">
-                            Analysis engine takes approx ~30s
-                        </div>
-                        <Button
-                            size="lg"
-                            className="w-full md:w-auto ml-auto font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 shadow-sm transition-all duration-200"
-                            onClick={handleGenerateReport}
-                            disabled={isGenerating || !jobDescription || !selfDescription}
-                        >
-                            {isGenerating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating...</> : "Generate Report"}
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" onClick={() => navigate('/')}>
+                            Home
+                        </Button>
+                        <Button variant="ghost" onClick={logout}>
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Logout
                         </Button>
                     </div>
-                </div>
-            </main>
+                </header>
+
+                <section className="grid gap-4 md:grid-cols-3">
+                    <Card>
+                        <CardContent className="flex items-center gap-3 p-5">
+                            <div className="rounded-xl bg-accent p-2.5">
+                                <Clock3 className="h-5 w-5 text-accent-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-wider text-muted-foreground">Reports Generated</p>
+                                <p className="text-2xl font-bold">{reports?.length || 0}</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardContent className="flex items-center gap-3 p-5">
+                            <div className="rounded-xl bg-accent p-2.5">
+                                <ChartNoAxesCombined className="h-5 w-5 text-accent-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-wider text-muted-foreground">Latest Match Score</p>
+                                <p className="text-2xl font-bold">{latestScore != null ? `${latestScore}%` : '--'}</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardContent className="flex items-center gap-3 p-5">
+                            <div className="rounded-xl bg-accent p-2.5">
+                                <Sparkles className="h-5 w-5 text-accent-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-wider text-muted-foreground">Mode</p>
+                                <p className="text-2xl font-bold">Advanced</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </section>
+
+                <section className="grid gap-6 xl:grid-cols-[1fr_360px]">
+                    <Card className="overflow-hidden">
+                        <CardHeader>
+                            <CardTitle>Create New Evaluation</CardTitle>
+                            <CardDescription>Paste role details and your profile summary for a high-quality report.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-5">
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-sm font-medium">
+                                    <Briefcase className="h-4 w-4 text-primary" />
+                                    Target Job Description
+                                </label>
+                                <textarea
+                                    value={jobDescription}
+                                    onChange={(e) => setJobDescription(e.target.value)}
+                                    className="min-h-[230px] w-full resize-y rounded-2xl border border-input bg-white/85 p-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                    placeholder="Paste complete role description, responsibilities, and required skills..."
+                                />
+                                <p className="text-xs text-muted-foreground">{jobDescription.length} / 5000 recommended characters</p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-sm font-medium">
+                                    <UserSquare2 className="h-4 w-4 text-primary" />
+                                    Your Professional Summary
+                                </label>
+                                <textarea
+                                    value={selfDescription}
+                                    onChange={(e) => setSelfDescription(e.target.value)}
+                                    className="min-h-[140px] w-full resize-y rounded-2xl border border-input bg-white/85 p-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                    placeholder="Share years of experience, major projects, technical stack, and impact highlights..."
+                                />
+                            </div>
+
+                            {errorMsg && (
+                                <div className="flex items-start gap-2 rounded-2xl border border-destructive/35 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                                    <AlertCircle className="mt-0.5 h-4 w-4" />
+                                    <span>{errorMsg}</span>
+                                </div>
+                            )}
+
+                            <div className="flex flex-wrap items-center gap-3">
+                                <Button size="lg" onClick={handleGenerateReport} disabled={isGenerating}>
+                                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                                    {isGenerating ? 'Generating report...' : 'Generate Professional Report'}
+                                </Button>
+                                <p className="text-xs text-muted-foreground">Average generation time: 20-40 seconds</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <div className="space-y-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Optional Resume Upload</CardTitle>
+                                <CardDescription>PDF or DOCX, max 5MB</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div
+                                    className={`rounded-2xl border-2 border-dashed p-7 text-center transition-all ${
+                                        isDragging ? 'border-primary bg-accent/80' : 'border-border bg-secondary/35'
+                                    }`}
+                                    onDragOver={(e) => {
+                                        e.preventDefault()
+                                        setIsDragging(true)
+                                    }}
+                                    onDragLeave={() => setIsDragging(false)}
+                                    onDrop={(e) => {
+                                        e.preventDefault()
+                                        setIsDragging(false)
+                                        const file = e.dataTransfer.files?.[0]
+                                        if (!file) return
+                                        if (resumeInputRef.current) {
+                                            resumeInputRef.current.files = e.dataTransfer.files
+                                        }
+                                        onFileChange(file)
+                                    }}
+                                    onClick={() => resumeInputRef.current?.click()}
+                                >
+                                    <UploadCloud className="mx-auto mb-3 h-8 w-8 text-primary" />
+                                    <p className="text-sm font-medium">{fileName || 'Click or drag your resume here'}</p>
+                                    <p className="mt-1 text-xs text-muted-foreground">Adds context for better question quality</p>
+                                    <input
+                                        ref={resumeInputRef}
+                                        className="hidden"
+                                        type="file"
+                                        accept=".pdf,.docx"
+                                        onChange={(e) => onFileChange(e.target.files?.[0])}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Recent Reports</CardTitle>
+                                <CardDescription>Open any previous evaluation</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                {!reports?.length && <p className="text-sm text-muted-foreground">No reports yet. Create your first one.</p>}
+                                {reports?.slice(0, 6).map((item) => (
+                                    <button
+                                        key={item._id}
+                                        className="w-full rounded-xl border border-border/80 bg-white/80 px-3 py-2 text-left text-sm transition-all hover:border-primary/40 hover:bg-accent/70"
+                                        onClick={() => navigate(`/interview/${item._id}`)}
+                                    >
+                                        <p className="line-clamp-1 font-semibold">{item.title || 'Interview Evaluation'}</p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {item.matchScore != null ? `Score ${item.matchScore}%` : 'Score pending'}
+                                            {' • '}
+                                            {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Saved'}
+                                        </p>
+                                    </button>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </section>
+            </div>
         </div>
     )
 }

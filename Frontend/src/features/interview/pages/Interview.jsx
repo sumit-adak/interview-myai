@@ -1,283 +1,291 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
-import { useInterview } from '../hooks/useInterview'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
-import { 
-    Code2, Search, ArrowLeft, Target, Settings, BrainCircuit,
-    ChevronDown, Download, AlertCircle, CheckCircle2, ChevronRight,
-    Loader2, FileText
+import { useInterview } from '../hooks/useInterview'
+import {
+    ArrowLeft,
+    Loader2,
+    AlertCircle,
+    Download,
+    FileText,
+    ChevronDown,
+    ChevronRight,
+    Code2,
+    BrainCircuit,
+    Target,
+    CalendarDays,
+    Sparkles
 } from 'lucide-react'
 import html2pdf from 'html2pdf.js'
 
-const SimpleAccordion = ({ question, answer, title }) => {
-    const [isOpen, setIsOpen] = useState(false)
-    return (
-        <div className="border border-border rounded-md mb-3 bg-card overflow-hidden">
-            <button 
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-foreground pr-8">{question}</span>
-                    {title && <span className="text-xs text-muted-foreground">{title}</span>}
-                </div>
-                {isOpen ? <ChevronDown className="w-5 h-5 text-muted-foreground flex-shrink-0" /> : <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />}
-            </button>
-            {isOpen && (
-                <div className="p-4 pt-0 text-sm text-foreground bg-muted/20 border-t border-border mt-2 whitespace-pre-wrap leading-relaxed">
-                    {answer}
-                </div>
-            )}
-        </div>
-    )
+const severityClass = {
+    low: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    medium: 'bg-amber-100 text-amber-700 border-amber-300',
+    high: 'bg-rose-100 text-rose-700 border-rose-300'
 }
 
-const ProgressBar = ({ score }) => {
-    const numericScore = parseInt(score) || 0;
+const AccordionItem = ({ title, subtitle, content }) => {
+    const [open, setOpen] = useState(false)
+
     return (
-        <div className="w-full">
-            <div className="flex justify-between items-end mb-1">
-                <span className="text-3xl font-bold text-foreground">{numericScore}%</span>
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Match Score</span>
-            </div>
-            <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div 
-                    className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${numericScore}%` }}
-                />
-            </div>
+        <div className="overflow-hidden rounded-2xl border border-border bg-white/90">
+            <button
+                className="flex w-full items-center justify-between gap-4 p-4 text-left"
+                onClick={() => setOpen((prev) => !prev)}
+            >
+                <div>
+                    <p className="text-sm font-semibold text-foreground">{title}</p>
+                    {subtitle && <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>}
+                </div>
+                {open ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+            </button>
+            {open && <div className="border-t border-border bg-secondary/30 p-4 text-sm leading-relaxed text-foreground">{content}</div>}
         </div>
     )
 }
 
 const Interview = () => {
     const { interviewId } = useParams()
-    const { getReportById, report: activeReport, loading, getResumePdf } = useInterview()
-    const [activeTab, setActiveTab] = useState('technical')
-    const [isGeneratingResume, setIsGeneratingResume] = useState(false)
-    const [fetchError, setFetchError] = useState("")
     const navigate = useNavigate()
+    const { getReportById, report, loading, getResumePdf } = useInterview()
+
+    const [activeTab, setActiveTab] = useState('technical')
+    const [fetchError, setFetchError] = useState('')
+    const [resumeLoading, setResumeLoading] = useState(false)
 
     useEffect(() => {
-        if (interviewId) {
-            setFetchError("")
-            getReportById(interviewId).catch((err) => {
-                setFetchError(err?.message || "Could not load this report.")
-            })
-        }
+        if (!interviewId) return
+        setFetchError('')
+        getReportById(interviewId).catch((err) => {
+            setFetchError(err?.message || 'Could not load report')
+        })
     }, [interviewId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleDownloadPdf = () => {
-        const element = document.getElementById('report-content')
+    const matchScore = useMemo(() => {
+        const parsed = Number(report?.matchScore)
+        return Number.isFinite(parsed) ? Math.max(0, Math.min(100, parsed)) : 0
+    }, [report])
+
+    const handleDownloadReportPdf = () => {
+        const element = document.getElementById('report-export')
         if (!element) return
-        
-        const opt = {
-            margin: 1,
-            filename: `interview_strategy_${interviewId}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        }
-        html2pdf().set(opt).from(element).save()
+
+        html2pdf()
+            .set({
+                margin: 10,
+                filename: `interview_report_${interviewId}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            })
+            .from(element)
+            .save()
     }
 
-    const handleGenerateResume = async () => {
+    const handleResumeDownload = async () => {
+        setResumeLoading(true)
         try {
-            setIsGeneratingResume(true)
             await getResumePdf(interviewId)
         } finally {
-            setIsGeneratingResume(false)
+            setResumeLoading(false)
         }
     }
 
-    if (loading) {
+    if (loading && !report) {
         return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-                <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
-                <h2 className="text-lg font-medium text-foreground">Loading report...</h2>
+            <div className="flex min-h-screen flex-col items-center justify-center">
+                <Loader2 className="mb-3 h-8 w-8 animate-spin text-primary" />
+                <p className="text-sm text-muted-foreground">Loading report...</p>
             </div>
         )
     }
 
-    if (fetchError || !activeReport) {
+    if (fetchError || !report) {
         return (
-            <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-4">
-                <AlertCircle className="w-12 h-12 text-destructive" />
-                <h2 className="text-2xl font-semibold text-foreground">Report Not Found</h2>
-                <p className="text-sm text-muted-foreground text-center max-w-sm">
-                    {fetchError || "This report does not exist or you don't have permission to view it."}
-                </p>
-                <Button onClick={() => navigate('/dashboard')}>Return to Dashboard</Button>
+            <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
+                <AlertCircle className="mb-3 h-10 w-10 text-destructive" />
+                <h2 className="text-2xl font-semibold">Unable to open report</h2>
+                <p className="mt-2 max-w-md text-sm text-muted-foreground">{fetchError || 'This report is unavailable.'}</p>
+                <Button className="mt-5" onClick={() => navigate('/dashboard')}>Back to dashboard</Button>
             </div>
         )
     }
-
-    const { matchScore, technicalQuestions, behavioralQuestions, preparationPlan, feedback } = activeReport
 
     const tabs = [
-        { id: 'technical', label: 'Technical Assessment', icon: Code2 },
-        { id: 'behavioral', label: 'Behavioral Fit', icon: BrainCircuit },
-        { id: 'roadmap', label: 'Strategic Roadmap', icon: Target },
-        { id: 'feedback', label: 'Core Feedback', icon: Search }
+        { id: 'technical', label: 'Technical Questions', icon: Code2 },
+        { id: 'behavioral', label: 'Behavioral Questions', icon: BrainCircuit },
+        { id: 'gaps', label: 'Skill Gaps', icon: Target },
+        { id: 'plan', label: 'Preparation Plan', icon: CalendarDays }
     ]
 
     return (
-        <div className="min-h-screen bg-background flex flex-col lg:flex-row">
-            {/* Left Sidebar (Navigation) */}
-            <aside className="w-full lg:w-64 border-r border-border bg-card flex-shrink-0 flex flex-col">
-                <div className="h-16 flex items-center px-4 md:px-6 border-b border-border sticky top-0 bg-card z-10 shrink-0">
-                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')} className="px-2 -ml-2 text-muted-foreground">
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Dashboard
-                    </Button>
-                </div>
-                
-                <div className="p-4 flex-1 overflow-y-auto">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">Report Sections</p>
-                    <nav className="space-y-1">
-                        {tabs.map(tab => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors
-                                ${activeTab === tab.id 
-                                    ? 'bg-muted text-foreground' 
-                                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
-                            >
-                                <tab.icon className={`w-4 h-4 mr-3 ${activeTab === tab.id ? 'text-primary' : 'text-muted-foreground'}`} />
-                                {tab.label}
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-
-                <div className="p-4 border-t border-border sticky bottom-0 bg-card space-y-2">
-                    <Button 
-                        variant="default" 
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90" 
-                        onClick={handleGenerateResume}
-                        disabled={isGeneratingResume}
-                    >
-                        {isGeneratingResume ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <FileText className="w-4 h-4 mr-2" />}
-                        {isGeneratingResume ? "Optimizing..." : "Download Resume"}
-                    </Button>
-                    <Button variant="outline" className="w-full" onClick={handleDownloadPdf}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Export Report PDF
-                    </Button>
-                </div>
-            </aside>
-
-            {/* Center Content Area */}
-            <main className="flex-1 overflow-y-auto w-full p-4 lg:p-8" id="report-content">
-                <div className="max-w-3xl mx-auto">
-                    <header className="mb-8">
-                        <h1 className="text-2xl font-bold text-foreground">Interview Evaluation Report</h1>
-                        <p className="text-sm text-muted-foreground">Generated analysis based on your target role mapping.</p>
-                    </header>
-                    
-                    {activeTab === 'technical' && (
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Technical Questions</h2>
-                            {technicalQuestions?.length > 0 ? (
-                                <div className="space-y-1">
-                                    {technicalQuestions.map((q, idx) => (
-                                        <SimpleAccordion key={idx} question={q.question} answer={q.answer} title={q.intention} />
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-sm text-muted-foreground">No technical questions available.</p>
-                            )}
-                        </div>
-                    )}
-
-                    {activeTab === 'behavioral' && (
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Behavioral Alignment</h2>
-                            {behavioralQuestions?.length > 0 ? (
-                                <div className="space-y-1">
-                                    {behavioralQuestions.map((q, idx) => (
-                                        <SimpleAccordion key={idx} question={q.question} answer={q.answer} title={q.intention} />
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-sm text-muted-foreground">No behavioral questions available.</p>
-                            )}
-                        </div>
-                    )}
-
-                    {activeTab === 'roadmap' && (
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Strategic Roadmap</h2>
-                            <div className="space-y-4 max-w-none text-foreground bg-card p-6 rounded-lg border border-border">
-                                {preparationPlan?.length > 0 ? preparationPlan.map((plan, idx) => (
-                                    <div key={idx} className="mb-4">
-                                        <h3 className="text-md font-bold text-foreground">Day {plan.day}: <span className="text-primary">{plan.focus}</span></h3>
-                                        <ul className="list-disc pl-5 mt-2 space-y-1 text-sm text-muted-foreground">
-                                            {plan.tasks?.map((task, i) => <li key={i}>{task}</li>)}
-                                        </ul>
-                                    </div>
-                                )) : "No strategy provided."}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'feedback' && (
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2 mb-4">Core Feedback</h2>
-                            <div className="prose prose-sm dark:prose-invert max-w-none text-foreground bg-card p-6 rounded-lg border border-border whitespace-pre-wrap">
-                                {feedback || "No feedback provided."}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </main>
-
-            {/* Right Sidebar (Analytics Panel) */}
-            <aside className="w-full lg:w-80 border-l border-border bg-card p-6 flex flex-col gap-8">
-                <div>
-                    <h3 className="text-sm font-semibold text-foreground mb-4">Profile Match</h3>
-                    <ProgressBar score={matchScore} />
-                </div>
-
-                {activeReport.skillGaps && activeReport.skillGaps.length > 0 && (
+        <div className="min-h-screen px-4 py-6 md:px-6 md:py-8">
+            <div className="mx-auto max-w-7xl">
+                <header className="glass-panel mb-6 flex flex-col justify-between gap-4 rounded-3xl p-5 md:flex-row md:items-center md:p-6">
                     <div>
-                        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
-                            <AlertCircle className="w-4 h-4 text-destructive" />
-                            Identified Gaps
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                            {activeReport.skillGaps.map((gap, i) => (
-                                <span key={i} className="px-2.5 py-1 text-xs font-medium rounded-md bg-destructive/10 text-destructive border border-destructive/20">
-                                    {gap.skill || gap}
-                                </span>
-                            ))}
-                        </div>
+                        <Button variant="ghost" size="sm" className="mb-2 -ml-2" onClick={() => navigate('/dashboard')}>
+                            <ArrowLeft className="mr-1 h-4 w-4" />
+                            Dashboard
+                        </Button>
+                        <h1 className="text-2xl font-bold md:text-3xl">{report?.title || 'Interview Evaluation Report'}</h1>
+                        <p className="mt-1 text-sm text-muted-foreground">Advanced analysis with role-aligned preparation strategy</p>
                     </div>
-                )}
 
-                <div>
-                    <h3 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
-                        <CheckCircle2 className="w-4 h-4 text-primary" />
-                        Next Actions
-                    </h3>
-                    <ul className="space-y-3">
-                        <li className="text-sm text-muted-foreground flex items-start">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 mr-2 flex-shrink-0" />
-                            Review technical core concepts
-                        </li>
-                        <li className="text-sm text-muted-foreground flex items-start">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 mr-2 flex-shrink-0" />
-                            Draft STAR method behavioral stories
-                        </li>
-                        <li className="text-sm text-muted-foreground flex items-start">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 mr-2 flex-shrink-0" />
-                            Address identified skill gaps
-                        </li>
-                    </ul>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Button variant="outline" onClick={handleDownloadReportPdf}>
+                            <Download className="mr-2 h-4 w-4" />
+                            Export report PDF
+                        </Button>
+                        <Button onClick={handleResumeDownload} disabled={resumeLoading}>
+                            {resumeLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}
+                            Download ATS resume
+                        </Button>
+                    </div>
+                </header>
+
+                <div className="grid gap-6 lg:grid-cols-[250px_1fr_300px]" id="report-export">
+                    <aside className="space-y-3">
+                        <Card>
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base">Sections</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-1">
+                                {tabs.map((tab) => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm transition-all ${
+                                            activeTab === tab.id
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'hover:bg-accent hover:text-accent-foreground'
+                                        }`}
+                                    >
+                                        <tab.icon className="h-4 w-4" />
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </aside>
+
+                    <main className="space-y-4">
+                        {activeTab === 'technical' && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Technical Interview Questions</CardTitle>
+                                    <CardDescription>Role-specific deep-dive prompts with strong answer directions</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {report.technicalQuestions?.map((item, idx) => (
+                                        <AccordionItem
+                                            key={idx}
+                                            title={item.question}
+                                            subtitle={item.intention}
+                                            content={item.answer}
+                                        />
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        )}
+
+                        {activeTab === 'behavioral' && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Behavioral Interview Questions</CardTitle>
+                                    <CardDescription>Communication and leadership scenarios with structured response guides</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {report.behavioralQuestions?.map((item, idx) => (
+                                        <AccordionItem
+                                            key={idx}
+                                            title={item.question}
+                                            subtitle={item.intention}
+                                            content={item.answer}
+                                        />
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        )}
+
+                        {activeTab === 'gaps' && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Skill Gaps</CardTitle>
+                                    <CardDescription>Prioritized competencies to strengthen for better role fit</CardDescription>
+                                </CardHeader>
+                                <CardContent className="grid gap-3 sm:grid-cols-2">
+                                    {report.skillGaps?.map((item, idx) => (
+                                        <div key={idx} className="rounded-2xl border border-border bg-white/80 p-4">
+                                            <p className="text-sm font-semibold">{item.skill}</p>
+                                            <span
+                                                className={`mt-2 inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold ${severityClass[item.severity] || severityClass.medium}`}
+                                            >
+                                                {item.severity || 'medium'}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        )}
+
+                        {activeTab === 'plan' && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Preparation Plan</CardTitle>
+                                    <CardDescription>Day-wise roadmap to increase interview readiness</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {report.preparationPlan?.map((day, idx) => (
+                                        <div key={idx} className="rounded-2xl border border-border bg-white/90 p-4">
+                                            <p className="text-sm font-bold text-primary">Day {day.day}: {day.focus}</p>
+                                            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-foreground">
+                                                {day.tasks?.map((task, tIdx) => (
+                                                    <li key={tIdx}>{task}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        )}
+                    </main>
+
+                    <aside className="space-y-4">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Overall Match</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="mb-2 text-4xl font-bold">{matchScore}%</p>
+                                <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                                    <div className="h-full rounded-full bg-primary" style={{ width: `${matchScore}%` }} />
+                                </div>
+                                <p className="mt-3 text-xs text-muted-foreground">Higher score means stronger alignment with role requirements.</p>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Execution Tips</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-2 text-sm text-muted-foreground">
+                                <p className="rounded-xl bg-secondary/40 p-3">Use STAR format for behavioral answers.</p>
+                                <p className="rounded-xl bg-secondary/40 p-3">Quantify outcomes when discussing projects.</p>
+                                <p className="rounded-xl bg-secondary/40 p-3">Prioritize high-severity gaps first.</p>
+                                <p className="rounded-xl bg-secondary/40 p-3">Run one mock interview before final round.</p>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardContent className="flex items-start gap-2 p-4 text-sm text-muted-foreground">
+                                <Sparkles className="mt-0.5 h-4 w-4 text-primary" />
+                                This report is optimized for practical execution. Keep revising and regenerate after each major update.
+                            </CardContent>
+                        </Card>
+                    </aside>
                 </div>
-            </aside>
+            </div>
         </div>
     )
 }
