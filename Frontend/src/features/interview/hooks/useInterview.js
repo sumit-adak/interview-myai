@@ -106,6 +106,35 @@ export const useInterview = () => {
                 cleanHtml = cleanHtml.slice(htmlStartIdx)
             }
 
+            // Convert full HTML documents into a render-safe fragment for html2pdf.
+            const toRenderableResumeHtml = (html) => {
+                const text = String(html || "").trim()
+                if (!text) return ""
+
+                const looksLikeDocument = /<!doctype html|<html|<head|<body/i.test(text)
+                if (!looksLikeDocument) return text
+
+                try {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(text, "text/html")
+                    const styleBlocks = Array.from(doc.querySelectorAll("style")).map((el) => el.outerHTML).join("\n")
+                    const bodyContent = doc.body?.innerHTML?.trim() || ""
+
+                    if (!bodyContent) return ""
+
+                    return `${styleBlocks}\n<div id="resume-render-root">${bodyContent}</div>`
+                } catch {
+                    return text
+                }
+            }
+
+            const renderHtml = toRenderableResumeHtml(cleanHtml) || `
+                <div style="font-family: Arial, sans-serif; color: #111827; padding: 24px;">
+                    <h1 style="margin: 0 0 8px 0; font-size: 24px;">Resume</h1>
+                    <p style="margin: 0; font-size: 14px;">Unable to parse generated HTML. Please regenerate the resume.</p>
+                </div>
+            `
+
             const opt = {
                 margin:       10,
                 filename:     `resume_${interviewReportId}.pdf`,
@@ -114,18 +143,27 @@ export const useInterview = () => {
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // html2pdf has issues with full HTML documents because it sets innerHTML which strips <html> and <body>. 
-            // We replace body with div to keep any inline styles the AI put on the body tag!
-            let safeHtml = cleanHtml.replace(/<body/gi, "<div id='resume-body-wrapper'").replace(/<\/body>/gi, "</div>");
-
-            const wrapperHtml = `
-                <div style="background-color: white !important; color: black !important; text-align: left; width: 100%; min-height: 100vh;">
-                    ${safeHtml}
+            // Render via an offscreen DOM node to avoid blank pages from document-level markup.
+            const mount = document.createElement("div")
+            mount.style.position = "fixed"
+            mount.style.left = "-100000px"
+            mount.style.top = "0"
+            mount.style.width = "210mm"
+            mount.style.background = "#ffffff"
+            mount.style.color = "#111827"
+            mount.style.zIndex = "-1"
+            mount.innerHTML = `
+                <div style="background:#fff; color:#111827; width:100%; min-height:297mm; padding:0;">
+                    ${renderHtml}
                 </div>
-            `;
+            `
+            document.body.appendChild(mount)
 
-            // html2pdf accepts a raw HTML string.
-            await html2pdf().set(opt).from(wrapperHtml).save();
+            try {
+                await html2pdf().set(opt).from(mount).save();
+            } finally {
+                document.body.removeChild(mount)
+            }
 
         } catch (error) {
             console.error("Resume PDF generation error:", error)
