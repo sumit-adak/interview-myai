@@ -145,7 +145,7 @@ export const useInterview = () => {
             const renderHtml = toRenderableResumeHtml(extractResumeHtml(htmlResponse)) || FALLBACK_RESUME_HTML
 
             const opt = {
-                margin: 0,
+                margin: [10, 10, 10, 10],
                 filename: `resume_${interviewReportId}.pdf`,
                 image: { type: "jpeg", quality: 0.98 },
                 html2canvas: {
@@ -155,8 +155,7 @@ export const useInterview = () => {
                     backgroundColor: "#ffffff",
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: 794,
-                    windowHeight: 1123
+                    windowWidth: 718
                 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
                 pagebreak: { mode: ["css", "legacy"] }
@@ -170,13 +169,12 @@ export const useInterview = () => {
             mount.style.opacity = "0"
             mount.style.pointerEvents = "none"
             mount.style.overflow = "hidden"
-            mount.style.width = "210mm"
-            mount.style.minHeight = "297mm"
+            mount.style.width = "190mm"
             mount.style.background = "#ffffff"
             mount.style.color = "#111827"
             mount.style.zIndex = "2147483647"
             mount.innerHTML = `
-                <div style="background:#fff; color:#111827; width:210mm; min-height:297mm; margin:0; padding:0; overflow:hidden;">
+                <div style="background:#fff; color:#111827; width:190mm; margin:0; padding:0;">
                     ${renderHtml}
                 </div>
             `
