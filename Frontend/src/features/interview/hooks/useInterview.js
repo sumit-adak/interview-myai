@@ -86,20 +86,11 @@ const getExportDimensions = (element) => {
     }
 
     const rect = element.getBoundingClientRect()
-    const width = Math.max(
-        Math.ceil(rect.width),
-        Math.ceil(element.scrollWidth),
-        Math.ceil(element.offsetWidth),
-        794
-    )
-    const height = Math.max(
-        Math.ceil(rect.height),
-        Math.ceil(element.scrollHeight),
-        Math.ceil(element.offsetHeight),
-        1
-    )
 
-    return { width, height }
+    return {
+        width: Math.max(Math.ceil(rect.width), Math.ceil(element.scrollWidth), Math.ceil(element.offsetWidth), 794),
+        height: Math.max(Math.ceil(rect.height), Math.ceil(element.scrollHeight), Math.ceil(element.offsetHeight), 1123)
+    }
 }
 
 export const useInterview = () => {
@@ -184,17 +175,20 @@ export const useInterview = () => {
 
             const mount = document.createElement("div")
             mount.setAttribute("data-resume-export", "true")
-            mount.style.position = "absolute"
-            mount.style.left = "-9999px"
+            mount.style.position = "fixed"
+            mount.style.left = "0"
             mount.style.top = "0"
             mount.style.pointerEvents = "none"
-            mount.style.opacity = "1"
+            mount.style.opacity = "0.01"
             mount.style.overflow = "visible"
             mount.style.width = "190mm"
+            mount.style.maxWidth = "190mm"
+            mount.style.minHeight = "1px"
             mount.style.background = "#ffffff"
             mount.style.color = "#111827"
+            mount.style.zIndex = "-1"
             mount.innerHTML = `
-                <div style="background:#fff; color:#111827; width:190mm; margin:0; padding:0; overflow:visible;">
+                <div style="background:#fff; color:#111827; width:190mm; max-width:190mm; margin:0; padding:0; overflow:visible;">
                     ${renderHtml}
                 </div>
             `
@@ -210,6 +204,9 @@ export const useInterview = () => {
                 }
 
                 const { width, height } = getExportDimensions(exportRoot)
+                exportRoot.style.width = `${width}px`
+                exportRoot.style.maxWidth = `${width}px`
+                exportRoot.style.minHeight = `${height}px`
 
                 await html2pdf().set({
                     ...opt,
