@@ -80,6 +80,28 @@ const waitForResumeLayout = async () => {
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
 }
 
+const getExportDimensions = (element) => {
+    if (!element) {
+        return { width: 794, height: 1123 }
+    }
+
+    const rect = element.getBoundingClientRect()
+    const width = Math.max(
+        Math.ceil(rect.width),
+        Math.ceil(element.scrollWidth),
+        Math.ceil(element.offsetWidth),
+        794
+    )
+    const height = Math.max(
+        Math.ceil(rect.height),
+        Math.ceil(element.scrollHeight),
+        Math.ceil(element.offsetHeight),
+        1
+    )
+
+    return { width, height }
+}
+
 export const useInterview = () => {
 
     const context = useContext(InterviewContext)
@@ -154,27 +176,25 @@ export const useInterview = () => {
                     letterRendering: true,
                     backgroundColor: "#ffffff",
                     scrollX: 0,
-                    scrollY: 0,
-                    windowWidth: 718
+                    scrollY: 0
                 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-                pagebreak: { mode: ["css", "legacy"] }
+                pagebreak: { mode: ["avoid-all", "css", "legacy"] }
             }
 
             const mount = document.createElement("div")
             mount.setAttribute("data-resume-export", "true")
-            mount.style.position = "fixed"
-            mount.style.left = "0"
+            mount.style.position = "absolute"
+            mount.style.left = "-9999px"
             mount.style.top = "0"
-            mount.style.opacity = "0"
             mount.style.pointerEvents = "none"
-            mount.style.overflow = "hidden"
+            mount.style.opacity = "1"
+            mount.style.overflow = "visible"
             mount.style.width = "190mm"
             mount.style.background = "#ffffff"
             mount.style.color = "#111827"
-            mount.style.zIndex = "2147483647"
             mount.innerHTML = `
-                <div style="background:#fff; color:#111827; width:190mm; margin:0; padding:0;">
+                <div style="background:#fff; color:#111827; width:190mm; margin:0; padding:0; overflow:visible;">
                     ${renderHtml}
                 </div>
             `
@@ -189,7 +209,18 @@ export const useInterview = () => {
                     throw new Error("Generated resume content was empty.")
                 }
 
-                await html2pdf().set(opt).from(exportRoot).save()
+                const { width, height } = getExportDimensions(exportRoot)
+
+                await html2pdf().set({
+                    ...opt,
+                    html2canvas: {
+                        ...opt.html2canvas,
+                        width,
+                        height,
+                        windowWidth: width,
+                        windowHeight: height
+                    }
+                }).from(exportRoot).save()
             } finally {
                 document.body.removeChild(mount)
             }

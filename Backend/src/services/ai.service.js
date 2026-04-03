@@ -875,7 +875,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
     ].filter(Boolean).join("\n\n") || "No input data provided."
 
     const prompt = `You are a senior resume writer and ATS specialist.
-Generate a polished ATS-friendly one-page resume in clean semantic HTML.
+Generate a polished ATS-friendly resume in clean semantic HTML.
 
 Rules:
 - Return ONLY JSON with key: html
@@ -883,7 +883,7 @@ Rules:
 - Use a professional, readable, ATS-compliant layout with Arial, Helvetica, or Calibri.
 - Include sections only when they have real content: Header, Professional Summary, Technical Skills, Projects, Education, Experience, Achievements/Certifications.
 - Use concise bullet points with action verbs and role-relevant keywords.
-- Fit cleanly on A4 pages with natural multi-page flow when needed.
+- Fit cleanly on A4 pages with natural multi-page flow when needed instead of forcing everything onto one page.
 - Do not use fixed page heights, oversized containers, or styles that can create blank pages.
 - Prevent awkward splits by using CSS rules like page-break-inside: avoid / break-inside: avoid for sections and entries.
 - Keep margins, spacing, and heading styles consistent across all pages.
