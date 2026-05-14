@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 33% 97%;
+    --foreground: 210 22% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 22% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 22% 15%;
+
+    --primary: 205 88% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 34 36% 92%;
+    --secondary-foreground: 210 22% 15%;
+
+    --muted: 30 29% 93%;
+    --muted-foreground: 210 10% 40%;
+
+    --accent: 196 63% 93%;
+    --accent-foreground: 208 68% 28%;
+
+    --destructive: 0 76% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 85%;
+    --input: 30 20% 85%;
+    --ring: 205 88% 39%;
+
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    background-image:
+      radial-gradient(circle at 5% 10%, rgba(17, 94, 153, 0.15), transparent 30%),
+      radial-gradient(circle at 92% 6%, rgba(14, 116, 144, 0.12), transparent 22%),
+      radial-gradient(circle at 80% 82%, rgba(251, 146, 60, 0.10), transparent 26%),
+      linear-gradient(to bottom, #f7f5f0, #f4f6f8);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Space Grotesk', 'Manrope', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply border border-border/70 bg-white/90 backdrop-blur-sm shadow-sm;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-foreground;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
