@@ -37,6 +37,28 @@
     --radius: 1rem;
   }
 
+  .dark {
+    --background: 215 26% 10%;
+    --foreground: 210 30% 96%;
+    --card: 214 24% 14%;
+    --card-foreground: 210 30% 96%;
+    --popover: 214 24% 14%;
+    --popover-foreground: 210 30% 96%;
+    --primary: 196 85% 48%;
+    --primary-foreground: 220 30% 8%;
+    --secondary: 215 22% 18%;
+    --secondary-foreground: 210 30% 96%;
+    --muted: 215 18% 20%;
+    --muted-foreground: 215 14% 68%;
+    --accent: 190 40% 22%;
+    --accent-foreground: 190 70% 88%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 18% 25%;
+    --input: 215 18% 25%;
+    --ring: 196 85% 48%;
+  }
+
   * {
     @apply border-border;
   }
@@ -59,6 +81,10 @@
     background-attachment: fixed;
   }
 
+  .dark body {
+    background-image: linear-gradient(to bottom, #0f1720, #111827);
+  }
+
   h1,
   h2,
   h3,
@@ -70,7 +96,7 @@
 
 @layer components {
   .glass-panel {
-    @apply border border-border/70 bg-white/90 backdrop-blur-sm shadow-sm;
+    @apply border border-border/70 bg-white/90 backdrop-blur-sm shadow-sm dark:bg-card/90;
   }
 
   .section-title {

@@ -1,15 +1,34 @@
 const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
+const helmet = require("helmet")
+const env = require("./config/env")
+const createRateLimiter = require("./middlewares/rateLimit.middleware")
+const { securityHeaders, sanitizeBody } = require("./middlewares/security.middleware")
+const { notFound, errorHandler } = require("./middlewares/error.middleware")
 
 const app = express()
 
-app.use(express.json())
+app.set("trust proxy", 1)
+app.use(helmet())
+app.use(securityHeaders)
+app.use(express.json({ limit: "1mb" }))
 app.use(cookieParser())
 
 app.use(cors({
-    origin: true,
+    origin(origin, callback) {
+        if (!origin || env.corsOrigins.includes(origin)) {
+            return callback(null, true)
+        }
+        return callback(new Error("Not allowed by CORS"))
+    },
     credentials: true
+}))
+app.use(sanitizeBody)
+app.use(createRateLimiter({
+    windowMs: env.RATE_LIMIT_WINDOW_MS,
+    max: env.RATE_LIMIT_MAX,
+    message: "Too many requests. Please wait and try again."
 }))
 
 /* require all the routes here */
@@ -21,22 +40,11 @@ const interviewRouter = require("./routes/interview.routes")
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
-app.use((err, req, res, next) => {
-    if (err?.code === "LIMIT_FILE_SIZE") {
-        return res.status(400).json({
-            message: "Resume file is too large. Max allowed size is 5MB."
-        })
-    }
-
-    if (err?.message === "Only PDF and DOCX files are allowed") {
-        return res.status(400).json({
-            message: err.message
-        })
-    }
-
-    return next(err)
+app.get("/", (req, res) => {
+    res.json({ status: "ok", service: "AI Interview Report Generator API" })
 })
 
-
+app.use(notFound)
+app.use(errorHandler)
 
 module.exports = app

@@ -1,7 +1,7 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
 import { useCallback, useContext } from "react"
 import { InterviewContext } from "../interview.context"
-import html2pdf from "html2pdf.js"
+import { getApiErrorMessage } from "../../../lib/apiClient"
 
 const FALLBACK_RESUME_HTML = `
     <div style="font-family: Arial, sans-serif; color: #111827; padding: 24px; background: #ffffff;">
@@ -111,7 +111,7 @@ export const useInterview = () => {
             response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
         } catch (error) {
-            const msg = error?.response?.data?.message || error?.message || "Failed to generate report. Please try again."
+            const msg = getApiErrorMessage(error, "Failed to generate report. Please try again.")
             throw new Error(msg)
         } finally {
             setLoading(false)
@@ -128,7 +128,7 @@ export const useInterview = () => {
             response = await getInterviewReportById(reportId)
             setReport(response.interviewReport)
         } catch (error) {
-            const msg = error?.response?.data?.message || error?.message || "Failed to fetch report."
+            const msg = getApiErrorMessage(error, "Failed to fetch report.")
             throw new Error(msg)
         } finally {
             setLoading(false)
@@ -208,6 +208,7 @@ export const useInterview = () => {
                 exportRoot.style.maxWidth = `${width}px`
                 exportRoot.style.minHeight = `${height}px`
 
+                const { default: html2pdf } = await import("html2pdf.js")
                 await html2pdf().set({
                     ...opt,
                     html2canvas: {
@@ -224,8 +225,8 @@ export const useInterview = () => {
 
         } catch (error) {
             console.error("Resume PDF generation error:", error)
-            const msg = error?.response?.data?.message || error?.message || "Failed to download resume. Please try again."
-            alert(msg)
+            const msg = getApiErrorMessage(error, "Failed to download resume. Please try again.")
+            throw new Error(msg)
         } finally {
             setLoading(false)
         }

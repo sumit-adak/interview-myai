@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
+import { useToast } from '../../../components/ui/toast'
 import { useInterview } from '../hooks/useInterview'
 import {
     ArrowLeft,
@@ -17,7 +18,6 @@ import {
     CalendarDays,
     Sparkles
 } from 'lucide-react'
-import html2pdf from 'html2pdf.js'
 
 const severityClass = {
     low: 'bg-emerald-100 text-emerald-700 border-emerald-300',
@@ -49,6 +49,7 @@ const Interview = () => {
     const { interviewId } = useParams()
     const navigate = useNavigate()
     const { getReportById, report, loading, getResumePdf } = useInterview()
+    const { showToast } = useToast()
 
     const [activeTab, setActiveTab] = useState('technical')
     const [fetchError, setFetchError] = useState('')
@@ -67,10 +68,11 @@ const Interview = () => {
         return Number.isFinite(parsed) ? Math.max(0, Math.min(100, parsed)) : 0
     }, [report])
 
-    const handleDownloadReportPdf = () => {
+    const handleDownloadReportPdf = async () => {
         const element = document.getElementById('report-export')
         if (!element) return
 
+        const { default: html2pdf } = await import('html2pdf.js')
         html2pdf()
             .set({
                 margin: 10,
@@ -81,12 +83,16 @@ const Interview = () => {
             })
             .from(element)
             .save()
+        showToast({ title: 'Report export started', description: 'Your PDF download should begin shortly.' })
     }
 
     const handleResumeDownload = async () => {
         setResumeLoading(true)
         try {
             await getResumePdf(interviewId)
+            showToast({ title: 'Resume exported', description: 'ATS resume PDF download is complete.' })
+        } catch (error) {
+            showToast({ title: 'Resume export failed', description: error?.message || 'Please try again.', variant: 'error' })
         } finally {
             setResumeLoading(false)
         }

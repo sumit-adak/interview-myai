@@ -1,20 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "https://interview-myai.onrender.com",
-    withCredentials: true,
-})
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token")
-    if (token) {
-        config.headers = {
-            ...config.headers,
-            Authorization: `Bearer ${token}`
-        }
-    }
-    return config
-}, (error) => Promise.reject(error))
+import { apiClient } from "../../../lib/apiClient"
 
 
 /**
@@ -29,7 +13,7 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
         formData.append("resume", resumeFile)
     }
 
-    const response = await api.post("/api/interview/", formData, {
+    const response = await apiClient.post("/api/interview/", formData, {
         headers: {
             "Content-Type": "multipart/form-data"
         }
@@ -44,7 +28,7 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
  * @description Service to get interview report by interviewId.
  */
 export const getInterviewReportById = async (interviewId) => {
-    const response = await api.get(`/api/interview/report/${interviewId}`)
+    const response = await apiClient.get(`/api/interview/report/${interviewId}`)
 
     return response.data
 }
@@ -54,7 +38,7 @@ export const getInterviewReportById = async (interviewId) => {
  * @description Service to get all interview reports of logged in user.
  */
 export const getAllInterviewReports = async () => {
-    const response = await api.get("/api/interview/")
+    const response = await apiClient.get("/api/interview/")
 
     return response.data
 }
@@ -64,7 +48,7 @@ export const getAllInterviewReports = async () => {
  * @description Service to generate resume pdf based on user self description, resume content and job description.
  */
 export const generateResumePdf = async ({ interviewReportId }) => {
-    const response = await api.post(`/api/interview/resume/pdf/${interviewReportId}`)
+    const response = await apiClient.post(`/api/interview/resume/pdf/${interviewReportId}`)
 
     return response.data
 }

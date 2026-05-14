@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 import { Button } from '../../../components/ui/button'
+import { useToast } from '../../../components/ui/toast'
 import { Input } from '../../../components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../../components/ui/card'
 import { Loader2, Sparkles, AlertCircle } from 'lucide-react'
 
 const Login = () => {
     const { loading, handleLogin } = useAuth()
+    const { showToast } = useToast()
     const navigate = useNavigate()
 
     const [email, setEmail] = useState('')
@@ -19,9 +21,10 @@ const Login = () => {
         setError('')
         try {
             await handleLogin({ email, password })
+            showToast({ title: 'Signed in', description: 'Your workspace is ready.' })
             navigate('/dashboard')
         } catch (err) {
-            setError(err?.response?.data?.message || 'Login failed. Please check credentials.')
+            setError(err?.message || 'Login failed. Please check credentials.')
         }
     }
 

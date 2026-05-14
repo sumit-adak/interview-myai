@@ -9,7 +9,12 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         if (typeof window !== "undefined") {
             const stored = localStorage.getItem("user")
-            return stored ? JSON.parse(stored) : null
+            try {
+                return stored ? JSON.parse(stored) : null
+            } catch {
+                localStorage.removeItem("user")
+                return null
+            }
         }
         return null
     })
@@ -22,7 +27,7 @@ export const AuthProvider = ({ children }) => {
                 if (data && data.user) {
                     setUser(data.user)
                 }
-            } catch (err) {
+            } catch {
                 // no-op
             } finally {
                 setLoading(false)
@@ -34,7 +39,7 @@ export const AuthProvider = ({ children }) => {
         } else {
             getAndSetUser()
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (typeof window !== "undefined") {

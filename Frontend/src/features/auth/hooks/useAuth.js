@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth.context";
 import { login, register, logout } from "../services/auth.api";
+import { getApiErrorMessage } from "../../../lib/apiClient";
 
 
 
 export const useAuth = () => {
 
     const context = useContext(AuthContext)
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider")
+    }
     const { user, setUser, loading, setLoading } = context
 
 
@@ -14,13 +18,10 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await login({ email, password })
-            if (data?.token) {
-                localStorage.setItem("token", data.token)
-            }
             if (data?.user) setUser(data.user)
             return data
         } catch (err) {
-            throw err
+            throw new Error(getApiErrorMessage(err, "Login failed. Please check credentials."))
         } finally {
             setLoading(false)
         }
@@ -30,13 +31,10 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
-            if (data?.token) {
-                localStorage.setItem("token", data.token)
-            }
             if (data?.user) setUser(data.user)
             return data
         } catch (err) {
-            throw err
+            throw new Error(getApiErrorMessage(err, "Registration failed. Please try again."))
         } finally {
             setLoading(false)
         }
@@ -48,8 +46,9 @@ export const useAuth = () => {
             await logout()
             localStorage.removeItem("token")
             setUser(null)
-        } catch (err) {
-
+        } catch {
+            localStorage.removeItem("token")
+            setUser(null)
         } finally {
             setLoading(false)
         }

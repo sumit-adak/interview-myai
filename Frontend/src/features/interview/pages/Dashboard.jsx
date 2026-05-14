@@ -2,8 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
+import { Skeleton } from '../../../components/ui/skeleton'
+import { useToast } from '../../../components/ui/toast'
 import { useInterview } from '../hooks/useInterview'
 import { useAuth } from '../../auth/hooks/useAuth'
+import { useDebounce } from '../../../hooks/useDebounce'
 import {
     UploadCloud,
     Briefcase,
@@ -21,18 +24,21 @@ const Dashboard = () => {
     const navigate = useNavigate()
     const { generateReport, reports, getReports } = useInterview()
     const { user, logout } = useAuth()
+    const { showToast } = useToast()
 
     const [jobDescription, setJobDescription] = useState('')
     const [selfDescription, setSelfDescription] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
     const [isGenerating, setIsGenerating] = useState(false)
+    const [reportsLoading, setReportsLoading] = useState(true)
     const [isDragging, setIsDragging] = useState(false)
     const [fileName, setFileName] = useState('')
 
     const resumeInputRef = useRef(null)
+    const debouncedJobDescription = useDebounce(jobDescription, 250)
 
     useEffect(() => {
-        getReports()
+        getReports().finally(() => setReportsLoading(false))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const latestScore = useMemo(() => {
@@ -82,6 +88,7 @@ const Dashboard = () => {
             })
 
             if (report?._id) {
+                showToast({ title: 'Report generated', description: 'Your interview strategy is ready.' })
                 navigate(`/interview/${report._id}`)
                 return
             }
@@ -89,6 +96,7 @@ const Dashboard = () => {
             setErrorMsg('Report generated but could not be opened. Please try again.')
         } catch (error) {
             setErrorMsg(error?.message || 'Failed to generate report.')
+            showToast({ title: 'Generation failed', description: error?.message || 'Please try again.', variant: 'error' })
         } finally {
             setIsGenerating(false)
         }
@@ -168,7 +176,7 @@ const Dashboard = () => {
                                     className="min-h-[230px] w-full resize-y rounded-2xl border border-input bg-white/85 p-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                                     placeholder="Paste complete role description, responsibilities, and required skills..."
                                 />
-                                <p className="text-xs text-muted-foreground">{jobDescription.length} / 5000 recommended characters</p>
+                                <p className="text-xs text-muted-foreground">{debouncedJobDescription.length} / 5000 recommended characters</p>
                             </div>
 
                             <div className="space-y-2">
@@ -249,8 +257,15 @@ const Dashboard = () => {
                                 <CardDescription>Open any previous evaluation</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                {!reports?.length && <p className="text-sm text-muted-foreground">No reports yet. Create your first one.</p>}
-                                {reports?.slice(0, 6).map((item) => (
+                                {reportsLoading && (
+                                    <div className="space-y-2">
+                                        <Skeleton className="h-14 w-full" />
+                                        <Skeleton className="h-14 w-full" />
+                                        <Skeleton className="h-14 w-full" />
+                                    </div>
+                                )}
+                                {!reportsLoading && !reports?.length && <p className="text-sm text-muted-foreground">No reports yet. Create your first one.</p>}
+                                {!reportsLoading && reports?.slice(0, 6).map((item) => (
                                     <button
                                         key={item._id}
                                         className="w-full rounded-xl border border-border/80 bg-white/80 px-3 py-2 text-left text-sm transition-all hover:border-primary/40 hover:bg-accent/70"
@@ -259,7 +274,7 @@ const Dashboard = () => {
                                         <p className="line-clamp-1 font-semibold">{item.title || 'Interview Evaluation'}</p>
                                         <p className="mt-1 text-xs text-muted-foreground">
                                             {item.matchScore != null ? `Score ${item.matchScore}%` : 'Score pending'}
-                                            {' • '}
+                                            {' â€¢ '}
                                             {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Saved'}
                                         </p>
                                     </button>

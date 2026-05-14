@@ -62,6 +62,8 @@ const preparationPlanSchema = new mongoose.Schema({
         type: String,
         required: [ true, "Task is required" ]
     } ]
+}, {
+    _id: false
 })
 
 const interviewReportSchema = new mongoose.Schema({
@@ -96,6 +98,7 @@ const interviewReportSchema = new mongoose.Schema({
     timestamps: true
 })
 
+interviewReportSchema.index({ user: 1, createdAt: -1 })
 
 const interviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);
 

@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 import { Button } from '../../../components/ui/button'
+import { useToast } from '../../../components/ui/toast'
 import { Input } from '../../../components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../../components/ui/card'
 import { Loader2, Sparkles, AlertCircle } from 'lucide-react'
 
 const Register = () => {
     const { loading, handleRegister } = useAuth()
+    const { showToast } = useToast()
     const navigate = useNavigate()
 
     const [username, setUsername] = useState('')
@@ -20,9 +22,10 @@ const Register = () => {
         setError('')
         try {
             await handleRegister({ username, email, password })
+            showToast({ title: 'Account created', description: 'You can start generating interview reports.' })
             navigate('/dashboard')
         } catch (err) {
-            setError(err?.response?.data?.message || 'Registration failed. Please try again.')
+            setError(err?.message || 'Registration failed. Please try again.')
         }
     }
 
