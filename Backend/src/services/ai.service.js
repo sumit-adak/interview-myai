@@ -217,6 +217,31 @@ const buildFallbackInterviewReport = ({ resume = "", selfDescription = "", jobDe
             question: `Which ${missingKeywords[0] || "advanced"} capability do you plan to strengthen for this role, and how?`,
             intention: "Evaluate learning plan quality and ownership over skill gaps.",
             answer: "Present a concrete upskilling roadmap with timeline, resources, and measurable checkpoints."
+        },
+        {
+            question: "Walk me through how you would design a scalable database schema for this application.",
+            intention: "Assess data modeling skills, normalization vs denormalization tradeoffs, and indexing strategy.",
+            answer: "Discuss entity relationships, indexing for query patterns, sharding or partitioning strategy, and how you handle schema migrations in production."
+        },
+        {
+            question: "How do you approach writing and maintaining a comprehensive test suite for a production application?",
+            intention: "Evaluate testing philosophy, coverage strategy, and CI/CD integration.",
+            answer: "Cover unit tests, integration tests, E2E tests, mocking strategies, test data management, and how you balance coverage with development speed."
+        },
+        {
+            question: "Describe how you would debug a critical production issue that affects 10% of users but is not reproducible locally.",
+            intention: "Assess debugging methodology, production observability skills, and calm under pressure.",
+            answer: "Explain log analysis, distributed tracing, feature flag isolation, canary deployments, and how you communicate status updates to stakeholders during incidents."
+        },
+        {
+            question: "How do you handle state management in complex frontend applications and what patterns do you prefer?",
+            intention: "Evaluate frontend architecture understanding and ability to manage complexity.",
+            answer: "Discuss local vs global state, context API vs state libraries, caching strategies, optimistic updates, and how you prevent prop drilling and unnecessary re-renders."
+        },
+        {
+            question: "Explain your CI/CD pipeline design and how you ensure safe, zero-downtime deployments.",
+            intention: "Assess DevOps maturity and deployment best practices.",
+            answer: "Cover automated testing in pipelines, blue-green or rolling deployments, rollback strategies, environment promotion, and monitoring after deploy."
         }
     ]
 
@@ -240,6 +265,26 @@ const buildFallbackInterviewReport = ({ resume = "", selfDescription = "", jobDe
             question: "How do you communicate technical tradeoffs to non-technical stakeholders?",
             intention: "Assess clarity and cross-functional communication.",
             answer: "Demonstrate concise framing, risks, alternatives, and decision rationale in plain language."
+        },
+        {
+            question: "Tell me about a project that failed or didn't meet expectations. What did you learn?",
+            intention: "Assess self-awareness, growth mindset, and ability to learn from failure.",
+            answer: "Use STAR to describe what went wrong, your specific role in the failure, concrete lessons learned, and how you applied those lessons to future projects."
+        },
+        {
+            question: "Describe a time when you had to quickly learn a new technology or framework to deliver a project.",
+            intention: "Assess adaptability, learning speed, and resourcefulness.",
+            answer: "Explain the context, how you structured your learning, resources you used, how you applied the new knowledge, and the successful outcome."
+        },
+        {
+            question: "How do you prioritize tasks when you have multiple competing deadlines from different stakeholders?",
+            intention: "Assess prioritization skills, stakeholder management, and time management.",
+            answer: "Describe your prioritization framework, how you communicate tradeoffs to stakeholders, and a specific example where you successfully managed competing demands."
+        },
+        {
+            question: "Tell me about a time you mentored or helped a junior developer grow their skills.",
+            intention: "Assess leadership, empathy, and ability to grow team capabilities.",
+            answer: "Describe the situation, your mentoring approach, specific guidance you provided, and the measurable growth the person achieved."
         }
     ]
 
@@ -298,7 +343,7 @@ const normalizeReportPayload = (raw, context) => {
             intention: "Assess practical technical strength for this role.",
             answer: "Answer with architecture, tradeoffs, and measurable impact."
         }),
-        5
+        10
     )
 
     const behavioralQuestions = normalizeQuestions(
@@ -308,7 +353,7 @@ const normalizeReportPayload = (raw, context) => {
             intention: "Assess communication and execution behaviors.",
             answer: "Use STAR format with measurable outcome and lessons learned."
         }),
-        4
+        8
     )
 
     const skillGaps = normalizeSkillGaps(raw?.skillGaps, jobKeywords)
@@ -325,22 +370,24 @@ const normalizeReportPayload = (raw, context) => {
 }
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
-    const prompt = `You are an expert technical interview coach.
-Create a high-quality interview preparation report in strict JSON.
+    const prompt = `You are a world-class technical interview coach with 15+ years of hiring experience at top tech companies.
+Create an extremely detailed, high-quality interview preparation report in strict JSON.
 
 Rules:
-- Return ONLY valid JSON object matching schema.
-- Keep language precise and professional.
-- technicalQuestions must contain exactly 5 items.
-- behavioralQuestions must contain exactly 4 items.
-- skillGaps should contain 4 to 6 items with severity low|medium|high.
-- preparationPlan should contain 4 to 7 day-wise items.
-- title should be specific to the target role.
+- Return ONLY a valid JSON object matching the schema.
+- Keep language precise, professional, and highly actionable.
+- technicalQuestions must contain exactly 10 items. Cover system design, coding, debugging, architecture, scalability, security, databases, APIs, testing, and DevOps. Each question must be specific to the job description, not generic. Each answer must be a detailed 3-5 sentence model answer with concrete examples, specific technologies, and measurable outcomes.
+- behavioralQuestions must contain exactly 8 items. Cover leadership, conflict resolution, failure handling, teamwork, communication, prioritization, ownership, and adaptability. Each answer must use the STAR format (Situation, Task, Action, Result) with realistic scenarios.
+- Each question's "intention" must explain exactly what the interviewer is evaluating and what a strong vs weak answer looks like.
+- skillGaps should contain 4 to 6 items with severity low|medium|high. Be specific about what sub-skills are missing.
+- preparationPlan should contain 5 to 7 day-wise items with 3-4 concrete tasks each. Tasks should reference specific resources, practice problems, or exercises.
+- title should be specific to the target role mentioned in the job description.
+- matchScore should be a realistic, honest assessment (not inflated).
 
 Candidate Inputs:
-Resume: ${minify(resume)}
-Self Description: ${minify(selfDescription)}
-Job Description: ${minify(jobDescription)}
+Resume: ${minify(resume, 8000)}
+Self Description: ${minify(selfDescription, 4000)}
+Job Description: ${minify(jobDescription, 8000)}
 `
 
     let lastError
@@ -354,8 +401,8 @@ Job Description: ${minify(jobDescription)}
                     config: {
                         responseMimeType: "application/json",
                         responseSchema: zodToJsonSchema(interviewReportSchema),
-                        maxOutputTokens: 2500,
-                        temperature: 0.5
+                        maxOutputTokens: 8000,
+                        temperature: 0.6
                     }
                 })
 
@@ -874,22 +921,38 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
         selfDescription && `Self Description:\n${selfDescription}`
     ].filter(Boolean).join("\n\n") || "No input data provided."
 
-    const prompt = `You are a senior resume writer and ATS specialist.
-Generate a polished ATS-friendly resume in clean semantic HTML.
+    const prompt = `You are a world-class professional resume writer with 15+ years of experience placing candidates at top companies. You specialize in ATS-optimized, visually stunning resumes.
 
-Rules:
+Generate a premium, polished, ATS-friendly resume as a complete HTML document.
+
+CRITICAL DESIGN RULES:
 - Return ONLY JSON with key: html
-- html must be complete document: <!doctype html><html>...</html>
-- Use a professional, readable, ATS-compliant layout with Arial, Helvetica, or Calibri.
-- Include sections only when they have real content: Header, Professional Summary, Technical Skills, Projects, Education, Experience, Achievements/Certifications.
-- Use concise bullet points with action verbs and role-relevant keywords.
-- Fit cleanly on A4 pages with natural multi-page flow when needed instead of forcing everything onto one page.
-- Do not use fixed page heights, oversized containers, or styles that can create blank pages.
-- Prevent awkward splits by using CSS rules like page-break-inside: avoid / break-inside: avoid for sections and entries.
-- Keep margins, spacing, and heading styles consistent across all pages.
-- Do not wrap output in markdown fences.
+- html must be a complete document: <!doctype html><html>...</html>
+- Use font-family: 'Calibri', 'Segoe UI', Arial, Helvetica, sans-serif.
+- Use a clean, modern, two-tone color scheme: dark navy (#1a2332) for headers and a subtle accent (#2563eb) for section dividers and highlights.
+- The header section must have the candidate's full name in large bold (28pt), role title below (14pt), and contact info (email, phone, location, GitHub, LinkedIn) in a single clean line with pipe separators.
+- Add a thin colored accent line (3px solid #2563eb) below the header.
 
-Candidate input:\n${minify(candidateData, 9000)}
+CONTENT RULES:
+- Professional Summary: Write a compelling 3-4 sentence summary tailored to the target role. Highlight years of experience, core expertise, key achievements, and career goals. Use strong action language.
+- Technical Skills: Present in a clean table or grid layout, categorized by type (Languages, Frameworks, Databases, Tools & Platforms, Cloud & DevOps). Pull skills directly from the resume AND job description.
+- Experience/Projects: Each entry must have a bold title, company/context, and 3-5 bullet points. Every bullet MUST start with a strong action verb (Engineered, Architected, Optimized, Spearheaded, Implemented, Deployed, Automated, Reduced, Increased, Delivered). Include quantified metrics wherever possible (percentages, time savings, user counts, performance improvements).
+- Education: Include degree, institution, graduation year, and relevant coursework or GPA if available.
+- Achievements & Certifications: List notable awards, certifications, hackathon wins, publications, or open source contributions.
+
+FORMATTING RULES:
+- Use consistent spacing: 8mm between sections, 4mm between entries.
+- Section headers: uppercase, 11pt, letter-spacing 1px, with a 1px bottom border.
+- Body text: 10.5pt, line-height 1.5, color #374151.
+- Bullet points should have comfortable spacing (margin-bottom: 2mm).
+- Use page-break-inside: avoid and break-inside: avoid on all sections and entries.
+- Design for A4 paper with 15mm margins.
+- Do NOT use fixed heights that could create blank pages.
+- Ensure the resume flows naturally across pages if content requires it.
+- Do NOT wrap output in markdown fences.
+- Generate SUBSTANTIAL content — this is a premium professional resume, not a skeleton.
+
+Candidate input:\n${minify(candidateData, 12000)}
 `
 
     let lastError
@@ -903,8 +966,8 @@ Candidate input:\n${minify(candidateData, 9000)}
                     config: {
                         responseMimeType: "application/json",
                         responseSchema: zodToJsonSchema(resumePdfSchema),
-                        maxOutputTokens: 3500,
-                        temperature: 0.4
+                        maxOutputTokens: 16000,
+                        temperature: 0.5
                     }
                 })
 
