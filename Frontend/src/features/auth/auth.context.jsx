@@ -17,7 +17,12 @@ export const AuthProvider = ({ children }) => {
                     setUser(data.user)
                 }
             } catch {
-                if (!cancelled) setUser(null)
+                if (!cancelled) {
+                    setUser((prev) => {
+                        if (prev) return prev
+                        return null
+                    })
+                }
             } finally {
                 if (!cancelled) setLoading(false)
             }
