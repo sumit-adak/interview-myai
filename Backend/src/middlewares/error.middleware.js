@@ -1,10 +1,8 @@
-const AppError = require("../utils/AppError")
-
 function notFound(req, res, next) {
-    next(new AppError(`Route ${req.method} ${req.originalUrl} not found`, 404))
+    res.status(404).json({ message: `Route ${req.method} ${req.originalUrl} not found` })
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res, _next) {
     if (err?.code === "LIMIT_FILE_SIZE") {
         return res.status(400).json({
             message: "Resume file is too large. Max allowed size is 5MB."
@@ -20,6 +18,7 @@ function errorHandler(err, req, res, next) {
 
     if (!isProduction || statusCode >= 500) {
         console.error({
+            requestId: req.id,
             message: err.message,
             stack: err.stack,
             method: req.method,

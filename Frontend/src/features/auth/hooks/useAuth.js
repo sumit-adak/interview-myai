@@ -3,22 +3,17 @@ import { AuthContext } from "../auth.context";
 import { login, register, logout } from "../services/auth.api";
 import { getApiErrorMessage } from "../../../lib/apiClient";
 
-
-
 export const useAuth = () => {
-
     const context = useContext(AuthContext)
     if (!context) {
         throw new Error("useAuth must be used within an AuthProvider")
     }
     const { user, setUser, loading, setLoading } = context
 
-
     const handleLogin = async ({ email, password }) => {
         setLoading(true)
         try {
             const data = await login({ email, password })
-            if (data?.token) localStorage.setItem("token", data.token)
             if (data?.user) setUser(data.user)
             return data
         } catch (err) {
@@ -32,7 +27,6 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
-            if (data?.token) localStorage.setItem("token", data.token)
             if (data?.user) setUser(data.user)
             return data
         } catch (err) {
@@ -46,16 +40,13 @@ export const useAuth = () => {
         setLoading(true)
         try {
             await logout()
-            localStorage.removeItem("token")
-            setUser(null)
         } catch {
-            localStorage.removeItem("token")
-            setUser(null)
+            // proceed with local cleanup even if API call fails
         } finally {
+            setUser(null)
             setLoading(false)
         }
     }
-
 
     return { user, loading, handleRegister, handleLogin, handleLogout, logout: handleLogout }
 }

@@ -8,7 +8,7 @@ test("register validation accepts a strong payload", () => {
         body: {
             username: "Sumit Adak",
             email: "SUMIT@example.com",
-            password: "supersecret123"
+            password: "SuperSecret123!"
         }
     })
 

@@ -76,12 +76,37 @@ async function getInterviewReport({ userId, interviewId }) {
     return interviewReport
 }
 
-async function listInterviewReports(userId) {
-    return interviewReportModel
-        .find({ user: userId })
-        .sort({ createdAt: -1 })
-        .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
-        .lean()
+async function listInterviewReports(userId, { page = 1, limit = 10 } = {}) {
+    const skip = (page - 1) * limit
+    const [reports, total] = await Promise.all([
+        interviewReportModel
+            .find({ user: userId })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
+            .lean(),
+        interviewReportModel.countDocuments({ user: userId })
+    ])
+
+    return {
+        reports,
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+    }
+}
+
+async function deleteInterviewReport({ userId, interviewId }) {
+    const report = await interviewReportModel.findOneAndDelete({
+        _id: interviewId,
+        user: userId
+    })
+
+    if (!report) {
+        throw new AppError("Interview report not found", 404)
+    }
 }
 
 async function buildResumeHtml({ userId, interviewReportId }) {
@@ -102,5 +127,6 @@ module.exports = {
     createInterviewReport,
     getInterviewReport,
     listInterviewReports,
+    deleteInterviewReport,
     buildResumeHtml
 }

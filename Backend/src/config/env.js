@@ -6,10 +6,11 @@ const envSchema = z.object({
     MONGO_URI: z.string().min(1, "MONGO_URI is required"),
     JWT_SECRET: z.string().min(24, "JWT_SECRET must be at least 24 characters"),
     GOOGLE_GENAI_API_KEY: z.string().min(1, "GOOGLE_GENAI_API_KEY is required"),
-    CORS_ORIGIN: z.string().default("http://localhost:5175,https://interview-myai.vercel.app"),
+    CORS_ORIGIN: z.string().default("http://localhost:5175"),
     RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
     RATE_LIMIT_MAX: z.coerce.number().int().positive().default(120),
-    AI_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(12)
+    AI_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(12),
+    TRUST_PROXY: z.string().default("1")
 })
 
 const parsed = envSchema.safeParse(process.env)
@@ -25,9 +26,5 @@ env.corsOrigins = env.CORS_ORIGIN
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean)
-
-if (!env.corsOrigins.includes("https://interview-myai.vercel.app")) {
-    env.corsOrigins.push("https://interview-myai.vercel.app");
-}
 
 module.exports = env

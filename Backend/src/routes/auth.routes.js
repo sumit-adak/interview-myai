@@ -13,29 +13,25 @@ const authRouter = Router()
  */
 authRouter.post("/register", validate(registerSchema), authController.registerUserController)
 
-
 /**
  * @route POST /api/auth/login
- * @description login user with email and password
+ * @description Login user with email and password
  * @access Public
  */
 authRouter.post("/login", validate(loginSchema), authController.loginUserController)
 
-
 /**
- * @route GET /api/auth/logout
- * @description clear token from user cookie and add the token in blacklist
- * @access public
+ * @route POST /api/auth/logout
+ * @description Clear token from user cookie and add the token to blacklist
+ * @access Public
  */
 authRouter.post("/logout", authController.logoutUserController)
 
-
 /**
  * @route GET /api/auth/get-me
- * @description get the current logged in user details
- * @access private
+ * @description Get the current logged in user details
+ * @access Private
  */
 authRouter.get("/get-me", authMiddleware.authUser, authController.getMeController)
-
 
 module.exports = authRouter

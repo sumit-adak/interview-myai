@@ -8,17 +8,17 @@ const env = require("../config/env")
 const {
     generateInterviewSchema,
     interviewIdSchema,
-    resumeIdSchema
+    resumeIdSchema,
+    deleteReportSchema,
+    paginationSchema
 } = require("../validators/interview.validator")
 
 const interviewRouter = express.Router()
 
-
-
 /**
  * @route POST /api/interview/
- * @description generate new interview report on the basis of user self description,resume pdf and job description.
- * @access private
+ * @description Generate new interview report based on user self description, resume and job description
+ * @access Private
  */
 const aiLimiter = createRateLimiter({
     windowMs: env.RATE_LIMIT_WINDOW_MS,
@@ -36,9 +36,21 @@ interviewRouter.post(
 )
 
 /**
+ * @route GET /api/interview/
+ * @description Get all interview reports of logged in user (paginated)
+ * @access Private
+ */
+interviewRouter.get(
+    "/",
+    authMiddleware.authUser,
+    validate(paginationSchema),
+    interviewController.getAllInterviewReportsController
+)
+
+/**
  * @route GET /api/interview/report/:interviewId
- * @description get interview report by interviewId.
- * @access private
+ * @description Get interview report by interviewId
+ * @access Private
  */
 interviewRouter.get(
     "/report/:interviewId",
@@ -47,19 +59,22 @@ interviewRouter.get(
     interviewController.getInterviewReportByIdController
 )
 
-
 /**
- * @route GET /api/interview/
- * @description get all interview reports of logged in user.
- * @access private
+ * @route DELETE /api/interview/report/:interviewId
+ * @description Delete an interview report
+ * @access Private
  */
-interviewRouter.get("/", authMiddleware.authUser, interviewController.getAllInterviewReportsController)
-
+interviewRouter.delete(
+    "/report/:interviewId",
+    authMiddleware.authUser,
+    validate(deleteReportSchema),
+    interviewController.deleteInterviewReportController
+)
 
 /**
- * @route GET /api/interview/resume/pdf
- * @description generate resume pdf on the basis of user self description, resume content and job description.
- * @access private
+ * @route POST /api/interview/resume/pdf/:interviewReportId
+ * @description Generate resume HTML for PDF export
+ * @access Private
  */
 interviewRouter.post(
     "/resume/pdf/:interviewReportId",
@@ -68,7 +83,5 @@ interviewRouter.post(
     validate(resumeIdSchema),
     interviewController.generateResumePdfController
 )
-
-
 
 module.exports = interviewRouter

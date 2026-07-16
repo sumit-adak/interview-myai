@@ -54,6 +54,7 @@ const Interview = () => {
     const [activeTab, setActiveTab] = useState('technical')
     const [fetchError, setFetchError] = useState('')
     const [resumeLoading, setResumeLoading] = useState(false)
+    const [pdfExporting, setPdfExporting] = useState(false)
 
     useEffect(() => {
         if (!interviewId) return
@@ -72,18 +73,26 @@ const Interview = () => {
         const element = document.getElementById('report-export')
         if (!element) return
 
-        const { default: html2pdf } = await import('html2pdf.js')
-        html2pdf()
-            .set({
-                margin: 10,
-                filename: `interview_report_${interviewId}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            })
-            .from(element)
-            .save()
-        showToast({ title: 'Report export started', description: 'Your PDF download should begin shortly.' })
+        setPdfExporting(true)
+        try {
+            const { default: html2pdf } = await import('html2pdf.js')
+            await html2pdf()
+                .set({
+                    margin: 10,
+                    filename: `interview_report_${interviewId}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                })
+                .from(element)
+                .save()
+            showToast({ title: 'Report exported', description: 'Your PDF download is complete.' })
+        } catch (error) {
+            console.error("Report PDF export error:", error)
+            showToast({ title: 'Export failed', description: 'Failed to generate PDF. Please try again.', variant: 'error' })
+        } finally {
+            setPdfExporting(false)
+        }
     }
 
     const handleResumeDownload = async () => {
@@ -139,9 +148,9 @@ const Interview = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                        <Button variant="outline" onClick={handleDownloadReportPdf}>
-                            <Download className="mr-2 h-4 w-4" />
-                            Export report PDF
+                        <Button variant="outline" onClick={handleDownloadReportPdf} disabled={pdfExporting}>
+                            {pdfExporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                            {pdfExporting ? 'Exporting...' : 'Export report PDF'}
                         </Button>
                         <Button onClick={handleResumeDownload} disabled={resumeLoading}>
                             {resumeLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}

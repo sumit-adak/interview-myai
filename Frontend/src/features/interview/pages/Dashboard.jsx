@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
@@ -11,18 +11,22 @@ import {
     UploadCloud,
     Briefcase,
     UserSquare2,
-    FileText,
     Loader2,
     AlertCircle,
     Sparkles,
     LogOut,
     Clock3,
-    ChartNoAxesCombined
+    ChartNoAxesCombined,
+    Trash2,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react'
+
+const ITEMS_PER_PAGE = 10
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const { generateReport, reports, getReports } = useInterview()
+    const { generateReport, reports, getReports, pagination, removeReport } = useInterview()
     const { user, logout } = useAuth()
     const { showToast } = useToast()
 
@@ -33,13 +37,20 @@ const Dashboard = () => {
     const [reportsLoading, setReportsLoading] = useState(true)
     const [isDragging, setIsDragging] = useState(false)
     const [fileName, setFileName] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const [deletingId, setDeletingId] = useState(null)
 
     const resumeInputRef = useRef(null)
     const debouncedJobDescription = useDebounce(jobDescription, 250)
 
+    const loadReports = useCallback((page) => {
+        getReports({ page, limit: ITEMS_PER_PAGE })
+            .finally(() => setReportsLoading(false))
+    }, [getReports])
+
     useEffect(() => {
-        getReports().finally(() => setReportsLoading(false))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        loadReports(currentPage)
+    }, [currentPage, loadReports])
 
     const latestScore = useMemo(() => {
         if (!reports?.length) return null
@@ -89,6 +100,8 @@ const Dashboard = () => {
 
             if (report?._id) {
                 showToast({ title: 'Report generated', description: 'Your interview strategy is ready.' })
+                setCurrentPage(1)
+                loadReports(1)
                 navigate(`/interview/${report._id}`)
                 return
             }
@@ -99,6 +112,27 @@ const Dashboard = () => {
             showToast({ title: 'Generation failed', description: error?.message || 'Please try again.', variant: 'error' })
         } finally {
             setIsGenerating(false)
+        }
+    }
+
+    const handleDelete = async (e, reportId) => {
+        e.stopPropagation()
+        if (!confirm('Delete this report?')) return
+
+        setDeletingId(reportId)
+        try {
+            await removeReport(reportId)
+            showToast({ title: 'Report deleted', description: 'The report has been removed.' })
+            const remainingOnPage = reports.length - 1
+            if (remainingOnPage === 0 && currentPage > 1) {
+                setCurrentPage((p) => p - 1)
+            } else {
+                loadReports(currentPage)
+            }
+        } catch (error) {
+            showToast({ title: 'Delete failed', description: error?.message || 'Please try again.', variant: 'error' })
+        } finally {
+            setDeletingId(null)
         }
     }
 
@@ -130,7 +164,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-xs uppercase tracking-wider text-muted-foreground">Reports Generated</p>
-                                <p className="text-2xl font-bold">{reports?.length || 0}</p>
+                                <p className="text-2xl font-bold">{pagination?.total || 0}</p>
                             </div>
                         </CardContent>
                     </Card>
@@ -265,20 +299,55 @@ const Dashboard = () => {
                                     </div>
                                 )}
                                 {!reportsLoading && !reports?.length && <p className="text-sm text-muted-foreground">No reports yet. Create your first one.</p>}
-                                {!reportsLoading && reports?.slice(0, 6).map((item) => (
-                                    <button
-                                        key={item._id}
-                                        className="w-full rounded-xl border border-border/80 bg-white/80 px-3 py-2 text-left text-sm transition-all hover:border-primary/40 hover:bg-accent/70"
-                                        onClick={() => navigate(`/interview/${item._id}`)}
-                                    >
-                                        <p className="line-clamp-1 font-semibold">{item.title || 'Interview Evaluation'}</p>
-                                        <p className="mt-1 text-xs text-muted-foreground">
-                                            {item.matchScore != null ? `Score ${item.matchScore}%` : 'Score pending'}
-                                            {' • '}
-                                            {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Saved'}
-                                        </p>
-                                    </button>
+                                {!reportsLoading && reports?.map((item) => (
+                                    <div key={item._id} className="group relative">
+                                        <button
+                                            className="w-full rounded-xl border border-border/80 bg-white/80 px-3 py-2 pr-10 text-left text-sm transition-all hover:border-primary/40 hover:bg-accent/70"
+                                            onClick={() => navigate(`/interview/${item._id}`)}
+                                        >
+                                            <p className="line-clamp-1 font-semibold">{item.title || 'Interview Evaluation'}</p>
+                                            <p className="mt-1 text-xs text-muted-foreground">
+                                                {item.matchScore != null ? `Score ${item.matchScore}%` : 'Score pending'}
+                                                {' \u00B7 '}
+                                                {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Saved'}
+                                            </p>
+                                        </button>
+                                        <button
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                                            onClick={(e) => handleDelete(e, item._id)}
+                                            disabled={deletingId === item._id}
+                                            title="Delete report"
+                                        >
+                                            {deletingId === item._id
+                                                ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                                : <Trash2 className="h-3.5 w-3.5" />
+                                            }
+                                        </button>
+                                    </div>
                                 ))}
+                                {!reportsLoading && pagination.totalPages > 1 && (
+                                    <div className="flex items-center justify-between pt-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            disabled={currentPage <= 1}
+                                            onClick={() => setCurrentPage((p) => p - 1)}
+                                        >
+                                            <ChevronLeft className="h-4 w-4" />
+                                        </Button>
+                                        <span className="text-xs text-muted-foreground">
+                                            Page {currentPage} of {pagination.totalPages}
+                                        </span>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            disabled={currentPage >= pagination.totalPages}
+                                            onClick={() => setCurrentPage((p) => p + 1)}
+                                        >
+                                            <ChevronRight className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </div>

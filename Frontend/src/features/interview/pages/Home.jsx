@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
 import { BrainCircuit, FileText, Target, ArrowRight, ShieldCheck, Sparkles, Gauge, ChartNoAxesCombined } from 'lucide-react'
+import { useAuth } from '../../auth/hooks/useAuth'
 
 const features = [
     {
@@ -30,6 +31,7 @@ const highlights = [
 
 const Home = () => {
     const navigate = useNavigate()
+    const { user } = useAuth()
 
     return (
         <div className="min-h-screen text-foreground">
@@ -45,8 +47,16 @@ const Home = () => {
                         </div>
                     </button>
                     <div className="flex items-center gap-2">
-                        <Button variant="ghost" onClick={() => navigate('/login')}>Sign in</Button>
-                        <Button onClick={() => navigate('/register')}>Create account</Button>
+                        {user ? (
+                            <>
+                                <Button variant="ghost" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button variant="ghost" onClick={() => navigate('/login')}>Sign in</Button>
+                                <Button onClick={() => navigate('/register')}>Create account</Button>
+                            </>
+                        )}
                     </div>
                 </div>
             </header>
@@ -70,12 +80,19 @@ const Home = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
-                        <Button size="lg" onClick={() => navigate('/dashboard')}>
-                            Start evaluation
+                        <Button
+                            size="lg"
+                            onClick={() => navigate(user ? '/dashboard' : '/register')}
+                        >
+                            {user ? 'Start evaluation' : 'Get started free'}
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
-                        <Button size="lg" variant="outline" onClick={() => navigate('/login')}>
-                            View my reports
+                        <Button
+                            size="lg"
+                            variant="outline"
+                            onClick={() => navigate(user ? '/dashboard' : '/login')}
+                        >
+                            {user ? 'View reports' : 'Sign in'}
                         </Button>
                     </div>
 

@@ -1,5 +1,11 @@
-import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
-import { useCallback, useContext } from "react"
+import {
+    getAllInterviewReports,
+    generateInterviewReport,
+    getInterviewReportById,
+    generateResumePdf,
+    deleteInterviewReport
+} from "../services/interview.api"
+import { useCallback, useContext, useState } from "react"
 import { InterviewContext } from "../interview.context"
 import { getApiErrorMessage } from "../../../lib/apiClient"
 
@@ -94,7 +100,6 @@ const getExportDimensions = (element) => {
 }
 
 export const useInterview = () => {
-
     const context = useContext(InterviewContext)
 
     if (!context) {
@@ -102,10 +107,11 @@ export const useInterview = () => {
     }
 
     const { loading, setLoading, report, setReport, reports, setReports } = context
+    const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 1 })
 
     const generateReport = useCallback(async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
-        setReport(null) // clear any old report
+        setReport(null)
         let response = null
         try {
             response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
@@ -118,7 +124,6 @@ export const useInterview = () => {
         }
 
         return response?.interviewReport
-
     }, [setLoading, setReport])
 
     const getReportById = useCallback(async (reportId) => {
@@ -136,18 +141,34 @@ export const useInterview = () => {
         return response?.interviewReport
     }, [setLoading, setReport])
 
-    const getReports = useCallback(async () => {
-        // Use a separate loading state indicator so it does NOT block the whole page
-        let response = null
+    const getReports = useCallback(async ({ page = 1, limit = 10 } = {}) => {
         try {
-            response = await getAllInterviewReports()
-            setReports(response.interviewReports)
+            const response = await getAllInterviewReports({ page, limit })
+            setReports(response.interviewReports || [])
+            if (response.pagination) {
+                setPagination(response.pagination)
+            }
+            return response.interviewReports
         } catch (error) {
             console.error("Failed to fetch reports list:", error)
             setReports([])
+            return []
         }
+    }, [setReports])
 
-        return response?.interviewReports
+    const removeReport = useCallback(async (interviewId) => {
+        try {
+            await deleteInterviewReport(interviewId)
+            setReports((prev) => prev.filter((r) => r._id !== interviewId))
+            setPagination((prev) => ({
+                ...prev,
+                total: Math.max(0, prev.total - 1),
+                totalPages: Math.max(1, Math.ceil((prev.total - 1) / prev.limit))
+            }))
+        } catch (error) {
+            const msg = getApiErrorMessage(error, "Failed to delete report.")
+            throw new Error(msg)
+        }
     }, [setReports])
 
     const getResumePdf = useCallback(async (interviewReportId) => {
@@ -220,7 +241,9 @@ export const useInterview = () => {
                     }
                 }).from(exportRoot).save()
             } finally {
-                document.body.removeChild(mount)
+                if (mount.parentNode) {
+                    document.body.removeChild(mount)
+                }
             }
 
         } catch (error) {
@@ -232,6 +255,8 @@ export const useInterview = () => {
         }
     }, [setLoading])
 
-    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
-
+    return {
+        loading, report, reports, pagination,
+        generateReport, getReportById, getReports, getResumePdf, removeReport
+    }
 }

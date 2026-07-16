@@ -1,50 +1,41 @@
-import { createContext,useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { getMe } from "./services/auth.api";
 
 export const AuthContext = createContext()
 
-
 export const AuthProvider = ({ children }) => {
-
-    const [user, setUser] = useState(() => {
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem("user")
-            try {
-                return stored ? JSON.parse(stored) : null
-            } catch {
-                localStorage.removeItem("user")
-                return null
-            }
-        }
-        return null
-    })
+    const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const getAndSetUser = async () => {
+        let cancelled = false
+
+        const fetchUser = async () => {
             try {
                 const data = await getMe()
-                if (data && data.user) {
+                if (!cancelled && data?.user) {
                     setUser(data.user)
                 }
             } catch {
-                // no-op
+                if (!cancelled) setUser(null)
             } finally {
-                setLoading(false)
+                if (!cancelled) setLoading(false)
             }
         }
 
-        if (user) {
-            setLoading(false)
-        } else {
-            getAndSetUser()
-        }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        fetchUser()
+
+        return () => { cancelled = true }
+    }, [])
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             if (user) {
-                localStorage.setItem("user", JSON.stringify(user))
+                try {
+                    localStorage.setItem("user", JSON.stringify(user))
+                } catch {
+                    // localStorage unavailable
+                }
             } else {
                 localStorage.removeItem("user")
             }
@@ -52,9 +43,8 @@ export const AuthProvider = ({ children }) => {
     }, [user])
 
     return (
-        <AuthContext.Provider value={{user,setUser,loading,setLoading}} >
+        <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
             {children}
         </AuthContext.Provider>
     )
-
 }

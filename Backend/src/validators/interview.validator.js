@@ -21,4 +21,23 @@ const resumeIdSchema = z.object({
     })
 })
 
-module.exports = { generateInterviewSchema, interviewIdSchema, resumeIdSchema }
+const deleteReportSchema = z.object({
+    params: z.object({
+        interviewId: objectId
+    })
+})
+
+const paginationSchema = z.object({
+    query: z.object({
+        page: z.coerce.number().int().positive().default(1),
+        limit: z.coerce.number().int().min(1).max(50).default(10)
+    })
+})
+
+module.exports = {
+    generateInterviewSchema,
+    interviewIdSchema,
+    resumeIdSchema,
+    deleteReportSchema,
+    paginationSchema
+}
