@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
+import { Navbar } from '../../../components/layout/Navbar'
 import { Button } from '../../../components/ui/button'
 import { useToast } from '../../../components/ui/toast'
 import { Input } from '../../../components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../../components/ui/card'
-import { Loader2, Sparkles, AlertCircle } from 'lucide-react'
+import { Loader2, Sparkles, AlertCircle, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 
 const Register = () => {
     const { loading, handleRegister } = useAuth()
@@ -15,6 +16,7 @@ const Register = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
 
     const handleSubmit = async (e) => {
@@ -22,7 +24,7 @@ const Register = () => {
         setError('')
         try {
             await handleRegister({ username, email, password })
-            showToast({ title: 'Account created', description: 'You can start generating interview reports.' })
+            showToast({ title: 'Account Created', description: 'Your workspace is ready. Start generating reports!' })
             navigate('/dashboard')
         } catch (err) {
             setError(err?.message || 'Registration failed. Please try again.')
@@ -30,82 +32,129 @@ const Register = () => {
     }
 
     return (
-        <div className="min-h-screen px-4 py-10">
-            <div className="mx-auto grid max-w-5xl items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                <section className="hidden lg:block">
-                    <div className="glass-panel rounded-3xl p-10">
-                        <div className="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white">
-                            <Sparkles className="h-5 w-5" />
-                        </div>
-                        <h1 className="text-4xl font-bold leading-tight">Build your interview advantage from day one</h1>
-                        <p className="mt-4 max-w-md text-muted-foreground">
-                            Create your workspace to generate professional reports, identify gaps, and craft recruiter-ready resumes.
-                        </p>
-                    </div>
-                </section>
+        <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
+            <Navbar />
 
-                <Card className="w-full border-border/70 bg-card/95">
-                    <CardHeader>
-                        <CardTitle className="text-2xl">Create account</CardTitle>
-                        <CardDescription>Set up your profile in under a minute</CardDescription>
-                    </CardHeader>
-                    <form onSubmit={handleSubmit}>
-                        <CardContent className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium" htmlFor="username">Full name</label>
-                                <Input
-                                    id="username"
-                                    type="text"
-                                    placeholder="John Doe"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    required
-                                />
+            <main className="flex-1 flex items-center justify-center px-4 py-10">
+                <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+                    {/* Left Hero Panel (Desktop) */}
+                    <section className="hidden lg:block space-y-6">
+                        <div className="glass-panel rounded-3xl p-10 space-y-6">
+                            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-primary to-cyan-500 text-white shadow-lg shadow-primary/25">
+                                <Sparkles className="h-6 w-6" />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium" htmlFor="email">Email</label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="name@company.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium" htmlFor="password">Password</label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="At least 8 characters"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            {error && (
-                                <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                                    <AlertCircle className="mt-0.5 h-4 w-4" />
-                                    <span>{error}</span>
-                                </div>
-                            )}
-                        </CardContent>
-                        <CardFooter className="flex flex-col gap-3">
-                            <Button className="w-full" type="submit" disabled={loading}>
-                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Create account
-                            </Button>
-                            <p className="text-sm text-muted-foreground">
-                                Already registered?{' '}
-                                <Link to="/login" className="font-semibold text-primary hover:underline">
-                                    Sign in
-                                </Link>
+                            <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
+                                Build your interview advantage <span className="gradient-text">from day one</span>
+                            </h1>
+                            <p className="text-base text-muted-foreground leading-relaxed">
+                                Join thousands of professionals using AI to evaluate target job fit, identify core technical gaps, and practice responses before real interview rounds.
                             </p>
-                        </CardFooter>
-                    </form>
-                </Card>
-            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-border/60">
+                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                    Role-specific AI question generation
+                                </div>
+                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                    Personalized day-by-day preparation roadmap
+                                </div>
+                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                    ATS compliant resume generator & PDF export
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Right Card Form */}
+                    <Card className="glass-panel border-border/80 w-full shadow-2xl">
+                        <CardHeader className="space-y-1">
+                            <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+                            <CardDescription className="text-xs">
+                                Set up your profile in under a minute
+                            </CardDescription>
+                        </CardHeader>
+                        <form onSubmit={handleSubmit}>
+                            <CardContent className="space-y-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-foreground" htmlFor="username">
+                                        Full Name
+                                    </label>
+                                    <Input
+                                        id="username"
+                                        type="text"
+                                        placeholder="John Doe"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                        className="h-10 rounded-xl"
+                                    />
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-foreground" htmlFor="email">
+                                        Email Address
+                                    </label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="name@company.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="h-10 rounded-xl"
+                                    />
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-foreground" htmlFor="password">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder="At least 6 characters"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            className="h-10 rounded-xl pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            title={showPassword ? 'Hide password' : 'Show password'}
+                                        >
+                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {error && (
+                                    <div className="flex items-start gap-2.5 rounded-2xl border border-destructive/40 bg-destructive/10 px-3.5 py-2.5 text-xs text-destructive">
+                                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                                        <span>{error}</span>
+                                    </div>
+                                )}
+                            </CardContent>
+                            <CardFooter className="flex flex-col gap-3 pt-2">
+                                <Button className="w-full h-10 shadow-lg shadow-primary/25" type="submit" disabled={loading}>
+                                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                    Create Account
+                                </Button>
+                                <p className="text-center text-xs text-muted-foreground">
+                                    Already have an account?{' '}
+                                    <Link to="/login" className="font-bold text-primary hover:underline">
+                                        Sign in
+                                    </Link>
+                                </p>
+                            </CardFooter>
+                        </form>
+                    </Card>
+                </div>
+            </main>
         </div>
     )
 }
