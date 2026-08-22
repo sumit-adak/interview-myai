@@ -1,230 +1,302 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
-import { Navbar } from '../../../components/layout/Navbar'
-import { Button } from '../../../components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
-import {
-    BrainCircuit,
-    FileText,
-    Target,
-    ArrowRight,
-    ShieldCheck,
-    Sparkles,
-    Gauge,
-    ChartNoAxesCombined,
-    CheckCircle2,
-    Zap,
-    ChevronRight,
-    Award
-} from 'lucide-react'
-import { useAuth } from '../../auth/hooks/useAuth'
-
-const features = [
-    {
-        icon: BrainCircuit,
-        title: 'Role-Aware AI Evaluation',
-        description: 'Matches your experience directly against job descriptions, identifying key skill alignments and hidden gaps.'
-    },
-    {
-        icon: FileText,
-        title: 'ATS-Optimized Resume Export',
-        description: 'Generates recruiter-friendly, ATS-compliant HTML/PDF resumes with high-impact quantifiable bullet points.'
-    },
-    {
-        icon: Target,
-        title: 'Structured Interview Roadmap',
-        description: 'Creates targeted technical & behavioral question lists with STAR framework answers and day-by-day prep tasks.'
-    }
-]
-
-const highlights = [
-    { icon: Gauge, text: 'Instant Precision Match Scoring' },
-    { icon: ChartNoAxesCombined, text: 'Actionable Skill Gap Insights' },
-    { icon: ShieldCheck, text: 'Secure Session & Private Reports' }
-]
+import React, { useEffect, useState } from 'react'
+import { useNavigate, Link } from 'react-router'
 
 const Home = () => {
     const navigate = useNavigate()
-    const { user } = useAuth()
+    const [mobileOpen, setMobileOpen] = useState(false)
+    const [animated, setAnimated] = useState(false)
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setAnimated(true)
+        }, 100)
+        return () => clearTimeout(timer)
+    }, [])
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-            {/* Top Navigation Header */}
-            <Navbar />
+        <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden selection:bg-[#b8c8e0] selection:text-[#223144] flex flex-col justify-between">
+            {/* Floating Pill NavBar (Desktop) */}
+            <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl z-50 glass-panel rounded-full border border-[#334155] shadow-lg hidden md:flex items-center justify-between px-6 py-2">
+                <Link to="/" className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#b8c8e0] hover:opacity-90 transition-opacity">
+                    Interview AI
+                </Link>
 
-            {/* Main Content */}
-            <main className="flex-1">
-                {/* Hero Section */}
-                <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-20">
-                    <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-                        {/* Left Hero Text */}
-                        <div className="space-y-8">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary shadow-sm">
-                                <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-                                AI-Powered Career Preparation Engine
-                            </div>
+                <div className="flex items-center gap-6 font-['JetBrains_Mono'] text-[14px]">
+                    <button
+                        onClick={() => navigate('/interview/setup')}
+                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                    >
+                        Practice
+                    </button>
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                    >
+                        Resume Analyzer
+                    </button>
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                    >
+                        Analytics
+                    </button>
+                </div>
 
-                            <div className="space-y-5">
-                                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl leading-[1.12]">
-                                    Turn Every Application Into a{' '}
-                                    <span className="gradient-text">Winning Strategy</span>
+                <div className="flex items-center gap-4 font-['JetBrains_Mono'] text-[14px]">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="text-[#dae2fd] hover:text-[#b8c8e0] transition-colors py-2 px-4 rounded-full hover:bg-white/5"
+                    >
+                        Sign In
+                    </button>
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="bg-[#b8c8e0] text-[#223144] font-bold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition-transform"
+                    >
+                        Get Started
+                    </button>
+                </div>
+            </nav>
+
+            {/* Mobile Nav Header */}
+            <nav className="fixed top-0 w-full z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] flex md:hidden justify-between items-center px-4 py-3">
+                <Link to="/" className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#b8c8e0]">
+                    Interview AI
+                </Link>
+                <button
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    className="text-[#dae2fd] p-2 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                    <span className="material-symbols-outlined">{mobileOpen ? 'close' : 'menu'}</span>
+                </button>
+            </nav>
+
+            {/* Mobile Drawer */}
+            {mobileOpen && (
+                <div className="fixed top-14 inset-x-0 bg-[#0b1326]/95 backdrop-blur-xl border-b border-[#334155] p-6 z-40 flex flex-col gap-4 md:hidden font-['JetBrains_Mono'] text-[14px]">
+                    <button
+                        onClick={() => { navigate('/interview/setup'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                    >
+                        Practice
+                    </button>
+                    <button
+                        onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                    >
+                        Resume Analyzer
+                    </button>
+                    <button
+                        onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                    >
+                        Analytics
+                    </button>
+                    <div className="pt-4 border-t border-[#334155] flex flex-col gap-2">
+                        <button
+                            onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
+                            className="w-full bg-[#b8c8e0] text-[#223144] font-bold py-3 rounded-full text-center"
+                        >
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Hero Main Content */}
+            <main className="flex-1 flex flex-col justify-center">
+                <section className="relative min-h-[90vh] md:min-h-screen flex flex-col md:flex-row items-center pt-24 md:pt-0 overflow-hidden bg-[#0b1326]">
+                    {/* Left Side: Typography & CTA */}
+                    <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:pl-20 md:pr-12 z-20 h-full py-12 md:py-0">
+                        <div className="max-w-2xl gsap-reveal-text">
+                            <div className="overflow-hidden">
+                                <h1
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.1s' }}
+                                >
+                                    Don't Just Prepare
                                 </h1>
-                                <p className="max-w-2xl text-base text-muted-foreground sm:text-lg leading-relaxed">
-                                    Upload your resume or profile summary, paste any target job description, and receive a comprehensive
-                                    interview preparation blueprint with real technical questions, gap analysis, and ATS-ready resumes.
-                                </p>
                             </div>
-
-                            <div className="flex flex-wrap items-center gap-3 pt-1">
-                                <Button
-                                    size="lg"
-                                    onClick={() => navigate(user ? '/dashboard' : '/register')}
-                                    className="h-12 px-7 text-base shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
+                            <div className="overflow-hidden">
+                                <h1
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.2s' }}
                                 >
-                                    {user ? 'Go to Workspace' : 'Start Free Evaluation'}
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Button>
-                                <Button
-                                    size="lg"
-                                    variant="outline"
-                                    onClick={() => navigate(user ? '/dashboard' : '/login')}
-                                    className="h-12 px-6 text-base border-border/80"
-                                >
-                                    {user ? 'View Reports' : 'Sign in to Account'}
-                                </Button>
+                                    for Interviews.
+                                </h1>
                             </div>
-
-                            <div className="grid gap-3 sm:grid-cols-3 pt-4 border-t border-border/60">
-                                {highlights.map((item, idx) => (
-                                    <div key={idx} className="glass-panel rounded-2xl p-3.5 text-xs font-medium text-foreground flex items-center gap-2.5">
-                                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                                            <item.icon className="h-4 w-4" />
-                                        </div>
-                                        <span>{item.text}</span>
-                                    </div>
-                                ))}
+                            <div className="overflow-hidden mt-2">
+                                <h1
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 glow-text tracking-tight gsap-line ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.3s' }}
+                                >
+                                    Dominate Them.
+                                </h1>
                             </div>
                         </div>
 
-                        {/* Right Hero Preview Card */}
-                        <div className="relative">
-                            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-primary/30 via-cyan-500/20 to-purple-500/20 blur-xl opacity-70" />
-                            <Card className="relative overflow-hidden border border-border/80 bg-card/90 shadow-2xl backdrop-blur-xl">
-                                <div className="border-b border-border/60 bg-muted/40 px-5 py-3.5 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-3 w-3 rounded-full bg-rose-500/80" />
-                                        <div className="h-3 w-3 rounded-full bg-amber-500/80" />
-                                        <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                                        <span className="ml-2 text-xs font-semibold text-muted-foreground">Evaluation Live Mockup</span>
+                        <p
+                            className={`font-['Inter'] text-[16px] md:text-[18px] text-[#c4c6cd] max-w-lg mt-6 mb-8 leading-relaxed gsap-line ${
+                                animated ? 'active' : ''
+                            }`}
+                            style={{ transitionDelay: '0.4s' }}
+                        >
+                            Step into the simulation. Our advanced AI challenges you with role-specific questions, analyzing every response to build your ultimate competitive edge.
+                        </p>
+
+                        <div
+                            className={`flex flex-col sm:flex-row gap-4 gsap-line ${
+                                animated ? 'active' : ''
+                            }`}
+                            style={{ transitionDelay: '0.5s' }}
+                        >
+                            <button
+                                onClick={() => navigate('/interview/setup')}
+                                className="bg-[#b8c8e0] text-[#223144] font-['JetBrains_Mono'] text-[14px] font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform glow-primary flex items-center justify-center gap-2 group shadow-xl"
+                            >
+                                Enter Simulation
+                                <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+                                    arrow_forward
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Right Side: AI Simulation Interface */}
+                    <div className="w-full md:w-1/2 relative h-[500px] md:h-screen flex items-center justify-center border-t md:border-t-0 md:border-l border-[#334155]">
+                        {/* Shaders & Ambient Glow */}
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0b1326]/90 md:to-[#0b1326] z-0"></div>
+                            <div className="absolute inset-0 bg-gradient-to-b from-[#0b1326]/50 via-transparent to-[#0b1326]/50 z-0"></div>
+                        </div>
+
+                        {/* AI Intelligence Ring */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[540px] rounded-full border border-[#334155] rotate-slow z-0 opacity-40 pointer-events-none hidden md:block">
+                            <svg className="w-full h-full" viewBox="0 0 200 200">
+                                <path d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" fill="transparent" id="curve"></path>
+                                <text className="text-[#b8c8e0]" fill="currentColor" fontFamily="Hanken Grotesk" fontSize="8" fontWeight="600" letterSpacing="4">
+                                    <textPath href="#curve">ANALYZE • PRACTICE • IMPROVE • REPEAT • ANALYZE • PRACTICE • IMPROVE • REPEAT • </textPath>
+                                </text>
+                            </svg>
+                        </div>
+
+                        {/* Core Interface & Floating Cards */}
+                        <div className={`relative z-10 w-full max-w-[620px] px-6 gsap-slide-in ${animated ? 'active' : ''}`}>
+                            <div className="glass-panel rounded-2xl p-2 shadow-2xl border border-[#334155] relative">
+                                {/* Main Image */}
+                                <img
+                                    alt="AI Interview Interface"
+                                    className="w-full h-auto rounded-xl object-cover mix-blend-lighten float shadow-2xl"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAX6sgpjBpHJltPnFlNL2UGOE0dZS7tljA1Y6RFTUtnRHuoHgVJvoO3BgWf3j5sjho-8nODFOL-vW1lbkvojABgrOwqKLx_4tBu-xNwxYzAhLbUUqp9VyJ2CheQaQUct8eFyzzToG-g5aDurqC3W6HK34_7d7X5SJoaJXCQ6VGRfd6Tf9m8J7sZ57KXGGv8ZxyssGA7tfSkg4ULXYqdzmwFFIVZqreMZJeyBbNEcsbpdRcbfhgYiMbHw"
+                                />
+
+                                {/* Floating Card 1: Confidence */}
+                                <div
+                                    className={`absolute -right-2 md:-right-8 top-8 w-44 md:w-60 glass-panel rounded-xl p-3 md:p-4 border-t border-[#334155] shadow-2xl float-delayed-1 gsap-stagger-card ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.6s' }}
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="font-['JetBrains_Mono'] text-[11px] md:text-[12px] text-[#c4c6cd] uppercase tracking-wider">Confidence</span>
+                                        <span className="font-['Hanken_Grotesk'] text-[20px] md:text-[24px] font-bold text-[#b8c8e0]">92%</span>
                                     </div>
-                                    <span className="inline-flex items-center rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                                        <CheckCircle2 className="mr-1 h-3 w-3" /> Ready
-                                    </span>
+                                    <div className="w-full bg-[#2d3449] h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-[#b8c8e0] w-[92%] h-full rounded-full"></div>
+                                    </div>
                                 </div>
 
-                                <CardContent className="p-6 space-y-5">
-                                    {/* Mock Score Header */}
-                                    <div className="flex items-center justify-between rounded-2xl bg-secondary/50 p-4 border border-border/60">
-                                        <div>
-                                            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Target Role Alignment</p>
-                                            <p className="text-lg font-bold text-foreground">Senior Full Stack Engineer</p>
+                                {/* Floating Card 2: AI Analysis */}
+                                <div
+                                    className={`absolute -left-2 md:-left-10 bottom-1/4 w-52 md:w-68 glass-panel rounded-xl p-3 md:p-4 border-l border-[#334155] shadow-2xl float-delayed-2 gsap-stagger-card ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.7s' }}
+                                >
+                                    <h3 className="font-['JetBrains_Mono'] text-[13px] text-[#b8c8e0] mb-3 font-semibold">AI Analysis</h3>
+                                    <div className="space-y-1.5 font-['JetBrains_Mono'] text-[11px] text-[#dae2fd]">
+                                        <div className="flex justify-between items-center">
+                                            <span>Communication</span>
+                                            <span className="text-[#b8c8e0] font-semibold">91%</span>
                                         </div>
-                                        <div className="text-right">
-                                            <span className="text-3xl font-extrabold text-primary">92%</span>
-                                            <p className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Strong Match</p>
+                                        <div className="flex justify-between items-center">
+                                            <span>Technical</span>
+                                            <span className="text-[#b8c8e0] font-semibold">84%</span>
                                         </div>
-                                    </div>
-
-                                    {/* Mock Features Breakdown */}
-                                    <div className="space-y-3">
-                                        <div className="rounded-xl border border-border/70 bg-card p-3 flex items-start gap-3">
-                                            <Zap className="mt-0.5 h-4 w-4 text-amber-500 shrink-0" />
-                                            <div>
-                                                <p className="text-xs font-semibold text-foreground">Top Technical Prompt</p>
-                                                <p className="text-xs text-muted-foreground line-clamp-1">"How do you optimize state re-renders in large React applications?"</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="rounded-xl border border-border/70 bg-card p-3 flex items-start gap-3">
-                                            <Award className="mt-0.5 h-4 w-4 text-primary shrink-0" />
-                                            <div>
-                                                <p className="text-xs font-semibold text-foreground">ATS Resume Status</p>
-                                                <p className="text-xs text-muted-foreground">Formatted with metric bullet points ready for PDF export</p>
-                                            </div>
+                                        <div className="flex justify-between items-center">
+                                            <span>Problem Solving</span>
+                                            <span className="text-[#b8c8e0] font-semibold">89%</span>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <Button
-                                        className="w-full justify-between bg-secondary text-secondary-foreground hover:bg-primary hover:text-white transition-all"
-                                        onClick={() => navigate(user ? '/dashboard' : '/register')}
-                                    >
-                                        <span className="text-xs font-semibold">Generate Your Strategy Report</span>
-                                        <ChevronRight className="h-4 w-4" />
-                                    </Button>
-                                </CardContent>
-                            </Card>
+                                {/* Floating Card 3: Streak */}
+                                <div
+                                    className={`absolute -bottom-5 left-1/2 -translate-x-1/2 w-60 glass-panel rounded-xl py-2.5 px-4 border-b border-[#334155] shadow-2xl flex items-center justify-center gap-2 float gsap-stagger-card ${
+                                        animated ? 'active' : ''
+                                    }`}
+                                    style={{ transitionDelay: '0.8s' }}
+                                >
+                                    <span className="material-symbols-outlined text-[#b8c8e0] text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                        local_fire_department
+                                    </span>
+                                    <span className="font-['JetBrains_Mono'] text-[13px] font-semibold text-[#dae2fd]">
+                                        7-Day Streak Maintained
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </section>
 
-                {/* Features Section */}
-                <section className="border-t border-border/60 bg-muted/20 py-16 sm:py-20">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-                            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                                Built for Serious Candidates
-                            </h2>
-                            <p className="text-base text-muted-foreground">
-                                Everything you need to evaluate your fit, practice key interview questions, and project confidence.
-                            </p>
-                        </div>
-
-                        <div className="grid gap-6 md:grid-cols-3">
-                            {features.map((feature) => (
-                                <Card key={feature.title} className="glass-card-hover overflow-hidden rounded-3xl p-2">
-                                    <CardHeader className="pb-3">
-                                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-inner">
-                                            <feature.icon className="h-6 w-6" />
-                                        </div>
-                                        <CardTitle className="text-xl">{feature.title}</CardTitle>
-                                        <CardDescription className="text-sm leading-relaxed mt-2">{feature.description}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="pt-2">
-                                        <div className="inline-flex items-center text-xs font-semibold text-primary">
-                                            Role tailored analysis <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Bottom Call To Action Banner */}
-                <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-                    <div className="glass-panel relative overflow-hidden rounded-3xl p-8 sm:p-12 text-center space-y-6">
-                        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
-                        <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none" />
-
-                        <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-                            Ready to Ace Your Next Interview?
-                        </h2>
-                        <p className="max-w-xl mx-auto text-muted-foreground text-sm sm:text-base">
-                            Create your target role evaluation now and get a customized preparation strategy in under 30 seconds.
-                        </p>
-                        <div className="pt-2">
-                            <Button
-                                size="lg"
-                                onClick={() => navigate(user ? '/dashboard' : '/register')}
-                                className="h-12 px-8 text-base shadow-xl shadow-primary/25"
-                            >
-                                {user ? 'Open Workspace' : 'Get Started Now'}
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Button>
+                    {/* Marquee Bottom Ticker */}
+                    <div className="absolute bottom-0 w-full border-t border-b border-[#334155] bg-[#0b1326]/60 backdrop-blur-md py-2.5 z-30">
+                        <div className="marquee-container font-['JetBrains_Mono'] text-[12px] tracking-[0.2em] text-[#c4c6cd] uppercase">
+                            <div className="marquee-content">
+                                <span className="mx-6">PRACTICE SMARTER ✦</span>
+                                <span className="mx-6">GET REAL FEEDBACK ✦</span>
+                                <span className="mx-6">TRACK YOUR GROWTH ✦</span>
+                                <span className="mx-6">BUILD CONFIDENCE ✦</span>
+                                <span className="mx-6">PRACTICE SMARTER ✦</span>
+                                <span className="mx-6">GET REAL FEEDBACK ✦</span>
+                                <span className="mx-6">TRACK YOUR GROWTH ✦</span>
+                                <span className="mx-6">BUILD CONFIDENCE ✦</span>
+                            </div>
+                            <div aria-hidden="true" className="marquee-content">
+                                <span className="mx-6">PRACTICE SMARTER ✦</span>
+                                <span className="mx-6">GET REAL FEEDBACK ✦</span>
+                                <span className="mx-6">TRACK YOUR GROWTH ✦</span>
+                                <span className="mx-6">BUILD CONFIDENCE ✦</span>
+                                <span className="mx-6">PRACTICE SMARTER ✦</span>
+                                <span className="mx-6">GET REAL FEEDBACK ✦</span>
+                                <span className="mx-6">TRACK YOUR GROWTH ✦</span>
+                                <span className="mx-6">BUILD CONFIDENCE ✦</span>
+                            </div>
                         </div>
                     </div>
                 </section>
             </main>
+
+            {/* Footer */}
+            <footer className="w-full relative bg-[#0b1326] border-t border-[#334155] z-40">
+                <div className="max-w-[1440px] mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex flex-col gap-1 items-center md:items-start text-center md:text-left">
+                        <div className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#b8c8e0]">Interview AI</div>
+                        <p className="font-['Inter'] text-[14px] text-[#c4c6cd]">© 2024 Interview AI. Engineered for Excellence.</p>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-6 font-['Inter'] text-[14px]">
+                        <span className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors cursor-pointer">Privacy Policy</span>
+                        <span className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors cursor-pointer">Terms of Service</span>
+                        <span className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors cursor-pointer">API Documentation</span>
+                        <span className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors cursor-pointer">Contact</span>
+                    </div>
+                </div>
+            </footer>
         </div>
     )
 }

@@ -1,558 +1,419 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { Navbar } from '../../../components/layout/Navbar'
-import { Button } from '../../../components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
-import { Skeleton } from '../../../components/ui/skeleton'
-import { useToast } from '../../../components/ui/toast'
-import { useInterview } from '../hooks/useInterview'
-import { useAuth } from '../../auth/hooks/useAuth'
-import { useDebounce } from '../../../hooks/useDebounce'
-import {
-    UploadCloud,
-    Briefcase,
-    UserSquare2,
-    Loader2,
-    AlertCircle,
-    Sparkles,
-    Clock3,
-    ChartNoAxesCombined,
-    Trash2,
-    ChevronLeft,
-    ChevronRight,
-    Search,
-    Wand2,
-    FileCheck,
-    X,
-    ArrowUpRight,
-    Filter
-} from 'lucide-react'
-
-const ITEMS_PER_PAGE = 10
-
-const SAMPLE_JOB_DESC = `Senior Frontend Engineer (React / TypeScript)
-Responsibilities:
-- Architect and scale high-performance web applications using React, Next.js, and TypeScript.
-- Optimize frontend state management, bundle size, and web vitals for maximum responsiveness.
-- Collaborate with backend engineers to design clean REST/GraphQL APIs.
-- Write robust unit & integration tests using Jest/React Testing Library.
-
-Requirements:
-- 4+ years experience with React, JavaScript (ES6+), and modern CSS frameworks.
-- Deep understanding of web performance, asynchronous programming, and web security.
-- Experience leading technical discussions and mentoring junior engineers.`
-
-const SAMPLE_SELF_DESC = `Senior Full-Stack Engineer with 5 years of experience specializing in React, Node.js, and cloud deployments.
-Led frontend architecture for an e-commerce platform serving 500k monthly active users, improving page load times by 40%.
-Proficient in TypeScript, TailwindCSS, State Management (Redux/Zustand), RESTful APIs, and CI/CD pipelines.
-Strong background in system design, unit testing, and agile team workflows.`
+import { SlateSidebar } from '../../../components/layout/SlateSidebar'
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const { generateReport, reports, getReports, pagination, removeReport } = useInterview()
-    const { user } = useAuth()
-    const { showToast } = useToast()
-
-    const [jobDescription, setJobDescription] = useState('')
-    const [selfDescription, setSelfDescription] = useState('')
-    const [errorMsg, setErrorMsg] = useState('')
-    const [isGenerating, setIsGenerating] = useState(false)
-    const [reportsLoading, setReportsLoading] = useState(true)
-    const [isDragging, setIsDragging] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [deletingId, setDeletingId] = useState(null)
+    const [animated, setAnimated] = useState(false)
+    const [activePoint, setActivePoint] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
 
-    const resumeInputRef = useRef(null)
-    const debouncedJobDescription = useDebounce(jobDescription, 250)
-
-    const loadReports = useCallback((page) => {
-        setReportsLoading(true)
-        getReports({ page, limit: ITEMS_PER_PAGE })
-            .finally(() => setReportsLoading(false))
-    }, [getReports])
-
     useEffect(() => {
-        loadReports(currentPage)
-    }, [currentPage, loadReports])
+        const timer = setTimeout(() => {
+            setAnimated(true)
+        }, 50)
+        return () => clearTimeout(timer)
+    }, [])
 
-    const latestScore = useMemo(() => {
-        if (!reports?.length) return null
-        const first = reports[0]
-        const parsed = Number(first?.matchScore)
-        return Number.isFinite(parsed) ? parsed : null
-    }, [reports])
-
-    // Filter reports based on search query
-    const filteredReports = useMemo(() => {
-        if (!reports) return []
-        if (!searchQuery.trim()) return reports
-        return reports.filter((r) =>
-            (r.title || '').toLowerCase().includes(searchQuery.toLowerCase().trim())
-        )
-    }, [reports, searchQuery])
-
-    const handleFile = (file) => {
-        if (!file) return
-
-        const validTypes = [
-            'application/pdf',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ]
-
-        if (!validTypes.includes(file.type)) {
-            setErrorMsg('Only PDF and DOCX files are supported.')
-            return
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            setErrorMsg('Resume file is too large. Max allowed size is 5MB.')
-            return
-        }
-
-        setErrorMsg('')
-        setSelectedFile(file)
-    }
-
-    const removeSelectedFile = () => {
-        setSelectedFile(null)
-        if (resumeInputRef.current) {
-            resumeInputRef.current.value = ''
-        }
-    }
-
-    const handleFillSampleData = () => {
-        setJobDescription(SAMPLE_JOB_DESC)
-        setSelfDescription(SAMPLE_SELF_DESC)
-        setErrorMsg('')
-        showToast({ title: 'Sample Data Filled', description: 'Sample job description & profile loaded.' })
-    }
-
-    const handleGenerateReport = async () => {
-        setErrorMsg('')
-
-        if (!jobDescription.trim() || !selfDescription.trim()) {
-            setErrorMsg('Please provide both target job description and your profile summary.')
-            return
-        }
-
-        setIsGenerating(true)
-        try {
-            const report = await generateReport({
-                jobDescription: jobDescription.trim(),
-                selfDescription: selfDescription.trim(),
-                resumeFile: selectedFile
-            })
-
-            if (report?._id) {
-                showToast({ title: 'Report Generated', description: 'Your interview strategy report is ready.' })
-                setCurrentPage(1)
-                loadReports(1)
-                navigate(`/interview/${report._id}`)
-                return
-            }
-
-            setErrorMsg('Report generated but could not be opened. Please try again.')
-        } catch (error) {
-            setErrorMsg(error?.message || 'Failed to generate report.')
-            showToast({ title: 'Generation Failed', description: error?.message || 'Please try again.', variant: 'error' })
-        } finally {
-            setIsGenerating(false)
-        }
-    }
-
-    const handleDelete = async (e, reportId) => {
-        e.stopPropagation()
-        if (!confirm('Are you sure you want to delete this report?')) return
-
-        setDeletingId(reportId)
-        try {
-            await removeReport(reportId)
-            showToast({ title: 'Report Deleted', description: 'The report has been permanently removed.' })
-            const remainingOnPage = reports.length - 1
-            if (remainingOnPage === 0 && currentPage > 1) {
-                setCurrentPage((p) => p - 1)
-            } else {
-                loadReports(currentPage)
-            }
-        } catch (error) {
-            showToast({ title: 'Delete Failed', description: error?.message || 'Please try again.', variant: 'error' })
-        } finally {
-            setDeletingId(null)
-        }
-    }
-
-    const getScoreBadgeClass = (score) => {
-        if (score == null) return 'badge-blue'
-        if (score >= 75) return 'badge-emerald'
-        if (score >= 50) return 'badge-amber'
-        return 'badge-rose'
-    }
+    const dataPoints = [
+        { cx: 200, cy: 120, label: 'Week 1', score: '72%' },
+        { cx: 400, cy: 90, label: 'Week 2', score: '78%' },
+        { cx: 600, cy: 40, label: 'Week 3', score: '84%' },
+        { cx: 800, cy: 20, label: 'Week 4', score: '91%' }
+    ]
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-            <Navbar />
+        <div className="bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-[#b8c8e0] selection:text-[#223144]">
+            {/* Mobile Top Header */}
+            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-[#0b1326]/80 backdrop-blur-xl border-b border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.15)]">
+                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#E2E8F0] cursor-pointer">
+                    Interview AI
+                </div>
+                <button
+                    onClick={() => navigate('/interview/setup')}
+                    className="p-2 text-[#dae2fd] hover:text-[#b8c8e0] transition-colors"
+                >
+                    <span className="material-symbols-outlined text-[24px]">add_circle</span>
+                </button>
+            </nav>
 
-            <main className="flex-1 px-4 py-6 sm:px-6 md:py-8">
-                <div className="mx-auto max-w-7xl space-y-6">
-                    {/* Header Banner */}
-                    <div className="glass-panel flex flex-col justify-between gap-4 rounded-3xl p-6 md:flex-row md:items-center md:p-8">
-                        <div>
-                            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
-                                <Sparkles className="h-3.5 w-3.5" />
-                                Interactive AI Workspace
-                            </div>
-                            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-                                Welcome back, <span className="gradient-text">{user?.username || 'Candidate'}</span>
-                            </h1>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Generate customized role-aligned interview evaluations, ATS resume reviews, and daily study roadmaps.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleFillSampleData}
-                                className="border-primary/40 text-primary hover:bg-primary/10"
-                            >
-                                <Wand2 className="mr-1.5 h-4 w-4" />
-                                Fill Sample Data
-                            </Button>
-                        </div>
+            {/* Desktop Slate Sidebar */}
+            <SlateSidebar />
+
+            {/* Main Content Area */}
+            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-8">
+                <div className="scanline"></div>
+
+                {/* Top Search & Profile Bar (Desktop) */}
+                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#334155] bg-[#0b1326]/80 backdrop-blur-md sticky top-0 z-30">
+                    <div className="relative w-96">
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#c4c6cd] text-[18px]">
+                            search
+                        </span>
+                        <input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-[#0F172A] border border-[#334155] rounded-lg pl-10 pr-4 py-2 font-['Inter'] text-[14px] text-[#dae2fd] focus:outline-none focus:border-[#4A5568] focus:ring-1 focus:ring-[#4A5568]/50 transition-all placeholder:text-[#c4c6cd]/50"
+                            placeholder="Search interviews, metrics..."
+                            type="text"
+                        />
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate('/interview/setup')}
+                            className="btn-primary rounded-lg px-4 py-2 font-['JetBrains_Mono'] text-[13px] font-bold flex items-center gap-2"
+                        >
+                            <span className="material-symbols-outlined text-[16px]">play_arrow</span>
+                            Start Session
+                        </button>
+                        <button className="p-2 text-[#c4c6cd] hover:text-[#E2E8F0] transition-colors relative">
+                            <span className="material-symbols-outlined text-[22px]">notifications</span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-[#4A5568] rounded-full"></span>
+                        </button>
+                    </div>
+                </header>
+
+                {/* Content Canvas */}
+                <div className="p-4 md:p-8 lg:p-10 max-w-[1440px] mx-auto w-full flex-1 flex flex-col gap-6 lg:gap-8">
+                    {/* Welcome Header */}
+                    <div className={`stagger-item ${animated ? 'fade-up' : ''} mb-2`}>
+                        <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[36px] md:text-[40px] text-[#E2E8F0] font-bold tracking-tight">
+                            Good evening, Sumit 👋
+                        </h2>
+                        <p className="font-['Inter'] text-[16px] md:text-[18px] text-[#c4c6cd] mt-1">
+                            Ready to level up your interview skills?
+                        </p>
                     </div>
 
-                    {/* Quick Metrics Cards */}
-                    <section className="grid gap-4 sm:grid-cols-3">
-                        <Card className="glass-panel border-border/80">
-                            <CardContent className="flex items-center gap-4 p-5">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                                    <Clock3 className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Evaluations</p>
-                                    <p className="text-2xl font-extrabold text-foreground">{pagination?.total || 0}</p>
-                                </div>
-                            </CardContent>
-                        </Card>
+                    {/* Dashboard Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+                        {/* Left Column (Main Focus) */}
+                        <div className="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
+                            {/* Primary Card */}
+                            <div
+                                className={`glass-modal rounded-xl p-6 lg:p-8 stagger-item ${
+                                    animated ? 'fade-up delay-100' : ''
+                                } relative overflow-hidden group border border-[#334155]`}
+                            >
+                                {/* Decorative Glow */}
+                                <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#4A5568]/15 blur-[80px] rounded-full group-hover:bg-[#4A5568]/25 transition-all duration-700 pointer-events-none"></div>
 
-                        <Card className="glass-panel border-border/80">
-                            <CardContent className="flex items-center gap-4 p-5">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
-                                    <ChartNoAxesCombined className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Role Match</p>
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-2xl font-extrabold text-foreground">
-                                            {latestScore != null ? `${latestScore}%` : '--'}
-                                        </p>
-                                        {latestScore != null && (
-                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold ${getScoreBadgeClass(latestScore)}`}>
-                                                {latestScore >= 75 ? 'Strong' : latestScore >= 50 ? 'Moderate' : 'Needs Work'}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="glass-panel border-border/80">
-                            <CardContent className="flex items-center gap-4 p-5">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                                    <Sparkles className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">AI Intelligence</p>
-                                    <p className="text-2xl font-extrabold text-foreground">Advanced v2.4</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </section>
-
-                    {/* Main Form & Recent Reports Grid */}
-                    <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
-                        {/* Evaluation Form */}
-                        <Card className="glass-panel overflow-hidden border-border/80">
-                            <CardHeader className="border-b border-border/60 bg-muted/30 pb-4">
-                                <div className="flex items-center justify-between">
+                                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <div>
-                                        <CardTitle className="text-xl">Create Role Evaluation</CardTitle>
-                                        <CardDescription className="mt-1 text-xs">
-                                            Paste target position details and your background to build an interview strategy.
-                                        </CardDescription>
-                                    </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={handleFillSampleData}
-                                        className="text-xs text-primary hover:bg-primary/10"
-                                    >
-                                        <Wand2 className="h-3.5 w-3.5 mr-1" />
-                                        Auto-Fill Test Prompt
-                                    </Button>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="p-6 space-y-6">
-                                {/* Job Description Field */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <label className="flex items-center gap-2 text-sm font-bold text-foreground">
-                                            <Briefcase className="h-4 w-4 text-primary" />
-                                            Target Job Description
-                                        </label>
-                                        {jobDescription && (
-                                            <button
-                                                onClick={() => setJobDescription('')}
-                                                className="text-xs text-muted-foreground hover:text-destructive"
-                                            >
-                                                Clear
-                                            </button>
-                                        )}
-                                    </div>
-                                    <textarea
-                                        value={jobDescription}
-                                        onChange={(e) => setJobDescription(e.target.value)}
-                                        className="min-h-[200px] w-full resize-y rounded-2xl border border-input bg-card p-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
-                                        placeholder="Paste full job posting, required qualifications, technical stack, and responsibilities..."
-                                    />
-                                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                                        <span>Provide key requirements for higher precision</span>
-                                        <span>{debouncedJobDescription.length} chars</span>
-                                    </div>
-                                </div>
-
-                                {/* Profile Summary Field */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <label className="flex items-center gap-2 text-sm font-bold text-foreground">
-                                            <UserSquare2 className="h-4 w-4 text-primary" />
-                                            Your Professional Summary & Background
-                                        </label>
-                                        {selfDescription && (
-                                            <button
-                                                onClick={() => setSelfDescription('')}
-                                                className="text-xs text-muted-foreground hover:text-destructive"
-                                            >
-                                                Clear
-                                            </button>
-                                        )}
-                                    </div>
-                                    <textarea
-                                        value={selfDescription}
-                                        onChange={(e) => setSelfDescription(e.target.value)}
-                                        className="min-h-[140px] w-full resize-y rounded-2xl border border-input bg-card p-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
-                                        placeholder="Summarize your years of experience, core technical skills, key projects, and career achievements..."
-                                    />
-                                </div>
-
-                                {errorMsg && (
-                                    <div className="flex items-start gap-2.5 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                                        <span>{errorMsg}</span>
-                                    </div>
-                                )}
-
-                                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border/60">
-                                    <Button
-                                        size="lg"
-                                        onClick={handleGenerateReport}
-                                        disabled={isGenerating}
-                                        className="h-12 px-8 text-base shadow-lg shadow-primary/25"
-                                    >
-                                        {isGenerating ? (
-                                            <>
-                                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                                Analyzing & Generating Strategy...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Sparkles className="mr-2 h-5 w-5" />
-                                                Generate Evaluation Report
-                                            </>
-                                        )}
-                                    </Button>
-                                    <span className="text-xs text-muted-foreground font-medium">Est. time: 20-30 seconds</span>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* Sidebar Column: Upload & Recent Reports */}
-                        <div className="space-y-6">
-                            {/* Optional Resume Upload Card */}
-                            <Card className="glass-panel border-border/80">
-                                <CardHeader className="pb-3">
-                                    <CardTitle className="text-base flex items-center justify-between">
-                                        <span>Optional Resume Upload</span>
-                                        <span className="text-xs font-normal text-muted-foreground">PDF / DOCX</span>
-                                    </CardTitle>
-                                    <CardDescription className="text-xs">
-                                        Attaching a resume helps extract specific project details.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    {selectedFile ? (
-                                        <div className="flex items-center justify-between rounded-2xl border border-primary/40 bg-primary/5 p-4">
-                                            <div className="flex items-center gap-3 overflow-hidden">
-                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                                                    <FileCheck className="h-5 w-5" />
-                                                </div>
-                                                <div className="truncate">
-                                                    <p className="truncate text-xs font-semibold text-foreground">{selectedFile.name}</p>
-                                                    <p className="text-[10px] text-muted-foreground">
-                                                        {(selectedFile.size / 1024).toFixed(1)} KB
-                                                    </p>
+                                        <h3 className="font-['Hanken_Grotesk'] text-[22px] md:text-[24px] font-semibold text-[#E2E8F0] mb-2">
+                                            Continue Your Interview Journey
+                                        </h3>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex -space-x-1">
+                                                <div className="w-8 h-8 rounded-full bg-[#4A5568]/20 flex items-center justify-center border border-[#4A5568]/30">
+                                                    <span className="material-symbols-outlined text-[#b8c8e0] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                                        local_fire_department
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={removeSelectedFile}
-                                                className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                                                title="Remove file"
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div
-                                            className={`rounded-2xl border-2 border-dashed p-6 text-center transition-all cursor-pointer ${
-                                                isDragging
-                                                    ? 'border-primary bg-primary/10 scale-[0.99]'
-                                                    : 'border-border/80 bg-muted/20 hover:border-primary/50 hover:bg-muted/40'
-                                            }`}
-                                            onDragOver={(e) => {
-                                                e.preventDefault()
-                                                setIsDragging(true)
-                                            }}
-                                            onDragLeave={() => setIsDragging(false)}
-                                            onDrop={(e) => {
-                                                e.preventDefault()
-                                                setIsDragging(false)
-                                                const file = e.dataTransfer.files?.[0]
-                                                if (file) handleFile(file)
-                                            }}
-                                            onClick={() => resumeInputRef.current?.click()}
-                                        >
-                                            <UploadCloud className="mx-auto mb-2 h-8 w-8 text-primary animate-bounce" />
-                                            <p className="text-xs font-bold text-foreground">Click or drag resume file here</p>
-                                            <p className="mt-1 text-[11px] text-muted-foreground">Supports PDF and DOCX (Max 5MB)</p>
-                                            <input
-                                                ref={resumeInputRef}
-                                                className="hidden"
-                                                type="file"
-                                                accept=".pdf,.docx"
-                                                onChange={(e) => handleFile(e.target.files?.[0])}
-                                            />
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-
-                            {/* Recent Reports Card */}
-                            <Card className="glass-panel border-border/80">
-                                <CardHeader className="pb-3">
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-base">Recent Reports</CardTitle>
-                                        <span className="text-xs text-muted-foreground">{pagination?.total || 0} total</span>
-                                    </div>
-                                    {/* Search Filter Input */}
-                                    <div className="relative mt-2">
-                                        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-                                        <input
-                                            type="text"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder="Search reports by title..."
-                                            className="w-full rounded-xl border border-input bg-card pl-8 pr-3 py-1.5 text-xs outline-none focus:border-primary text-foreground"
-                                        />
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-2.5">
-                                    {reportsLoading && (
-                                        <div className="space-y-2">
-                                            <Skeleton className="h-14 w-full rounded-xl" />
-                                            <Skeleton className="h-14 w-full rounded-xl" />
-                                            <Skeleton className="h-14 w-full rounded-xl" />
-                                        </div>
-                                    )}
-
-                                    {!reportsLoading && !filteredReports?.length && (
-                                        <div className="py-6 text-center text-xs text-muted-foreground space-y-1">
-                                            <Filter className="mx-auto h-6 w-6 text-muted-foreground/60 mb-2" />
-                                            <p className="font-semibold">No evaluation reports found.</p>
-                                            <p className="text-[11px]">Generate your first report to get started.</p>
-                                        </div>
-                                    )}
-
-                                    {!reportsLoading && filteredReports?.map((item) => (
-                                        <div key={item._id} className="group relative">
-                                            <button
-                                                className="w-full rounded-2xl border border-border/80 bg-card p-3 pr-10 text-left text-xs transition-all hover:border-primary/50 hover:bg-accent/50 shadow-sm"
-                                                onClick={() => navigate(`/interview/${item._id}`)}
-                                            >
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <p className="line-clamp-1 font-bold text-foreground">
-                                                        {item.title || 'Interview Evaluation'}
-                                                    </p>
-                                                    <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-                                                </div>
-                                                <div className="mt-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
-                                                    <span>
-                                                        {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Saved'}
-                                                    </span>
-                                                    {item.matchScore != null && (
-                                                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${getScoreBadgeClass(item.matchScore)}`}>
-                                                            {item.matchScore}% Score
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </button>
-                                            <button
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
-                                                onClick={(e) => handleDelete(e, item._id)}
-                                                disabled={deletingId === item._id}
-                                                title="Delete report"
-                                            >
-                                                {deletingId === item._id
-                                                    ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                                    : <Trash2 className="h-3.5 w-3.5" />
-                                                }
-                                            </button>
-                                        </div>
-                                    ))}
-
-                                    {/* Pagination Controls */}
-                                    {!reportsLoading && pagination.totalPages > 1 && (
-                                        <div className="flex items-center justify-between pt-3 border-t border-border/60">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                disabled={currentPage <= 1}
-                                                onClick={() => setCurrentPage((p) => p - 1)}
-                                                className="h-7 text-xs px-2.5"
-                                            >
-                                                <ChevronLeft className="h-3.5 w-3.5 mr-1" /> Prev
-                                            </Button>
-                                            <span className="text-[11px] font-semibold text-muted-foreground">
-                                                {currentPage} / {pagination.totalPages}
+                                            <span className="font-['JetBrains_Mono'] text-[14px] text-[#b8c8e0] font-medium">
+                                                7 Day Streak! Keep it up.
                                             </span>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                disabled={currentPage >= pagination.totalPages}
-                                                onClick={() => setCurrentPage((p) => p + 1)}
-                                                className="h-7 text-xs px-2.5"
-                                            >
-                                                Next <ChevronRight className="h-3.5 w-3.5 ml-1" />
-                                            </Button>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/interview/setup')}
+                                        className="btn-primary rounded-lg px-6 py-3.5 font-['JetBrains_Mono'] text-[14px] font-bold whitespace-nowrap shrink-0 shadow-lg hover:scale-105 transition-transform"
+                                    >
+                                        Start New Interview
+                                    </button>
+                                </div>
+
+                                {/* Module Progress Bar */}
+                                <div className="mt-8 relative z-10">
+                                    <div className="flex justify-between font-['JetBrains_Mono'] text-[12px] text-[#c4c6cd] mb-2">
+                                        <span>Module 3: Behavioral</span>
+                                        <span className="text-[#b8c8e0] font-bold">65%</span>
+                                    </div>
+                                    <div className="w-full h-2 bg-[#020617] rounded-full overflow-hidden border border-[#334155]/40">
+                                        <div className="h-full bg-[#4A5568] w-[65%] rounded-full shadow-[0_0_10px_rgba(74,85,104,0.5)] transition-all duration-1000"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Charts Section: Performance Overview */}
+                            <div
+                                className={`glass-panel rounded-xl p-6 lg:p-8 stagger-item ${
+                                    animated ? 'fade-up delay-300' : ''
+                                } border border-[#334155]`}
+                            >
+                                <div className="flex justify-between items-center mb-6">
+                                    <div>
+                                        <h3 className="font-['Hanken_Grotesk'] text-[22px] md:text-[24px] font-semibold text-[#E2E8F0]">
+                                            Performance Overview
+                                        </h3>
+                                        <p className="font-['Inter'] text-[13px] text-[#c4c6cd] mt-0.5">
+                                            Score progression across simulated rounds
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/interview/setup')}
+                                        className="text-[#c4c6cd] hover:text-[#E2E8F0] p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined">more_horiz</span>
+                                    </button>
+                                </div>
+
+                                <div className="h-64 w-full relative">
+                                    {/* Abstract SVG Line Chart Simulation */}
+                                    <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 200">
+                                        {/* Grid Lines */}
+                                        <line stroke="rgba(255,255,255,0.05)" strokeWidth="1" x1="0" x2="800" y1="50" y2="50" />
+                                        <line stroke="rgba(255,255,255,0.05)" strokeWidth="1" x1="0" x2="800" y1="100" y2="100" />
+                                        <line stroke="rgba(255,255,255,0.05)" strokeWidth="1" x1="0" x2="800" y1="150" y2="150" />
+
+                                        {/* Gradient Definitions */}
+                                        <defs>
+                                            <linearGradient id="chartGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+                                                <stop offset="0%" stopColor="#4A5568" />
+                                                <stop offset="100%" stopColor="#b8c8e0" />
+                                            </linearGradient>
+                                            <linearGradient id="fillGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+                                                <stop offset="0%" stopColor="rgba(184, 200, 224, 0.15)" />
+                                                <stop offset="100%" stopColor="rgba(184, 200, 224, 0.0)" />
+                                            </linearGradient>
+                                        </defs>
+
+                                        {/* Fill Area */}
+                                        <path
+                                            d="M0,180 Q100,160 200,120 T400,90 T600,40 T800,20 L800,200 L0,200 Z"
+                                            fill="url(#fillGradient)"
+                                            opacity="0.6"
+                                        />
+
+                                        {/* Data Line Path */}
+                                        <path
+                                            className="path-draw"
+                                            d="M0,180 Q100,160 200,120 T400,90 T600,40 T800,20"
+                                            fill="none"
+                                            stroke="url(#chartGradient)"
+                                            strokeLinecap="round"
+                                            strokeWidth="3.5"
+                                        />
+
+                                        {/* Interactive Data Points */}
+                                        {dataPoints.map((pt, idx) => (
+                                            <g key={idx} className="cursor-pointer" onMouseEnter={() => setActivePoint(pt)} onMouseLeave={() => setActivePoint(null)}>
+                                                <circle
+                                                    cx={pt.cx}
+                                                    cy={pt.cy}
+                                                    fill="#1E293B"
+                                                    r={activePoint?.label === pt.label ? 7 : 5}
+                                                    stroke={idx >= 2 ? '#b8c8e0' : '#4A5568'}
+                                                    strokeWidth="2.5"
+                                                    className="transition-all duration-200"
+                                                />
+                                            </g>
+                                        ))}
+                                    </svg>
+
+                                    {/* Tooltip Hover Overlay */}
+                                    {activePoint && (
+                                        <div
+                                            className="absolute top-2 left-1/2 -translate-x-1/2 glass-panel border border-[#b8c8e0] px-3 py-1.5 rounded-lg text-xs font-['JetBrains_Mono'] shadow-xl pointer-events-none"
+                                        >
+                                            <span className="text-[#c4c6cd]">{activePoint.label}: </span>
+                                            <span className="text-[#b8c8e0] font-bold">{activePoint.score} Match</span>
                                         </div>
                                     )}
-                                </CardContent>
-                            </Card>
+                                </div>
+
+                                <div className="flex justify-between mt-4 font-['JetBrains_Mono'] text-[12px] text-[#c4c6cd]">
+                                    <span>Week 1 (Baseline)</span>
+                                    <span>Week 2 (Practice)</span>
+                                    <span>Week 3 (Refinement)</span>
+                                    <span>Week 4 (Current)</span>
+                                </div>
+                            </div>
                         </div>
-                    </section>
+
+                        {/* Right Column (Stats & Radar) */}
+                        <div className="lg:col-span-4 flex flex-col gap-6 lg:gap-8">
+                            {/* Stats Grid */}
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Stat 1: Total Interviews */}
+                                <div
+                                    className={`glass-panel rounded-xl p-4 stagger-item ${
+                                        animated ? 'fade-up delay-200' : ''
+                                    } metric-glow border border-[#334155]`}
+                                >
+                                    <div className="flex items-center gap-2 mb-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[12px]">
+                                        <span className="material-symbols-outlined text-[18px]">record_voice_over</span>
+                                        Total Interviews
+                                    </div>
+                                    <div className="font-['Hanken_Grotesk'] text-[28px] sm:text-[32px] text-[#E2E8F0] font-bold">
+                                        24
+                                    </div>
+                                </div>
+
+                                {/* Stat 2: Average Score */}
+                                <div
+                                    className={`glass-panel rounded-xl p-4 stagger-item ${
+                                        animated ? 'fade-up delay-200' : ''
+                                    } metric-glow border border-[#334155]`}
+                                >
+                                    <div className="flex items-center gap-2 mb-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[12px]">
+                                        <span className="material-symbols-outlined text-[18px]">analytics</span>
+                                        Average Score
+                                    </div>
+                                    <div className="font-['Hanken_Grotesk'] text-[28px] sm:text-[32px] text-[#b8c8e0] font-bold">
+                                        86%
+                                    </div>
+                                </div>
+
+                                {/* Stat 3: Current Streak */}
+                                <div
+                                    className={`glass-panel rounded-xl p-4 stagger-item ${
+                                        animated ? 'fade-up delay-300' : ''
+                                    } metric-glow border border-[#334155]`}
+                                >
+                                    <div className="flex items-center gap-2 mb-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[12px]">
+                                        <span className="material-symbols-outlined text-[18px] text-[#b8c8e0]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                            local_fire_department
+                                        </span>
+                                        Current Streak
+                                    </div>
+                                    <div className="font-['Hanken_Grotesk'] text-[28px] sm:text-[32px] text-[#b8c8e0] font-bold">
+                                        7 Days
+                                    </div>
+                                </div>
+
+                                {/* Stat 4: Improvement */}
+                                <div
+                                    className={`glass-panel ai-feedback-card rounded-xl p-4 stagger-item ${
+                                        animated ? 'fade-up delay-300' : ''
+                                    } border border-[#334155]`}
+                                >
+                                    <div className="flex items-center gap-2 mb-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[12px]">
+                                        <span className="material-symbols-outlined text-[18px]">trending_up</span>
+                                        Improvement
+                                    </div>
+                                    <div className="font-['Hanken_Grotesk'] text-[28px] sm:text-[32px] text-[#b8c8e0] font-bold">
+                                        +18%
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Radar Chart: Skill Breakdown */}
+                            <div
+                                className={`glass-panel rounded-xl p-6 stagger-item ${
+                                    animated ? 'fade-up delay-400' : ''
+                                } flex-1 flex flex-col border border-[#334155]`}
+                            >
+                                <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#E2E8F0] mb-4">
+                                    Skill Analysis
+                                </h3>
+                                <div className="flex-1 flex items-center justify-center relative min-h-[200px]">
+                                    {/* Abstract SVG Radar Chart */}
+                                    <svg className="w-full max-w-[220px] h-auto overflow-visible" viewBox="0 0 100 100">
+                                        {/* Background Web Polygons */}
+                                        <polygon fill="none" points="50,5 95,50 50,95 5,50" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                                        <polygon fill="none" points="50,25 75,50 50,75 25,50" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+
+                                        {/* Axes */}
+                                        <line stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" x1="50" x2="50" y1="5" y2="95" />
+                                        <line stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" x1="5" x2="95" y1="50" y2="50" />
+
+                                        {/* Data Polygon (Animated) */}
+                                        <polygon
+                                            className="path-draw"
+                                            fill="rgba(184, 200, 224, 0.2)"
+                                            points="50,15 85,50 50,70 20,50"
+                                            stroke="#b8c8e0"
+                                            strokeWidth="1.8"
+                                        >
+                                            <animate attributeName="opacity" dur="3s" repeatCount="indefinite" values="0.5;1;0.5" />
+                                        </polygon>
+
+                                        {/* Labels */}
+                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="6.5" textAnchor="middle" x="50" y="0">
+                                            Technical
+                                        </text>
+                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="6.5" textAnchor="start" x="100" y="52">
+                                            Comm
+                                        </text>
+                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="6.5" textAnchor="middle" x="50" y="104">
+                                            Confidence
+                                        </text>
+                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="6.5" textAnchor="end" x="0" y="52">
+                                            Logic
+                                        </text>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* Quick Actions Bento */}
+                            <div
+                                className={`glass-panel rounded-xl p-6 stagger-item ${
+                                    animated ? 'fade-up delay-500' : ''
+                                } border border-[#334155]`}
+                            >
+                                <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#E2E8F0] mb-4">
+                                    Quick Actions
+                                </h3>
+                                <div className="flex flex-col gap-3">
+                                    <button
+                                        onClick={() => navigate('/interview/setup')}
+                                        className="w-full btn-secondary rounded-lg p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-3 text-[#E2E8F0]">
+                                            <span className="material-symbols-outlined text-[#4A5568] group-hover:text-[#b8c8e0] transition-colors">
+                                                model_training
+                                            </span>
+                                            Practice Questions
+                                        </div>
+                                        <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all">
+                                            arrow_forward
+                                        </span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => navigate('/interview/setup')}
+                                        className="w-full btn-secondary rounded-lg p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-3 text-[#E2E8F0]">
+                                            <span className="material-symbols-outlined text-[#4A5568] group-hover:text-[#b8c8e0] transition-colors">
+                                                upload_file
+                                            </span>
+                                            Upload Resume
+                                        </div>
+                                        <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all">
+                                            arrow_forward
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
+
+            {/* Mobile Bottom Navigation */}
+            <nav className="md:hidden fixed bottom-0 w-full bg-[#0F172A]/90 backdrop-blur-xl border-t border-[#334155] flex justify-around items-center py-3 px-4 z-50">
+                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#b8c8e0]">
+                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        dashboard
+                    </span>
+                    <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
+                </button>
+                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                    <span className="material-symbols-outlined text-[20px]">psychology</span>
+                    <span className="text-[10px] font-['JetBrains_Mono']">Practice</span>
+                </button>
+                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                    <span className="material-symbols-outlined text-[20px]">description</span>
+                    <span className="text-[10px] font-['JetBrains_Mono']">Resume</span>
+                </button>
+                <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                    <span className="material-symbols-outlined text-[20px]">home</span>
+                    <span className="text-[10px] font-['JetBrains_Mono']">Home</span>
+                </button>
+            </nav>
         </div>
     )
 }

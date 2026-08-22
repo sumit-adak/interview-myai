@@ -1,19 +1,15 @@
 import React, { Suspense, lazy } from "react";
-import { createBrowserRouter } from "react-router";
-import Protected from "./features/auth/components/Protected";
-import { Skeleton } from "./components/ui/skeleton";
+import { createBrowserRouter, Navigate } from "react-router";
 
-const Login = lazy(() => import("./features/auth/pages/Login"));
-const Register = lazy(() => import("./features/auth/pages/Register"));
 const Home = lazy(() => import("./features/interview/pages/Home"));
 const Dashboard = lazy(() => import("./features/interview/pages/Dashboard"));
-const Interview = lazy(() => import("./features/interview/pages/Interview"));
+const InterviewSetup = lazy(() => import("./features/interview/pages/InterviewSetup"));
 
 const PageLoader = () => (
-    <main className="min-h-screen px-4 py-8">
-        <div className="mx-auto max-w-6xl space-y-4">
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-80 w-full" />
+    <main className="min-h-screen flex items-center justify-center bg-[#0b1326] text-[#dae2fd]">
+        <div className="glass-panel rounded-2xl px-6 py-4 flex items-center gap-3 border border-[#334155]">
+            <span className="h-4 w-4 rounded-full border-2 border-[#b8c8e0] border-t-transparent animate-spin"></span>
+            <span className="font-['JetBrains_Mono'] text-sm text-[#c4c6cd]">Loading Interview AI...</span>
         </div>
     </main>
 )
@@ -26,23 +22,19 @@ const withSuspense = (element) => (
 
 export const router = createBrowserRouter([
     {
-        path: "/login",
-        element: withSuspense(<Login />)
-    },
-    {
-        path: "/register",
-        element: withSuspense(<Register />)
-    },
-    {
         path: "/",
         element: withSuspense(<Home />)
     },
     {
         path: "/dashboard",
-        element: <Protected>{withSuspense(<Dashboard />)}</Protected>
+        element: withSuspense(<Dashboard />)
     },
     {
-        path: "/interview/:interviewId",
-        element: <Protected>{withSuspense(<Interview />)}</Protected>
+        path: "/interview/setup",
+        element: withSuspense(<InterviewSetup />)
+    },
+    {
+        path: "*",
+        element: <Navigate to="/" replace />
     }
 ]);
