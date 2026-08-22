@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 import { Navbar } from '../../../components/layout/Navbar'
@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Loader2, Sparkles, AlertCircle, Eye, EyeOff, ShieldCheck, CheckCircle2 } from 'lucide-react'
 
 const Login = () => {
-    const { loading, handleLogin } = useAuth()
+    const { user, loading, handleLogin } = useAuth()
     const { showToast } = useToast()
     const navigate = useNavigate()
 
@@ -17,6 +17,12 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate('/dashboard', { replace: true })
+        }
+    }, [user, loading, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault()

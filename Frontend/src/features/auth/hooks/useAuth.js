@@ -14,7 +14,15 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await login({ email, password })
-            if (data?.user) setUser(data.user)
+            if (data?.token && typeof window !== "undefined") {
+                localStorage.setItem("token", data.token)
+            }
+            if (data?.user) {
+                setUser(data.user)
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("user", JSON.stringify(data.user))
+                }
+            }
             return data
         } catch (err) {
             throw new Error(getApiErrorMessage(err, "Login failed. Please check credentials."))
@@ -27,7 +35,15 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
-            if (data?.user) setUser(data.user)
+            if (data?.token && typeof window !== "undefined") {
+                localStorage.setItem("token", data.token)
+            }
+            if (data?.user) {
+                setUser(data.user)
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("user", JSON.stringify(data.user))
+                }
+            }
             return data
         } catch (err) {
             throw new Error(getApiErrorMessage(err, "Registration failed. Please try again."))
@@ -43,6 +59,10 @@ export const useAuth = () => {
         } catch {
             // proceed with local cleanup even if API call fails
         } finally {
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("token")
+                localStorage.removeItem("user")
+            }
             setUser(null)
             setLoading(false)
         }

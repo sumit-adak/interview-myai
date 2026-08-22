@@ -4,24 +4,40 @@ import { getMe } from "./services/auth.api";
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const saved = localStorage.getItem("user")
+                return saved ? JSON.parse(saved) : null
+            } catch {
+                return null
+            }
+        }
+        return null
+    })
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         let cancelled = false
 
         const fetchUser = async () => {
+            const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
             try {
                 const data = await getMe()
                 if (!cancelled && data?.user) {
                     setUser(data.user)
+                    if (typeof window !== "undefined") {
+                        localStorage.setItem("user", JSON.stringify(data.user))
+                    }
                 }
             } catch {
                 if (!cancelled) {
-                    setUser((prev) => {
-                        if (prev) return prev
-                        return null
-                    })
+                    if (!token) {
+                        setUser(null)
+                        if (typeof window !== "undefined") {
+                            localStorage.removeItem("user")
+                        }
+                    }
                 }
             } finally {
                 if (!cancelled) setLoading(false)
@@ -53,3 +69,4 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     )
 }
+
