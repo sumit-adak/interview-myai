@@ -4,6 +4,7 @@ import { createBrowserRouter, Navigate } from "react-router";
 const Home = lazy(() => import("./features/interview/pages/Home"));
 const Dashboard = lazy(() => import("./features/interview/pages/Dashboard"));
 const InterviewSetup = lazy(() => import("./features/interview/pages/InterviewSetup"));
+const History = lazy(() => import("./features/interview/pages/History"));
 
 const PageLoader = () => (
     <main className="min-h-screen flex items-center justify-center bg-[#0b1326] text-[#dae2fd]">
@@ -28,6 +29,14 @@ export const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: withSuspense(<Dashboard />)
+    },
+    {
+        path: "/history",
+        element: withSuspense(<History />)
+    },
+    {
+        path: "/interview/history",
+        element: withSuspense(<History />)
     },
     {
         path: "/interview/setup",

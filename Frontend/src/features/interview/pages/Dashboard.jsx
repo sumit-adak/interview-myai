@@ -678,13 +678,22 @@ const Dashboard = () => {
                                             Log of your latest simulated rounds and AI evaluations
                                         </p>
                                     </div>
-                                    <button
-                                        onClick={() => navigate('/interview/setup')}
-                                        className="text-xs font-['JetBrains_Mono'] text-[#818cf8] hover:text-white px-3 py-1.5 rounded-lg border border-indigo-500/20 hover:border-indigo-500/50 bg-indigo-500/10 transition-all flex items-center gap-1.5 cursor-pointer"
-                                    >
-                                        <span>New Round</span>
-                                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => navigate('/history')}
+                                            className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] hover:text-white px-3 py-1.5 rounded-lg border border-[#334155] hover:border-indigo-500/40 bg-[#0F172A] transition-all flex items-center gap-1 cursor-pointer"
+                                        >
+                                            <span>View All</span>
+                                            <span className="material-symbols-outlined text-[14px]">history</span>
+                                        </button>
+                                        <button
+                                            onClick={() => navigate('/interview/setup')}
+                                            className="text-xs font-['JetBrains_Mono'] text-[#818cf8] hover:text-white px-3 py-1.5 rounded-lg border border-indigo-500/20 hover:border-indigo-500/50 bg-indigo-500/10 transition-all flex items-center gap-1 cursor-pointer"
+                                        >
+                                            <span>New Round</span>
+                                            <span className="material-symbols-outlined text-[14px]">add</span>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-col gap-3">
@@ -974,13 +983,13 @@ const Dashboard = () => {
                     </span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
                 </button>
+                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                    <span className="material-symbols-outlined text-[20px]">history</span>
+                    <span className="text-[10px] font-['JetBrains_Mono']">History</span>
+                </button>
                 <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
                     <span className="material-symbols-outlined text-[20px]">psychology</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Practice</span>
-                </button>
-                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
-                    <span className="material-symbols-outlined text-[20px]">description</span>
-                    <span className="text-[10px] font-['JetBrains_Mono']">Resume</span>
                 </button>
                 <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
                     <span className="material-symbols-outlined text-[20px]">home</span>
