@@ -8,6 +8,7 @@ const History = lazy(() => import("./features/interview/pages/History"));
 const Analytics = lazy(() => import("./features/interview/pages/Analytics"));
 const ResumeAnalyzer = lazy(() => import("./features/interview/pages/ResumeAnalyzer"));
 const Practice = lazy(() => import("./features/interview/pages/Practice"));
+const Settings = lazy(() => import("./features/interview/pages/Settings"));
 
 const PageLoader = () => (
     <main className="min-h-screen flex items-center justify-center bg-[#0b1326] text-[#dae2fd]">
@@ -64,6 +65,22 @@ export const router = createBrowserRouter([
     {
         path: "/interview/practice",
         element: withSuspense(<Practice />)
+    },
+    {
+        path: "/settings",
+        element: withSuspense(<Settings />)
+    },
+    {
+        path: "/interview/settings",
+        element: withSuspense(<Settings />)
+    },
+    {
+        path: "/support",
+        element: withSuspense(<Settings />)
+    },
+    {
+        path: "/interview/support",
+        element: withSuspense(<Settings />)
     },
     {
         path: "/interview/setup",

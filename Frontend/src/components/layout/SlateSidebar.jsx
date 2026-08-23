@@ -10,6 +10,8 @@ export const SlateSidebar = () => {
     const isAnalytics = location.pathname === '/analytics' || location.pathname === '/interview/analytics'
     const isResume = location.pathname === '/resume' || location.pathname === '/interview/resume'
     const isPractice = location.pathname === '/practice' || location.pathname === '/interview/practice' || location.pathname === '/interview/setup'
+    const isSettings = location.pathname === '/settings' || location.pathname === '/interview/settings'
+    const isSupport = location.pathname === '/support' || location.pathname === '/interview/support'
 
     return (
         <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#1E293B]/90 backdrop-blur-xl border-r border-[#334155] py-6 z-40 select-none">
@@ -120,18 +122,30 @@ export const SlateSidebar = () => {
             {/* Footer Links */}
             <div className="mt-auto px-2 flex flex-col gap-1 pb-2">
                 <button
-                    onClick={() => navigate('/dashboard')}
-                    className="w-full text-left text-[#c4c6cd] hover:text-[#E2E8F0] px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 hover:bg-[#4A5568]/10 transition-all duration-200"
+                    onClick={() => navigate('/settings')}
+                    className={`w-full text-left px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 transition-all duration-200 ${
+                        isSettings
+                            ? 'text-[#E2E8F0] bg-[#4A5568]/20 border-l-2 border-[#4A5568]'
+                            : 'text-[#c4c6cd] hover:text-[#E2E8F0] border-l-2 border-transparent hover:bg-[#4A5568]/10'
+                    }`}
                 >
-                    <span className="material-symbols-outlined text-[20px]">settings</span>
+                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: isSettings ? "'FILL' 1" : "'FILL' 0" }}>
+                        settings
+                    </span>
                     Settings
                 </button>
 
                 <button
-                    onClick={() => navigate('/')}
-                    className="w-full text-left text-[#c4c6cd] hover:text-[#E2E8F0] px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 hover:bg-[#4A5568]/10 transition-all duration-200"
+                    onClick={() => navigate('/support')}
+                    className={`w-full text-left px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 transition-all duration-200 ${
+                        isSupport
+                            ? 'text-[#E2E8F0] bg-[#4A5568]/20 border-l-2 border-[#4A5568]'
+                            : 'text-[#c4c6cd] hover:text-[#E2E8F0] border-l-2 border-transparent hover:bg-[#4A5568]/10'
+                    }`}
                 >
-                    <span className="material-symbols-outlined text-[20px]">help</span>
+                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: isSupport ? "'FILL' 1" : "'FILL' 0" }}>
+                        help
+                    </span>
                     Support
                 </button>
             </div>
