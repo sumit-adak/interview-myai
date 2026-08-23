@@ -7,6 +7,7 @@ export const SlateSidebar = () => {
 
     const isOverview = location.pathname === '/dashboard'
     const isHistory = location.pathname === '/history' || location.pathname === '/interview/history'
+    const isAnalytics = location.pathname === '/analytics' || location.pathname === '/interview/analytics'
     const isPractice = location.pathname === '/interview/setup'
 
     return (
@@ -73,10 +74,16 @@ export const SlateSidebar = () => {
                 </button>
 
                 <button
-                    onClick={() => navigate('/dashboard')}
-                    className="w-full text-left text-[#c4c6cd] hover:text-[#E2E8F0] px-4 py-3 rounded-r-lg border-l-2 border-transparent font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 hover:bg-[#4A5568]/10 transition-all duration-200"
+                    onClick={() => navigate('/analytics')}
+                    className={`w-full text-left px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 transition-all duration-200 ${
+                        isAnalytics
+                            ? 'text-[#E2E8F0] bg-[#4A5568]/20 border-l-2 border-[#4A5568]'
+                            : 'text-[#c4c6cd] hover:text-[#E2E8F0] border-l-2 border-transparent hover:bg-[#4A5568]/10'
+                    }`}
                 >
-                    <span className="material-symbols-outlined text-[20px]">insights</span>
+                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: isAnalytics ? "'FILL' 1" : "'FILL' 0" }}>
+                        insights
+                    </span>
                     Analytics
                 </button>
 
