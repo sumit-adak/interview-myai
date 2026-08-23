@@ -9,7 +9,7 @@ export const SlateSidebar = () => {
     const isHistory = location.pathname === '/history' || location.pathname === '/interview/history'
     const isAnalytics = location.pathname === '/analytics' || location.pathname === '/interview/analytics'
     const isResume = location.pathname === '/resume' || location.pathname === '/interview/resume'
-    const isPractice = location.pathname === '/interview/setup'
+    const isPractice = location.pathname === '/practice' || location.pathname === '/interview/practice' || location.pathname === '/interview/setup'
 
     return (
         <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#1E293B]/90 backdrop-blur-xl border-r border-[#334155] py-6 z-40 select-none">
@@ -103,10 +103,10 @@ export const SlateSidebar = () => {
                 </button>
 
                 <button
-                    onClick={() => navigate('/interview/setup')}
+                    onClick={() => navigate('/practice')}
                     className={`w-full text-left px-4 py-3 rounded-r-lg font-['JetBrains_Mono'] text-[14px] flex items-center gap-3 transition-all duration-200 ${
                         isPractice
-                            ? 'text-[#b8c8e0] bg-[#4A5568]/20 border-l-2 border-[#b8c8e0]'
+                            ? 'text-[#E2E8F0] bg-[#4A5568]/20 border-l-2 border-[#4A5568]'
                             : 'text-[#c4c6cd] hover:text-[#E2E8F0] border-l-2 border-transparent hover:bg-[#4A5568]/10'
                     }`}
                 >
