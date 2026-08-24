@@ -8,12 +8,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(8,89,140,0.25)] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(8,89,140,0.28)]",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline: "border border-input bg-background/90 shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-[0_4px_16px_rgba(37,99,235,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(37,99,235,0.45)] hover:brightness-105 active:translate-y-0 active:scale-[0.98]",
+        destructive: "bg-rose-600 text-white shadow-sm hover:bg-rose-700 hover:shadow-[0_4px_16px_rgba(225,29,72,0.35)] active:scale-[0.98]",
+        outline: "border border-slate-700/80 bg-slate-900/60 backdrop-blur-md shadow-sm hover:bg-slate-800 hover:text-foreground hover:border-slate-600 active:scale-[0.98]",
+        secondary: "bg-slate-800/90 text-slate-200 border border-slate-700/80 shadow-sm hover:bg-slate-700 active:scale-[0.98]",
+        ghost: "hover:bg-slate-800/70 hover:text-foreground active:scale-[0.98]",
+        link: "text-blue-400 underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",
