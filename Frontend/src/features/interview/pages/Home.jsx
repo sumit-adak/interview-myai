@@ -16,42 +16,45 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden selection:bg-[#b8c8e0] selection:text-[#223144] flex flex-col justify-between">
             {/* Floating Pill NavBar (Desktop) */}
-            <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl z-50 glass-panel rounded-full border border-[#334155] shadow-lg hidden md:flex items-center justify-between px-6 py-2">
-                <Link to="/" className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#b8c8e0] hover:opacity-90 transition-opacity">
+            <nav className="fixed top-5 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl z-50 glass-panel rounded-full border border-white/10 shadow-2xl hidden md:flex items-center justify-between px-6 py-2.5">
+                <Link to="/" className="font-['Hanken_Grotesk'] text-[20px] font-bold text-white hover:text-blue-400 transition-colors flex items-center gap-2">
+                    <span className="material-symbols-outlined text-blue-400 text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        auto_awesome
+                    </span>
                     Interview AI
                 </Link>
 
-                <div className="flex items-center gap-6 font-['JetBrains_Mono'] text-[14px]">
+                <div className="flex items-center gap-6 font-['JetBrains_Mono'] text-[13px]">
                     <button
-                        onClick={() => navigate('/interview/setup')}
-                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                        onClick={() => navigate('/practice')}
+                        className="text-[#94a3b8] hover:text-white transition-colors py-1.5 px-3 rounded-full hover:bg-white/5 cursor-pointer"
                     >
                         Practice
                     </button>
                     <button
-                        onClick={() => navigate('/dashboard')}
-                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                        onClick={() => navigate('/resume')}
+                        className="text-[#94a3b8] hover:text-white transition-colors py-1.5 px-3 rounded-full hover:bg-white/5 cursor-pointer"
                     >
                         Resume Analyzer
                     </button>
                     <button
-                        onClick={() => navigate('/dashboard')}
-                        className="text-[#c4c6cd] hover:text-[#b8c8e0] transition-colors py-2 px-3 rounded-full hover:bg-white/5"
+                        onClick={() => navigate('/analytics')}
+                        className="text-[#94a3b8] hover:text-white transition-colors py-1.5 px-3 rounded-full hover:bg-white/5 cursor-pointer"
                     >
                         Analytics
                     </button>
                 </div>
 
-                <div className="flex items-center gap-4 font-['JetBrains_Mono'] text-[14px]">
+                <div className="flex items-center gap-3 font-['JetBrains_Mono'] text-[13px]">
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="text-[#dae2fd] hover:text-[#b8c8e0] transition-colors py-2 px-4 rounded-full hover:bg-white/5"
+                        className="text-[#dae2fd] hover:text-white transition-colors py-1.5 px-4 rounded-full hover:bg-white/5 cursor-pointer"
                     >
-                        Sign In
+                        Dashboard
                     </button>
                     <button
-                        onClick={() => navigate('/dashboard')}
-                        className="bg-[#b8c8e0] text-[#223144] font-bold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition-transform"
+                        onClick={() => navigate('/interview/setup')}
+                        className="btn-primary font-bold py-2 px-5 rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer"
                     >
                         Get Started
                     </button>
@@ -59,13 +62,16 @@ const Home = () => {
             </nav>
 
             {/* Mobile Nav Header */}
-            <nav className="fixed top-0 w-full z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] flex md:hidden justify-between items-center px-4 py-3">
-                <Link to="/" className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#b8c8e0]">
+            <nav className="fixed top-0 w-full z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155]/60 flex md:hidden justify-between items-center px-5 py-3.5">
+                <Link to="/" className="font-['Hanken_Grotesk'] text-[19px] font-bold text-white flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-blue-400 text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        auto_awesome
+                    </span>
                     Interview AI
                 </Link>
                 <button
                     onClick={() => setMobileOpen(!mobileOpen)}
-                    className="text-[#dae2fd] p-2 hover:bg-white/5 rounded-lg transition-colors"
+                    className="text-[#dae2fd] p-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer"
                 >
                     <span className="material-symbols-outlined">{mobileOpen ? 'close' : 'menu'}</span>
                 </button>
@@ -73,29 +79,29 @@ const Home = () => {
 
             {/* Mobile Drawer */}
             {mobileOpen && (
-                <div className="fixed top-14 inset-x-0 bg-[#0b1326]/95 backdrop-blur-xl border-b border-[#334155] p-6 z-40 flex flex-col gap-4 md:hidden font-['JetBrains_Mono'] text-[14px]">
+                <div className="fixed top-14 inset-x-0 bg-[#0b1326]/95 backdrop-blur-2xl border-b border-[#334155] p-6 z-40 flex flex-col gap-3 md:hidden font-['JetBrains_Mono'] text-[14px] shadow-2xl">
                     <button
-                        onClick={() => { navigate('/interview/setup'); setMobileOpen(false); }}
-                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                        onClick={() => { navigate('/practice'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2.5 px-3 hover:bg-white/5 rounded-xl transition-colors"
                     >
                         Practice
                     </button>
                     <button
-                        onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
-                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                        onClick={() => { navigate('/resume'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2.5 px-3 hover:bg-white/5 rounded-xl transition-colors"
                     >
                         Resume Analyzer
                     </button>
                     <button
-                        onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
-                        className="text-left text-[#dae2fd] py-2 px-3 hover:bg-white/5 rounded-lg"
+                        onClick={() => { navigate('/analytics'); setMobileOpen(false); }}
+                        className="text-left text-[#dae2fd] py-2.5 px-3 hover:bg-white/5 rounded-xl transition-colors"
                     >
                         Analytics
                     </button>
                     <div className="pt-4 border-t border-[#334155] flex flex-col gap-2">
                         <button
-                            onClick={() => { navigate('/dashboard'); setMobileOpen(false); }}
-                            className="w-full bg-[#b8c8e0] text-[#223144] font-bold py-3 rounded-full text-center"
+                            onClick={() => { navigate('/interview/setup'); setMobileOpen(false); }}
+                            className="w-full btn-primary font-bold py-3 rounded-xl text-center"
                         >
                             Get Started
                         </button>
@@ -111,7 +117,7 @@ const Home = () => {
                         <div className="max-w-2xl gsap-reveal-text">
                             <div className="overflow-hidden">
                                 <h1
-                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[76px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
                                         animated ? 'active' : ''
                                     }`}
                                     style={{ transitionDelay: '0.1s' }}
@@ -121,7 +127,7 @@ const Home = () => {
                             </div>
                             <div className="overflow-hidden">
                                 <h1
-                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[76px] font-bold leading-[1.05] text-[#dae2fd] tracking-tight gsap-line ${
                                         animated ? 'active' : ''
                                     }`}
                                     style={{ transitionDelay: '0.2s' }}
@@ -131,7 +137,7 @@ const Home = () => {
                             </div>
                             <div className="overflow-hidden mt-2">
                                 <h1
-                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[80px] font-bold leading-[1.05] text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 glow-text tracking-tight gsap-line ${
+                                    className={`font-['Hanken_Grotesk'] text-[44px] sm:text-[56px] md:text-[68px] lg:text-[76px] font-bold leading-[1.05] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-sky-200 glow-text tracking-tight gsap-line ${
                                         animated ? 'active' : ''
                                     }`}
                                     style={{ transitionDelay: '0.3s' }}
@@ -142,7 +148,7 @@ const Home = () => {
                         </div>
 
                         <p
-                            className={`font-['Inter'] text-[16px] md:text-[18px] text-[#c4c6cd] max-w-lg mt-6 mb-8 leading-relaxed gsap-line ${
+                            className={`font-['Inter'] text-[16px] md:text-[18px] text-[#94a3b8] max-w-lg mt-6 mb-8 leading-relaxed gsap-line ${
                                 animated ? 'active' : ''
                             }`}
                             style={{ transitionDelay: '0.4s' }}
@@ -158,7 +164,7 @@ const Home = () => {
                         >
                             <button
                                 onClick={() => navigate('/interview/setup')}
-                                className="bg-[#b8c8e0] text-[#223144] font-['JetBrains_Mono'] text-[14px] font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform glow-primary flex items-center justify-center gap-2 group shadow-xl"
+                                className="glowing-btn font-['JetBrains_Mono'] text-[14px] font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-2 group shadow-xl cursor-pointer"
                             >
                                 Enter Simulation
                                 <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
