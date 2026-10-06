@@ -37,53 +37,53 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif]">
             <Navbar />
 
             <main className="flex-1 flex items-center justify-center px-4 py-10">
                 <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
                     {/* Left Hero Panel (Desktop) */}
                     <section className="hidden lg:block space-y-6">
-                        <div className="glass-panel rounded-3xl p-10 space-y-6">
-                            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-primary to-cyan-500 text-white shadow-lg shadow-primary/25">
+                        <div className="bg-white border border-[#E8E4DC] shadow-sm rounded-3xl p-10 space-y-6">
+                            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 border border-blue-200 text-[#2563EB]">
                                 <Sparkles className="h-6 w-6" />
                             </div>
-                            <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
-                                Welcome back to your <span className="gradient-text">Interview Command Center</span>
+                            <h1 className="text-4xl font-extrabold font-['Hanken_Grotesk'] tracking-tight leading-tight text-[#0F172A]">
+                                Welcome back to your <span className="text-[#2563EB]">Interview Command Center</span>
                             </h1>
-                            <p className="text-base text-muted-foreground leading-relaxed">
+                            <p className="text-base text-[#64748B] leading-relaxed">
                                 Access saved evaluations, generate role strategy reports, and download ATS resumes tailored for top engineering & management roles.
                             </p>
 
-                            <div className="space-y-3 pt-4 border-t border-border/60">
-                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                            <div className="space-y-3 pt-4 border-t border-[#F0ECE1]">
+                                <div className="flex items-center gap-3 text-sm text-[#0F172A] font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-[#2563EB] shrink-0" />
                                     Instant precision match scoring & skill gap analysis
                                 </div>
-                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                <div className="flex items-center gap-3 text-sm text-[#0F172A] font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-[#2563EB] shrink-0" />
                                     STAR framework technical & behavioral response guides
                                 </div>
-                                <div className="flex items-center gap-3 text-sm text-foreground font-medium">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                                    Recruiter-friendly PDF & HTML resume exporter
+                                <div className="flex items-center gap-3 text-sm text-[#0F172A] font-medium">
+                                    <CheckCircle2 className="h-4 w-4 text-[#2563EB] shrink-0" />
+                                    Recruiter-friendly PDF & ATS resume exporter
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     {/* Right Card Form */}
-                    <Card className="glass-panel border-border/80 w-full shadow-2xl">
+                    <Card className="bg-white border border-[#E8E4DC] shadow-xl w-full rounded-2xl">
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-                            <CardDescription className="text-xs">
+                            <CardTitle className="text-2xl font-bold font-['Hanken_Grotesk'] text-[#0F172A]">Sign In</CardTitle>
+                            <CardDescription className="text-xs text-[#64748B]">
                                 Enter your credentials to access your interview workspace
                             </CardDescription>
                         </CardHeader>
                         <form onSubmit={handleSubmit}>
                             <CardContent className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-foreground" htmlFor="email">
+                                    <label className="text-xs font-semibold text-[#0F172A]" htmlFor="email">
                                         Email Address
                                     </label>
                                     <Input
@@ -93,12 +93,12 @@ const Login = () => {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="h-10 rounded-xl"
+                                        className="h-10 rounded-xl bg-[#FAF8F5] border-[#E8E4DC] focus:border-[#2563EB] text-[#0F172A]"
                                     />
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-foreground" htmlFor="password">
+                                    <label className="text-xs font-semibold text-[#0F172A]" htmlFor="password">
                                         Password
                                     </label>
                                     <div className="relative">
@@ -109,12 +109,12 @@ const Login = () => {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
-                                            className="h-10 rounded-xl pr-10"
+                                            className="h-10 rounded-xl pr-10 bg-[#FAF8F5] border-[#E8E4DC] focus:border-[#2563EB] text-[#0F172A]"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#0F172A]"
                                             title={showPassword ? 'Hide password' : 'Show password'}
                                         >
                                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -123,20 +123,20 @@ const Login = () => {
                                 </div>
 
                                 {error && (
-                                    <div className="flex items-start gap-2.5 rounded-2xl border border-destructive/40 bg-destructive/10 px-3.5 py-2.5 text-xs text-destructive">
+                                    <div className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs text-red-600">
                                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                                         <span>{error}</span>
                                     </div>
                                 )}
                             </CardContent>
                             <CardFooter className="flex flex-col gap-3 pt-2">
-                                <Button className="w-full h-10 shadow-lg shadow-primary/25" type="submit" disabled={loading}>
+                                <Button className="w-full h-10 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold rounded-xl shadow-sm" type="submit" disabled={loading}>
                                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                     Sign In
                                 </Button>
-                                <p className="text-center text-xs text-muted-foreground">
+                                <p className="text-center text-xs text-[#64748B]">
                                     Don't have an account yet?{' '}
-                                    <Link to="/register" className="font-bold text-primary hover:underline">
+                                    <Link to="/register" className="font-bold text-[#2563EB] hover:underline">
                                         Create an account
                                     </Link>
                                 </p>

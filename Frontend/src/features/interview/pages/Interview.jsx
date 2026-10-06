@@ -198,27 +198,27 @@ const Interview = () => {
     ]
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif]">
             <Navbar />
 
             <main className="flex-1 px-4 py-6 sm:px-6 md:py-8">
                 <div className="mx-auto max-w-7xl space-y-6">
                     {/* Header Controls */}
-                    <header className="glass-panel flex flex-col justify-between gap-4 rounded-3xl p-5 md:flex-row md:items-center md:p-6">
+                    <header className="bg-white border border-[#E8E4DC] shadow-sm flex flex-col justify-between gap-4 rounded-2xl p-5 md:flex-row md:items-center md:p-6">
                         <div className="space-y-1">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="-ml-2 h-8 text-xs text-muted-foreground hover:text-foreground"
+                                className="-ml-2 h-8 text-xs text-[#64748B] hover:text-[#0F172A] hover:bg-[#FAF8F5]"
                                 onClick={() => navigate('/dashboard')}
                             >
                                 <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
                                 Back to Workspace
                             </Button>
-                            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+                            <h1 className="text-2xl font-bold font-['Hanken_Grotesk'] tracking-tight sm:text-3xl text-[#0F172A]">
                                 {report?.title || 'Role Evaluation Strategy Report'}
                             </h1>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-[#64748B]">
                                 Detailed AI assessment, questions, and step-by-step prep roadmap.
                             </p>
                         </div>
@@ -229,16 +229,16 @@ const Interview = () => {
                                 size="sm"
                                 onClick={handleDownloadReportPdf}
                                 disabled={pdfExporting}
-                                className="border-border/80"
+                                className="border-[#E8E4DC] text-[#0F172A] hover:bg-[#FAF8F5]"
                             >
-                                {pdfExporting ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Download className="mr-1.5 h-4 w-4" />}
+                                {pdfExporting ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin text-[#2563EB]" /> : <Download className="mr-1.5 h-4 w-4 text-[#2563EB]" />}
                                 {pdfExporting ? 'Exporting...' : 'Export Report PDF'}
                             </Button>
                             <Button
                                 size="sm"
                                 onClick={handleResumeDownload}
                                 disabled={resumeLoading}
-                                className="shadow-md shadow-primary/20"
+                                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-sm font-semibold"
                             >
                                 {resumeLoading ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <FileText className="mr-1.5 h-4 w-4" />}
                                 Download ATS Resume
@@ -252,17 +252,17 @@ const Interview = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 rounded-2xl px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all ${
+                                className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-all ${
                                     activeTab === tab.id
-                                        ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]'
-                                        : 'glass-panel text-muted-foreground hover:bg-accent hover:text-foreground'
+                                        ? 'bg-[#2563EB] text-white shadow-sm'
+                                        : 'bg-white border border-[#E8E4DC] text-[#64748B] hover:text-[#0F172A] hover:border-blue-200'
                                 }`}
                             >
-                                <tab.icon className="h-4 w-4" />
+                                <tab.icon className={`h-4 w-4 ${activeTab === tab.id ? 'text-white' : 'text-[#2563EB]'}`} />
                                 {tab.label}
                                 {tab.count != null && (
                                     <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] ${
-                                        activeTab === tab.id ? 'bg-white/20 text-white' : 'bg-secondary text-secondary-foreground'
+                                        activeTab === tab.id ? 'bg-white/20 text-white font-bold' : 'bg-[#FAF8F5] text-[#64748B] border border-[#E8E4DC]'
                                     }`}>
                                         {tab.count}
                                     </span>
@@ -276,13 +276,13 @@ const Interview = () => {
                         {/* Tab Content Section */}
                         <div className="space-y-4">
                             {activeTab === 'technical' && (
-                                <Card className="glass-panel border-border/80">
-                                    <CardHeader className="pb-3 border-b border-border/60">
-                                        <CardTitle className="text-xl flex items-center gap-2">
-                                            <Code2 className="h-5 w-5 text-primary" />
+                                <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                    <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+                                        <CardTitle className="text-xl font-bold font-['Hanken_Grotesk'] text-[#0F172A] flex items-center gap-2">
+                                            <Code2 className="h-5 w-5 text-[#2563EB]" />
                                             Technical Questions & Answers
                                         </CardTitle>
-                                        <CardDescription className="text-xs">
+                                        <CardDescription className="text-xs text-[#64748B]">
                                             Deep-dive role-specific technical prompts with detailed answer explanations.
                                         </CardDescription>
                                     </CardHeader>
@@ -300,13 +300,13 @@ const Interview = () => {
                             )}
 
                             {activeTab === 'behavioral' && (
-                                <Card className="glass-panel border-border/80">
-                                    <CardHeader className="pb-3 border-b border-border/60">
-                                        <CardTitle className="text-xl flex items-center gap-2">
-                                            <BrainCircuit className="h-5 w-5 text-cyan-500" />
+                                <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                    <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+                                        <CardTitle className="text-xl font-bold font-['Hanken_Grotesk'] text-[#0F172A] flex items-center gap-2">
+                                            <BrainCircuit className="h-5 w-5 text-[#2563EB]" />
                                             Behavioral & Leadership Scenarios
                                         </CardTitle>
-                                        <CardDescription className="text-xs">
+                                        <CardDescription className="text-xs text-[#64748B]">
                                             Situational prompts evaluated using the STAR framework method.
                                         </CardDescription>
                                     </CardHeader>
@@ -324,27 +324,27 @@ const Interview = () => {
                             )}
 
                             {activeTab === 'gaps' && (
-                                <Card className="glass-panel border-border/80">
-                                    <CardHeader className="pb-3 border-b border-border/60">
-                                        <CardTitle className="text-xl flex items-center gap-2">
-                                            <Target className="h-5 w-5 text-amber-500" />
+                                <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                    <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+                                        <CardTitle className="text-xl font-bold font-['Hanken_Grotesk'] text-[#0F172A] flex items-center gap-2">
+                                            <Target className="h-5 w-5 text-amber-600" />
                                             Target Skill Gap Analysis
                                         </CardTitle>
-                                        <CardDescription className="text-xs">
+                                        <CardDescription className="text-xs text-[#64748B]">
                                             Competencies to strengthen before technical rounds.
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="p-5">
                                         <div className="grid gap-3 sm:grid-cols-2">
                                             {report.skillGaps?.map((item, idx) => (
-                                                <div key={idx} className="rounded-2xl border border-border/80 bg-card p-4 space-y-2 shadow-sm">
+                                                <div key={idx} className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-4 space-y-2 shadow-sm">
                                                     <div className="flex items-start justify-between gap-2">
-                                                        <p className="text-sm font-bold text-foreground">{item.skill}</p>
-                                                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${severityClass[item.severity] || severityClass.medium}`}>
+                                                        <p className="text-sm font-bold text-[#0F172A]">{item.skill}</p>
+                                                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${severityClass[item.severity] || severityClass.medium}`}>
                                                             {item.severity || 'medium'} severity
                                                         </span>
                                                     </div>
-                                                    <p className="text-xs text-muted-foreground">Focus review area for candidate preparation.</p>
+                                                    <p className="text-xs text-[#64748B]">Focus review area for candidate preparation.</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -353,24 +353,24 @@ const Interview = () => {
                             )}
 
                             {activeTab === 'plan' && (
-                                <Card className="glass-panel border-border/80">
-                                    <CardHeader className="pb-3 border-b border-border/60">
-                                        <CardTitle className="text-xl flex items-center gap-2">
-                                            <CalendarDays className="h-5 w-5 text-purple-500" />
+                                <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                    <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+                                        <CardTitle className="text-xl font-bold font-['Hanken_Grotesk'] text-[#0F172A] flex items-center gap-2">
+                                            <CalendarDays className="h-5 w-5 text-[#2563EB]" />
                                             Daily Preparation Roadmap
                                         </CardTitle>
-                                        <CardDescription className="text-xs">
+                                        <CardDescription className="text-xs text-[#64748B]">
                                             Interactive task list to track your day-by-day study execution.
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="p-5 space-y-4">
                                         {report.preparationPlan?.map((day, idx) => (
-                                            <div key={idx} className="rounded-2xl border border-border/80 bg-card p-4.5 space-y-3 shadow-sm">
-                                                <div className="flex items-center gap-2 border-b border-border/60 pb-2">
-                                                    <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/15 text-primary text-xs font-bold">
+                                            <div key={idx} className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-4.5 space-y-3 shadow-sm">
+                                                <div className="flex items-center gap-2 border-b border-[#E8E4DC] pb-2">
+                                                    <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 border border-blue-200 text-[#2563EB] text-xs font-bold font-['JetBrains_Mono']">
                                                         D{day.day}
                                                     </span>
-                                                    <p className="text-sm font-bold text-foreground">{day.focus}</p>
+                                                    <p className="text-sm font-bold text-[#0F172A]">{day.focus}</p>
                                                 </div>
                                                 <ul className="space-y-2">
                                                     {day.tasks?.map((task, tIdx) => {
@@ -380,14 +380,14 @@ const Interview = () => {
                                                             <li
                                                                 key={tIdx}
                                                                 onClick={() => toggleTask(taskKey)}
-                                                                className={`flex items-start gap-2.5 text-xs p-2 rounded-xl transition-colors cursor-pointer ${
-                                                                    isDone ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 line-through' : 'hover:bg-muted/40 text-foreground'
+                                                                className={`flex items-start gap-2.5 text-xs p-2 rounded-lg transition-colors cursor-pointer ${
+                                                                    isDone ? 'bg-emerald-50 text-emerald-800 line-through' : 'hover:bg-white text-[#0F172A]'
                                                                 }`}
                                                             >
                                                                 {isDone ? (
-                                                                    <CheckSquare className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                                                                    <CheckSquare className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                                                                 ) : (
-                                                                    <Square className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                                                                    <Square className="h-4 w-4 text-[#64748B] shrink-0 mt-0.5" />
                                                                 )}
                                                                 <span className="leading-relaxed">{task}</span>
                                                             </li>
@@ -404,30 +404,30 @@ const Interview = () => {
                         {/* Sidebar Metrics Column */}
                         <div className="space-y-6">
                             {/* Score Card */}
-                            <Card className="glass-panel border-border/80">
-                                <CardHeader className="pb-3 text-center">
-                                    <CardTitle className="text-base">Target Match Score</CardTitle>
-                                    <CardDescription className="text-xs">Overall alignment with job requirement</CardDescription>
+                            <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                <CardHeader className="pb-3 text-center border-b border-[#F0ECE1]">
+                                    <CardTitle className="text-base font-bold text-[#0F172A]">Target Match Score</CardTitle>
+                                    <CardDescription className="text-xs text-[#64748B]">Overall alignment with job requirement</CardDescription>
                                 </CardHeader>
-                                <CardContent className="text-center space-y-4">
-                                    <div className="inline-flex flex-col items-center justify-center rounded-full border-4 border-primary/20 bg-primary/5 p-6 h-36 w-36 mx-auto">
-                                        <span className="text-4xl font-extrabold text-primary">{matchScore}%</span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mt-1">Match Index</span>
+                                <CardContent className="text-center space-y-4 pt-5">
+                                    <div className="inline-flex flex-col items-center justify-center rounded-full border-4 border-blue-100 bg-blue-50/50 p-6 h-36 w-36 mx-auto">
+                                        <span className="text-4xl font-extrabold text-[#2563EB] font-['JetBrains_Mono']">{matchScore}%</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] mt-1">Match Index</span>
                                     </div>
 
-                                    <div className="h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+                                    <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#FAF8F5] border border-[#E8E4DC]">
                                         <div
-                                            className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-500 transition-all duration-500"
+                                            className="h-full rounded-full bg-[#2563EB] transition-all duration-500"
                                             style={{ width: `${matchScore}%` }}
                                         />
                                     </div>
 
-                                    <div className="rounded-2xl border border-border/80 bg-card p-3 text-left space-y-1">
-                                        <p className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                                    <div className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-3 text-left space-y-1">
+                                        <p className="text-xs font-bold text-[#0F172A] flex items-center gap-1.5">
+                                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                                             {matchScore >= 75 ? 'Exceptional Fit' : matchScore >= 50 ? 'Moderate Fit' : 'Requires Focus'}
                                         </p>
-                                        <p className="text-[11px] text-muted-foreground">
+                                        <p className="text-[11px] text-[#64748B]">
                                             Focus on high-severity skill gaps to maximize panel readiness.
                                         </p>
                                     </div>
@@ -435,22 +435,22 @@ const Interview = () => {
                             </Card>
 
                             {/* Execution Checklist Tips */}
-                            <Card className="glass-panel border-border/80">
-                                <CardHeader className="pb-3">
-                                    <CardTitle className="text-base">Pro Interview Tips</CardTitle>
+                            <Card className="bg-white border border-[#E8E4DC] shadow-sm rounded-2xl">
+                                <CardHeader className="pb-3 border-b border-[#F0ECE1]">
+                                    <CardTitle className="text-base font-bold text-[#0F172A]">Pro Interview Tips</CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-2 text-xs text-muted-foreground">
-                                    <div className="rounded-xl border border-border/60 bg-muted/30 p-2.5">
-                                        <p className="font-semibold text-foreground mb-0.5">Use STAR Technique</p>
-                                        <p className="text-[11px]">Structure responses by Situation, Task, Action, and Result.</p>
+                                <CardContent className="space-y-2 text-xs text-[#64748B] pt-4">
+                                    <div className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-2.5">
+                                        <p className="font-semibold text-[#0F172A] mb-0.5">Use STAR Technique</p>
+                                        <p className="text-[11px] text-[#64748B]">Structure responses by Situation, Task, Action, and Result.</p>
                                     </div>
-                                    <div className="rounded-xl border border-border/60 bg-muted/30 p-2.5">
-                                        <p className="font-semibold text-foreground mb-0.5">Quantify Outcomes</p>
-                                        <p className="text-[11px]">Include metrics e.g., "Improved speed by 35%".</p>
+                                    <div className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-2.5">
+                                        <p className="font-semibold text-[#0F172A] mb-0.5">Quantify Outcomes</p>
+                                        <p className="text-[11px] text-[#64748B]">Include metrics e.g., "Improved speed by 35%".</p>
                                     </div>
-                                    <div className="rounded-xl border border-border/60 bg-muted/30 p-2.5">
-                                        <p className="font-semibold text-foreground mb-0.5">Prepare Questions</p>
-                                        <p className="text-[11px]">Ask 2 strategic questions about team challenges.</p>
+                                    <div className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] p-2.5">
+                                        <p className="font-semibold text-[#0F172A] mb-0.5">Prepare Questions</p>
+                                        <p className="text-[11px] text-[#64748B]">Ask 2 strategic questions about team challenges.</p>
                                     </div>
                                 </CardContent>
                             </Card>

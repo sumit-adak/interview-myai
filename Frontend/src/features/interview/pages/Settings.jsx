@@ -171,22 +171,22 @@ export const Settings = () => {
             setShowBugModal(false)
             setBugTitle('')
             setBugDescription('')
-        }, 1800)
+        }, 1500)
     }
 
     return (
-        <div className="bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-[#b8c8e0] selection:text-[#223144]">
+        <div className="bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-blue-100 selection:text-blue-900">
             {/* Mobile Top Header */}
-            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
-                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#E2E8F0] cursor-pointer flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center text-white text-base font-bold shadow-md shadow-indigo-500/30">
+            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-[#E8E4DC] shadow-sm">
+                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#0F172A] cursor-pointer flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white text-base font-bold shadow-sm shadow-blue-500/20">
                         AI
                     </span>
                     Interview AI
                 </div>
                 <button
                     onClick={() => navigate('/interview/setup')}
-                    className="p-2 text-[#dae2fd] hover:text-[#b8c8e0] transition-colors"
+                    className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors"
                 >
                     <span className="material-symbols-outlined text-[24px]">add_circle</span>
                 </button>
@@ -196,17 +196,16 @@ export const Settings = () => {
             <SlateSidebar />
 
             {/* Main Content Area */}
-            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12">
-                <div className="scanline"></div>
+            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12 bg-[#FAF8F5]">
 
                 {/* Top Desktop Bar */}
-                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#334155] bg-[#0b1326]/80 backdrop-blur-md sticky top-0 z-30">
+                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#E8E4DC] bg-white/80 backdrop-blur-md sticky top-0 z-30">
                     <div className="flex items-center gap-3">
-                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                             Settings, Preferences & Support Hub
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5 font-medium">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             All Systems Operational
                         </span>
                     </div>
@@ -215,7 +214,7 @@ export const Settings = () => {
                         onClick={() => setShowBugModal(true)}
                         className="btn-secondary rounded-lg px-4 py-2 font-['JetBrains_Mono'] text-[13px] font-bold flex items-center gap-2 cursor-pointer"
                     >
-                        <span className="material-symbols-outlined text-[16px] text-amber-400">bug_report</span>
+                        <span className="material-symbols-outlined text-[16px] text-amber-500">bug_report</span>
                         Report a Problem
                     </button>
                 </header>
@@ -227,21 +226,21 @@ export const Settings = () => {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="material-symbols-outlined text-[#818cf8] text-[18px]">tune</span>
-                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#818cf8] font-bold">
+                                <span className="material-symbols-outlined text-[#2563EB] text-[18px]">tune</span>
+                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#2563EB] font-bold">
                                     Platform Configuration & Diagnostics
                                 </span>
                             </div>
-                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#E2E8F0] font-bold tracking-tight">
+                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#0F172A] font-bold tracking-tight">
                                 Settings & Support
                             </h2>
-                            <p className="font-['Inter'] text-[15px] text-[#c4c6cd] mt-0.5">
+                            <p className="font-['Inter'] text-[15px] text-[#64748B] mt-0.5">
                                 Configure your AI interviewer persona, strictness thresholds, API connections, account security, and diagnostic support.
                             </p>
                         </div>
 
                         {/* Mode Switcher Tabs */}
-                        <div className="flex items-center bg-[#0F172A] p-1.5 rounded-2xl border border-[#334155] shadow-lg self-start md:self-auto">
+                        <div className="flex items-center bg-[#FAF8F5] p-1.5 rounded-2xl border border-[#E8E4DC] shadow-sm self-start md:self-auto">
                             {[
                                 { id: 'settings', label: 'Settings', icon: 'settings' },
                                 { id: 'support', label: 'Support & FAQs', icon: 'help' },
@@ -252,8 +251,8 @@ export const Settings = () => {
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`px-4 py-2 rounded-xl text-xs font-['JetBrains_Mono'] font-bold flex items-center gap-2 transition-all cursor-pointer ${
                                         activeTab === tab.id
-                                            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm'
-                                            : 'text-[#c4c6cd] hover:text-white'
+                                            ? 'bg-[#2563EB] text-white shadow-sm'
+                                            : 'text-[#64748B] hover:text-[#0F172A]'
                                     }`}
                                 >
                                     <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
@@ -270,16 +269,16 @@ export const Settings = () => {
                         <div className="flex flex-col gap-8 animate-in fade-in duration-200">
                             
                             {/* SECTION A: AI VOICE & ACCENT SETTINGS */}
-                            <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-6">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#334155]">
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-6">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#E8E4DC]">
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-[#818cf8] text-[20px]">record_voice_over</span>
-                                            <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                            <span className="material-symbols-outlined text-[#2563EB] text-[20px]">record_voice_over</span>
+                                            <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                                 AI Interviewer Voice & Persona
                                             </h3>
                                         </div>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                             Choose the synthesized neural voice gender and regional acoustic accent for mock sessions.
                                         </p>
                                     </div>
@@ -287,7 +286,7 @@ export const Settings = () => {
                                         onClick={() => handlePlayVoicePreview(voiceGender, voiceAccent)}
                                         className="btn-secondary px-3.5 py-1.5 rounded-lg text-xs font-['JetBrains_Mono'] font-bold flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
                                     >
-                                        <span className={`material-symbols-outlined text-[16px] ${isPlayingPreview ? 'text-[#818cf8] animate-spin' : ''}`}>
+                                        <span className={`material-symbols-outlined text-[16px] ${isPlayingPreview ? 'text-[#2563EB] animate-spin' : ''}`}>
                                             volume_up
                                         </span>
                                         <span>{isPlayingPreview ? 'Playing Sample...' : 'Play Voice Preview'}</span>
@@ -298,7 +297,7 @@ export const Settings = () => {
                                     
                                     {/* Voice Gender Cards */}
                                     <div className="flex flex-col gap-3">
-                                        <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] font-semibold">
+                                        <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] font-semibold">
                                             Synthesizer Gender:
                                         </label>
                                         <div className="grid grid-cols-3 gap-3">
@@ -308,11 +307,11 @@ export const Settings = () => {
                                                     onClick={() => setVoiceGender(gender)}
                                                     className={`p-3.5 rounded-xl border text-center font-['JetBrains_Mono'] text-xs font-bold flex flex-col items-center justify-center gap-2 transition-all cursor-pointer ${
                                                         voiceGender === gender
-                                                            ? 'bg-gradient-to-tr from-indigo-950/80 to-purple-950/80 border-indigo-500 text-white shadow-md shadow-indigo-500/20'
-                                                            : 'bg-[#0F172A] border-[#334155] text-[#c4c6cd] hover:text-white hover:border-[#818cf8]/40'
+                                                            ? 'bg-blue-50 border-blue-400 text-[#2563EB] shadow-sm'
+                                                            : 'bg-[#FAF8F5] border-[#E8E4DC] text-[#475569] hover:text-[#0F172A] hover:border-blue-200'
                                                     }`}
                                                 >
-                                                    <span className="material-symbols-outlined text-[22px] text-[#818cf8]">
+                                                    <span className="material-symbols-outlined text-[22px] text-[#2563EB]">
                                                         {gender === 'Male' ? 'face_6' : gender === 'Female' ? 'face_3' : 'robot_2'}
                                                     </span>
                                                     <span>{gender}</span>
@@ -323,7 +322,7 @@ export const Settings = () => {
 
                                     {/* Accent Selection */}
                                     <div className="flex flex-col gap-3">
-                                        <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] font-semibold">
+                                        <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] font-semibold">
                                             Regional English Accent:
                                         </label>
                                         <div className="grid grid-cols-3 gap-3">
@@ -337,8 +336,8 @@ export const Settings = () => {
                                                     onClick={() => setVoiceAccent(item.label)}
                                                     className={`p-3.5 rounded-xl border text-center font-['JetBrains_Mono'] text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer ${
                                                         voiceAccent === item.label
-                                                            ? 'bg-gradient-to-tr from-indigo-950/80 to-purple-950/80 border-indigo-500 text-white shadow-md shadow-indigo-500/20'
-                                                            : 'bg-[#0F172A] border-[#334155] text-[#c4c6cd] hover:text-white hover:border-[#818cf8]/40'
+                                                            ? 'bg-blue-50 border-blue-400 text-[#2563EB] shadow-sm'
+                                                            : 'bg-[#FAF8F5] border-[#E8E4DC] text-[#475569] hover:text-[#0F172A] hover:border-blue-200'
                                                     }`}
                                                 >
                                                     <span className="text-lg">{item.flag}</span>
@@ -352,15 +351,15 @@ export const Settings = () => {
                             </div>
 
                             {/* SECTION B: INTERVIEWER STRICTNESS MODES */}
-                            <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-6">
-                                <div className="pb-4 border-b border-[#334155]">
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-6">
+                                <div className="pb-4 border-b border-[#E8E4DC]">
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-[#818cf8] text-[20px]">psychology_alt</span>
-                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                        <span className="material-symbols-outlined text-[#2563EB] text-[20px]">psychology_alt</span>
+                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                             Interviewer Evaluation Strictness
                                         </h3>
                                     </div>
-                                    <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                    <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                         Adjust how aggressively the AI probes for trade-offs, edge cases, and interruption triggers.
                                     </p>
                                 </div>
@@ -371,7 +370,7 @@ export const Settings = () => {
                                             id: 'Supportive',
                                             icon: 'favorite',
                                             badge: 'Encouraging & Helpful',
-                                            badgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+                                            badgeColor: 'text-emerald-700 bg-emerald-50 border-emerald-200',
                                             desc: 'Provides hints when hesitation is detected, uses friendly conversational cadence, and forgives minor syntax errors.',
                                             borderColor: 'border-emerald-500'
                                         },
@@ -379,15 +378,15 @@ export const Settings = () => {
                                             id: 'Neutral',
                                             icon: 'balance',
                                             badge: 'Standard L5 Rubric',
-                                            badgeColor: 'text-[#818cf8] bg-indigo-500/10 border-indigo-500/20',
+                                            badgeColor: 'text-[#2563EB] bg-blue-50 border-blue-200',
                                             desc: 'Standard balanced tech evaluation with calibrated follow-ups and realistic rubric scoring without artificial hints.',
-                                            borderColor: 'border-indigo-500'
+                                            borderColor: 'border-[#2563EB]'
                                         },
                                         {
                                             id: 'Stress Test',
                                             icon: 'warning',
                                             badge: 'High Pressure & Rigorous',
-                                            badgeColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+                                            badgeColor: 'text-amber-700 bg-amber-50 border-amber-200',
                                             desc: 'Challenging follow-ups, strict timer pressure, unexpected boundary constraint shifts, and rigorous edge testing.',
                                             borderColor: 'border-amber-500'
                                         }
@@ -399,32 +398,32 @@ export const Settings = () => {
                                                 onClick={() => setStrictness(mode.id)}
                                                 className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-4 ${
                                                     isSelected
-                                                        ? `bg-[#0F172A] ${mode.borderColor} shadow-lg shadow-indigo-500/15`
-                                                        : 'bg-[#0F172A]/50 border-[#334155] hover:border-[#818cf8]/40 hover:bg-[#0F172A]'
+                                                        ? `bg-[#FAF8F5] ${mode.borderColor} shadow-sm ring-1 ring-[#2563EB]/20`
+                                                        : 'bg-white border-[#E8E4DC] hover:border-blue-300 hover:bg-[#FAF8F5]'
                                                 }`}
                                             >
                                                 <div>
                                                     <div className="flex justify-between items-start mb-2">
-                                                        <span className="material-symbols-outlined text-[24px] text-[#818cf8]">{mode.icon}</span>
+                                                        <span className="material-symbols-outlined text-[24px] text-[#2563EB]">{mode.icon}</span>
                                                         <span className={`px-2 py-0.5 rounded text-[10px] font-['JetBrains_Mono'] font-bold border ${mode.badgeColor}`}>
                                                             {mode.badge}
                                                         </span>
                                                     </div>
-                                                    <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0]">
+                                                    <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A]">
                                                         {mode.id} Mode
                                                     </h4>
-                                                    <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-1.5 leading-relaxed">
+                                                    <p className="font-['Inter'] text-xs text-[#64748B] mt-1.5 leading-relaxed">
                                                         {mode.desc}
                                                     </p>
                                                 </div>
 
-                                                <div className="flex items-center gap-2 pt-2 border-t border-[#334155]/60 text-xs font-['JetBrains_Mono']">
+                                                <div className="flex items-center gap-2 pt-2 border-t border-[#E8E4DC] text-xs font-['JetBrains_Mono']">
                                                     <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border ${
-                                                        isSelected ? 'bg-indigo-600 border-indigo-400' : 'border-[#334155]'
+                                                        isSelected ? 'bg-[#2563EB] border-[#2563EB]' : 'border-[#CBD5E1]'
                                                     }`}>
                                                         {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
                                                     </span>
-                                                    <span className={isSelected ? 'text-[#E2E8F0] font-bold' : 'text-[#c4c6cd]'}>
+                                                    <span className={isSelected ? 'text-[#0F172A] font-bold' : 'text-[#64748B]'}>
                                                         {isSelected ? 'Active Mode Selected' : 'Click to Select'}
                                                     </span>
                                                 </div>
@@ -435,15 +434,15 @@ export const Settings = () => {
                             </div>
 
                             {/* SECTION C: API INTEGRATION (OPTIONAL PRO PROVIDERS) */}
-                            <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-6">
-                                <div className="pb-4 border-b border-[#334155]">
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-6">
+                                <div className="pb-4 border-b border-[#E8E4DC]">
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-[#818cf8] text-[20px]">key</span>
-                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                        <span className="material-symbols-outlined text-[#2563EB] text-[20px]">key</span>
+                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                             API Key Integrations & Custom Models (BYOK)
                                         </h3>
                                     </div>
-                                    <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                    <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                         Optionally connect your personal OpenAI GPT-4o or Anthropic Claude 3.5 Sonnet keys for zero-latency direct inference.
                                     </p>
                                 </div>
@@ -451,11 +450,11 @@ export const Settings = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     
                                     {/* OpenAI Key Field */}
-                                    <div className="p-5 rounded-xl bg-[#0F172A] border border-[#334155] flex flex-col gap-3.5">
+                                    <div className="p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex flex-col gap-3.5">
                                         <div className="flex justify-between items-center">
                                             <div className="flex items-center gap-2">
-                                                <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">OpenAI API Key</span>
-                                                <span className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">OpenAI API Key</span>
+                                                <span className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
                                                     {openAiStatus}
                                                 </span>
                                             </div>
@@ -466,12 +465,12 @@ export const Settings = () => {
                                                 type={showOpenAiKey ? 'text' : 'password'}
                                                 value={openAiKey}
                                                 onChange={(e) => setOpenAiKey(e.target.value)}
-                                                className="w-full bg-[#020617] border border-[#334155] rounded-xl px-3.5 py-2.5 font-['JetBrains_Mono'] text-xs text-[#dae2fd] focus:outline-none focus:border-indigo-500 pr-10"
+                                                className="w-full bg-white border border-[#E8E4DC] rounded-xl px-3.5 py-2.5 font-['JetBrains_Mono'] text-xs text-[#0F172A] focus:outline-none focus:border-[#2563EB] pr-10"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowOpenAiKey(!showOpenAiKey)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c4c6cd] hover:text-white"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#0F172A]"
                                             >
                                                 <span className="material-symbols-outlined text-[18px]">
                                                     {showOpenAiKey ? 'visibility_off' : 'visibility'}
@@ -492,11 +491,11 @@ export const Settings = () => {
                                     </div>
 
                                     {/* Anthropic Key Field */}
-                                    <div className="p-5 rounded-xl bg-[#0F172A] border border-[#334155] flex flex-col gap-3.5">
+                                    <div className="p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex flex-col gap-3.5">
                                         <div className="flex justify-between items-center">
                                             <div className="flex items-center gap-2">
-                                                <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">Anthropic API Key</span>
-                                                <span className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                                <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">Anthropic API Key</span>
+                                                <span className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-blue-50 text-[#2563EB] border border-blue-200 font-semibold">
                                                     {anthropicStatus}
                                                 </span>
                                             </div>
@@ -507,12 +506,12 @@ export const Settings = () => {
                                                 type={showAnthropicKey ? 'text' : 'password'}
                                                 value={anthropicKey}
                                                 onChange={(e) => setAnthropicKey(e.target.value)}
-                                                className="w-full bg-[#020617] border border-[#334155] rounded-xl px-3.5 py-2.5 font-['JetBrains_Mono'] text-xs text-[#dae2fd] focus:outline-none focus:border-indigo-500 pr-10"
+                                                className="w-full bg-white border border-[#E8E4DC] rounded-xl px-3.5 py-2.5 font-['JetBrains_Mono'] text-xs text-[#0F172A] focus:outline-none focus:border-[#2563EB] pr-10"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAnthropicKey(!showAnthropicKey)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c4c6cd] hover:text-white"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#0F172A]"
                                             >
                                                 <span className="material-symbols-outlined text-[18px]">
                                                     {showAnthropicKey ? 'visibility_off' : 'visibility'}
@@ -536,51 +535,51 @@ export const Settings = () => {
                             </div>
 
                             {/* SECTION D: ACCOUNT MANAGEMENT & SECURITY */}
-                            <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-6">
-                                <div className="pb-4 border-b border-[#334155]">
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-6">
+                                <div className="pb-4 border-b border-[#E8E4DC]">
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-[#818cf8] text-[20px]">manage_accounts</span>
-                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                        <span className="material-symbols-outlined text-[#2563EB] text-[20px]">manage_accounts</span>
+                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                             Account Profile & Security
                                         </h3>
                                     </div>
-                                    <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                    <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                         Update candidate profile information, credentials, and connected OAuth accounts.
                                     </p>
                                 </div>
 
                                 <form onSubmit={handleSaveProfile} className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Full Name</label>
+                                        <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Full Name</label>
                                         <input
                                             type="text"
                                             value={profileName}
                                             onChange={(e) => setProfileName(e.target.value)}
-                                            className="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#dae2fd] focus:outline-none focus:border-indigo-500"
+                                            className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Email Address</label>
+                                        <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Email Address</label>
                                         <input
                                             type="email"
                                             value={profileEmail}
                                             onChange={(e) => setProfileEmail(e.target.value)}
-                                            className="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#dae2fd] focus:outline-none focus:border-indigo-500"
+                                            className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Target Engineering Role</label>
+                                        <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Target Engineering Role</label>
                                         <input
                                             type="text"
                                             value={profileRole}
                                             onChange={(e) => setProfileRole(e.target.value)}
-                                            className="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#dae2fd] focus:outline-none focus:border-indigo-500"
+                                            className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
                                         />
                                     </div>
 
                                     <div className="md:col-span-3 flex justify-between items-center pt-2">
                                         {isSaveSuccess ? (
-                                            <span className="text-xs font-['JetBrains_Mono'] text-emerald-400 font-bold flex items-center gap-1">
+                                            <span className="text-xs font-['JetBrains_Mono'] text-emerald-700 font-bold flex items-center gap-1">
                                                 <span className="material-symbols-outlined text-[16px]">check_circle</span>
                                                 Profile changes saved successfully!
                                             </span>
@@ -596,18 +595,18 @@ export const Settings = () => {
                                 </form>
 
                                 {/* Danger Zone */}
-                                <div className="p-5 rounded-xl border border-red-500/30 bg-red-950/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+                                <div className="p-5 rounded-xl border border-red-200 bg-red-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
                                     <div>
-                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-red-400">
+                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-red-600">
                                             Delete Account & Purge Interview History
                                         </h4>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                             Permanently delete your profile, audio recordings, rubrics, and diagnostic logs.
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => setShowDeleteModal(true)}
-                                        className="px-4 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/40 text-xs font-['JetBrains_Mono'] font-bold transition-all cursor-pointer self-start sm:self-auto shrink-0"
+                                        className="px-4 py-2 rounded-xl bg-red-50 hover:bg-red-600 text-red-600 hover:text-white border border-red-300 text-xs font-['JetBrains_Mono'] font-bold transition-all cursor-pointer self-start sm:self-auto shrink-0"
                                     >
                                         Delete Account
                                     </button>
@@ -625,16 +624,16 @@ export const Settings = () => {
                         <div className="flex flex-col gap-6 animate-in fade-in duration-200">
                             
                             {/* Top Support Banner */}
-                            <div className="glass-modal rounded-2xl p-6 border border-indigo-500/40 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="bg-white rounded-2xl p-6 border border-[#E8E4DC] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-[#818cf8] shrink-0">
+                                    <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB] shrink-0">
                                         <span className="material-symbols-outlined text-[26px]">support_agent</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                        <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                             Need Help with Your Interview AI Session?
                                         </h3>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                             Search frequently asked questions below or submit a direct ticket with our engineering team.
                                         </p>
                                     </div>
@@ -652,10 +651,10 @@ export const Settings = () => {
                             {/* FAQ Accordion List */}
                             <div className="flex flex-col gap-5">
                                 {FAQ_DATA.map((cat) => (
-                                    <div key={cat.category} className="glass-panel rounded-2xl p-6 border border-[#334155] shadow-lg flex flex-col gap-4">
-                                        <div className="flex items-center gap-2 pb-2 border-b border-[#334155]">
-                                            <span className="material-symbols-outlined text-[#818cf8] text-[20px]">{cat.icon}</span>
-                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0]">
+                                    <div key={cat.category} className="bg-white rounded-2xl p-6 border border-[#E8E4DC] shadow-sm flex flex-col gap-4">
+                                        <div className="flex items-center gap-2 pb-2 border-b border-[#F0ECE1]">
+                                            <span className="material-symbols-outlined text-[#2563EB] text-[20px]">{cat.icon}</span>
+                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A]">
                                                 {cat.category}
                                             </h4>
                                         </div>
@@ -667,16 +666,16 @@ export const Settings = () => {
                                                 return (
                                                     <div
                                                         key={qIdx}
-                                                        className="rounded-xl border border-[#334155] bg-[#0F172A] overflow-hidden transition-all"
+                                                        className="rounded-xl border border-[#E8E4DC] bg-[#FAF8F5] overflow-hidden transition-all"
                                                     >
                                                         <button
                                                             onClick={() => setOpenFaqIndex(isOpen ? null : key)}
-                                                            className="w-full p-4 text-left flex justify-between items-center gap-3 cursor-pointer hover:bg-white/5"
+                                                            className="w-full p-4 text-left flex justify-between items-center gap-3 cursor-pointer hover:bg-[#F5F2EB] transition-colors"
                                                         >
-                                                            <span className="font-['Hanken_Grotesk'] text-xs md:text-sm font-bold text-[#E2E8F0]">
+                                                            <span className="font-['Hanken_Grotesk'] text-xs md:text-sm font-bold text-[#0F172A]">
                                                                 {item.q}
                                                             </span>
-                                                            <span className={`material-symbols-outlined text-[18px] text-[#818cf8] transition-transform ${
+                                                            <span className={`material-symbols-outlined text-[18px] text-[#2563EB] transition-transform ${
                                                                 isOpen ? 'rotate-180' : ''
                                                             }`}>
                                                                 expand_more
@@ -684,7 +683,7 @@ export const Settings = () => {
                                                         </button>
 
                                                         {isOpen && (
-                                                            <div className="p-4 pt-0 text-xs font-['Inter'] text-[#c4c6cd] leading-relaxed border-t border-[#334155]/60 bg-[#020617]/50">
+                                                            <div className="p-4 pt-0 text-xs font-['Inter'] text-[#475569] leading-relaxed border-t border-[#E8E4DC] bg-white">
                                                                 {item.a}
                                                             </div>
                                                         )}
@@ -705,22 +704,22 @@ export const Settings = () => {
                     {activeTab === 'status' && (
                         <div className="flex flex-col gap-6 animate-in fade-in duration-200">
                             
-                            <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-6">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#334155]">
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-6">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F0ECE1]">
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-emerald-400 text-[20px]">cloud_done</span>
-                                            <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                            <span className="material-symbols-outlined text-emerald-600 text-[20px]">cloud_done</span>
+                                            <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                                 AI System & Microservice Telemetry
                                             </h3>
                                         </div>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                             Real-time health status of inference nodes, speech pipelines, and rubric evaluators.
                                         </p>
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">
                                             Checked {lastCheckedSeconds}s ago
                                         </span>
                                         <button
@@ -743,24 +742,24 @@ export const Settings = () => {
                                         { name: 'Neural TTS Voice Synthesizer', status: 'Operational', latency: '140ms', uptime: '99.99%', icon: 'record_voice_over' },
                                         { name: 'ATS Semantic Parsing Engine', status: 'Operational', latency: '45ms', uptime: '100.0%', icon: 'document_scanner' }
                                     ].map((service, i) => (
-                                        <div key={i} className="p-5 rounded-xl bg-[#0F172A] border border-[#334155] flex flex-col justify-between gap-3">
+                                        <div key={i} className="p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex flex-col justify-between gap-3 hover:border-blue-200 transition-all">
                                             <div className="flex justify-between items-start">
-                                                <div className="w-10 h-10 rounded-xl bg-indigo-950/60 border border-indigo-500/30 flex items-center justify-center text-[#818cf8]">
+                                                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
                                                     <span className="material-symbols-outlined text-[20px]">{service.icon}</span>
                                                 </div>
-                                                <span className="flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                                <span className="flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                     {service.status}
                                                 </span>
                                             </div>
 
                                             <div>
-                                                <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                                <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                                     {service.name}
                                                 </h4>
-                                                <div className="flex justify-between text-xs font-['JetBrains_Mono'] text-[#c4c6cd] mt-2 pt-2 border-t border-[#334155]/60">
-                                                    <span>Latency: <strong className="text-[#818cf8]">{service.latency}</strong></span>
-                                                    <span>Uptime: <strong className="text-emerald-400">{service.uptime}</strong></span>
+                                                <div className="flex justify-between text-xs font-['JetBrains_Mono'] text-[#64748B] mt-2 pt-2 border-t border-[#E8E4DC]">
+                                                    <span>Latency: <strong className="text-[#2563EB]">{service.latency}</strong></span>
+                                                    <span>Uptime: <strong className="text-emerald-700">{service.uptime}</strong></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -778,56 +777,56 @@ export const Settings = () => {
                 BUG REPORT MODAL ("REPORT A PROBLEM")
             ========================================================= */}
             {showBugModal && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                    <div className="glass-modal max-w-lg w-full rounded-2xl p-6 md:p-7 border border-[#334155] shadow-2xl flex flex-col gap-5 animate-in zoom-in-95 duration-150">
+                <div className="fixed inset-0 bg-[#0F172A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white max-w-lg w-full rounded-2xl p-6 md:p-7 border border-[#E8E4DC] shadow-2xl flex flex-col gap-5 animate-in zoom-in-95 duration-150">
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                                     <span className="material-symbols-outlined text-[22px]">bug_report</span>
                                 </div>
                                 <div>
-                                    <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0]">
+                                    <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A]">
                                         Report a Problem / Submit Ticket
                                     </h4>
-                                    <p className="font-['Inter'] text-xs text-[#c4c6cd]">
+                                    <p className="font-['Inter'] text-xs text-[#64748B]">
                                         Our engineering team responds within 24 hours
                                     </p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowBugModal(false)}
-                                className="text-[#c4c6cd] hover:text-white p-1"
+                                className="text-[#64748B] hover:text-[#0F172A] p-1 rounded-lg hover:bg-slate-100 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[20px]">close</span>
                             </button>
                         </div>
 
                         {bugSubmitted ? (
-                            <div className="p-6 text-center flex flex-col items-center gap-3 bg-emerald-950/20 rounded-xl border border-emerald-500/30">
-                                <span className="material-symbols-outlined text-4xl text-emerald-400">check_circle</span>
-                                <h5 className="font-['Hanken_Grotesk'] text-base font-bold text-emerald-300">Ticket Submitted Successfully</h5>
-                                <p className="text-xs font-['Inter'] text-[#c4c6cd]">Reference ID: #TICK-8492. Closing dialog...</p>
+                            <div className="p-6 text-center flex flex-col items-center gap-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                                <span className="material-symbols-outlined text-4xl text-emerald-600">check_circle</span>
+                                <h5 className="font-['Hanken_Grotesk'] text-base font-bold text-emerald-800">Ticket Submitted Successfully</h5>
+                                <p className="text-xs font-['Inter'] text-[#64748B]">Reference ID: #TICK-8492. Closing dialog...</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmitBugReport} className="flex flex-col gap-4">
                                 <div>
-                                    <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Problem Title</label>
+                                    <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Problem Title</label>
                                     <input
                                         type="text"
                                         required
                                         value={bugTitle}
                                         onChange={(e) => setBugTitle(e.target.value)}
                                         placeholder="e.g. Microphone audio drops out after 3 minutes"
-                                        className="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#dae2fd] focus:outline-none focus:border-indigo-500"
+                                        className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl px-3.5 py-2 text-xs font-['Inter'] text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Category</label>
+                                    <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Category</label>
                                     <select
                                         value={bugCategory}
                                         onChange={(e) => setBugCategory(e.target.value)}
-                                        className="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-3.5 py-2 text-xs font-['JetBrains_Mono'] text-[#dae2fd] focus:outline-none"
+                                        className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl px-3.5 py-2 text-xs font-['JetBrains_Mono'] text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
                                     >
                                         <option>Speech Recognition / Audio</option>
                                         <option>Camera & Video Feed</option>
@@ -839,26 +838,26 @@ export const Settings = () => {
                                 </div>
 
                                 <div>
-                                    <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Detailed Description</label>
+                                    <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Detailed Description</label>
                                     <textarea
                                         rows={4}
                                         required
                                         value={bugDescription}
                                         onChange={(e) => setBugDescription(e.target.value)}
                                         placeholder="Please provide steps to reproduce the issue..."
-                                        className="w-full bg-[#0F172A] border border-[#334155] rounded-xl p-3 text-xs font-['Inter'] text-[#dae2fd] focus:outline-none focus:border-indigo-500 resize-none leading-relaxed"
+                                        className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl p-3 text-xs font-['Inter'] text-[#0F172A] focus:outline-none focus:border-[#2563EB] resize-none leading-relaxed"
                                     />
                                 </div>
 
                                 {/* Screen Capture Attachment Placeholder */}
                                 <div>
-                                    <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] block mb-1">Screen Capture Attachment</label>
-                                    <div className="p-4 rounded-xl border border-dashed border-[#334155] hover:border-indigo-500/50 transition-colors text-center cursor-pointer bg-[#0F172A]/50">
-                                        <span className="material-symbols-outlined text-[#818cf8] text-[22px] mb-1">add_photo_alternate</span>
-                                        <div className="text-xs font-['JetBrains_Mono'] text-[#E2E8F0] font-bold">
+                                    <label className="text-xs font-['JetBrains_Mono'] text-[#64748B] block mb-1">Screen Capture Attachment</label>
+                                    <div className="p-4 rounded-xl border border-dashed border-[#E8E4DC] hover:border-[#2563EB] transition-colors text-center cursor-pointer bg-[#FAF8F5]">
+                                        <span className="material-symbols-outlined text-[#2563EB] text-[22px] mb-1">add_photo_alternate</span>
+                                        <div className="text-xs font-['JetBrains_Mono'] text-[#0F172A] font-bold">
                                             Attach screenshot or logs
                                         </div>
-                                        <div className="text-[10px] text-[#c4c6cd]">PNG, JPG, or PDF (Max 5MB)</div>
+                                        <div className="text-[10px] text-[#64748B]">PNG, JPG, or PDF (Max 5MB)</div>
                                     </div>
                                 </div>
 
@@ -887,15 +886,15 @@ export const Settings = () => {
                 DELETE ACCOUNT CONFIRMATION MODAL
             ========================================================= */}
             {showDeleteModal && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                    <div className="glass-modal max-w-md w-full rounded-2xl p-6 border border-red-500/40 shadow-2xl flex flex-col gap-4 animate-in zoom-in-95 duration-150">
-                        <div className="flex items-center gap-3 text-red-400">
+                <div className="fixed inset-0 bg-[#0F172A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white max-w-md w-full rounded-2xl p-6 border border-[#E8E4DC] shadow-2xl flex flex-col gap-4 animate-in zoom-in-95 duration-150">
+                        <div className="flex items-center gap-3 text-red-600">
                             <span className="material-symbols-outlined text-[28px]">warning</span>
-                            <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                            <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                 Confirm Account Deletion
                             </h4>
                         </div>
-                        <p className="font-['Inter'] text-xs text-[#c4c6cd] leading-relaxed">
+                        <p className="font-['Inter'] text-xs text-[#64748B] leading-relaxed">
                             Are you absolutely sure you want to permanently delete your Interview AI account? All recorded interview transcripts, audio files, and ATS resume audits will be irreversibly erased.
                         </p>
                         <div className="flex justify-end gap-3 pt-2">
@@ -910,7 +909,7 @@ export const Settings = () => {
                                     setShowDeleteModal(false)
                                     navigate('/')
                                 }}
-                                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-['JetBrains_Mono'] font-bold cursor-pointer"
+                                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-['JetBrains_Mono'] font-bold cursor-pointer transition-colors shadow-sm"
                             >
                                 Yes, Delete My Account
                             </button>
@@ -920,22 +919,22 @@ export const Settings = () => {
             )}
 
             {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-0 w-full bg-[#0F172A]/95 backdrop-blur-xl border-t border-[#334155] flex justify-around items-center py-3 px-4 z-50">
-                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+            <nav className="md:hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#E8E4DC] flex justify-around items-center py-3 px-4 z-50 shadow-sm">
+                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">dashboard</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
                 </button>
-                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">history</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">History</span>
                 </button>
-                <button onClick={() => navigate('/settings')} className="flex flex-col items-center gap-1 text-[#818cf8]">
+                <button onClick={() => navigate('/settings')} className="flex flex-col items-center gap-1 text-[#2563EB]">
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                         settings
                     </span>
-                    <span className="text-[10px] font-['JetBrains_Mono']">Settings</span>
+                    <span className="text-[10px] font-['JetBrains_Mono'] font-semibold">Settings</span>
                 </button>
-                <button onClick={() => navigate('/support')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/support')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">help</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Support</span>
                 </button>
@@ -945,3 +944,4 @@ export const Settings = () => {
 }
 
 export default Settings
+
