@@ -111,7 +111,7 @@ const RECENT_ACTIVITIES = [
         date: 'Yesterday, 6:15 PM',
         score: 84,
         status: 'Passed',
-        statusColor: 'indigo',
+        statusColor: 'blue',
         duration: '60 mins',
         topics: ['Distributed Caching', 'Database Sharding']
     },
@@ -226,18 +226,18 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div className="bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-[#b8c8e0] selection:text-[#223144]">
+        <div className="bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-blue-100 selection:text-blue-900">
             {/* Mobile Top Header */}
-            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
-                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#E2E8F0] cursor-pointer flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center text-white text-base font-bold shadow-md shadow-indigo-500/30">
+            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-[#E8E4DC] shadow-sm">
+                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#0F172A] cursor-pointer flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-base font-bold shadow-sm">
                         AI
                     </span>
                     Interview AI
                 </div>
                 <button
                     onClick={() => navigate('/interview/setup')}
-                    className="p-2 text-[#dae2fd] hover:text-[#b8c8e0] transition-colors"
+                    className="p-2 text-[#0F172A] hover:text-blue-600 transition-colors"
                     aria-label="New Session"
                 >
                     <span className="material-symbols-outlined text-[24px]">add_circle</span>
@@ -249,18 +249,16 @@ const Dashboard = () => {
 
             {/* Main Content Area */}
             <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-8">
-                <div className="scanline"></div>
-
                 {/* Top Search & Profile Bar (Desktop) */}
-                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#334155] bg-[#0b1326]/80 backdrop-blur-md sticky top-0 z-30">
+                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#E8E4DC] bg-white/80 backdrop-blur-md sticky top-0 z-30">
                     <div className="relative w-96">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#c4c6cd] text-[18px]">
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8] text-[18px]">
                             search
                         </span>
                         <input
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#0F172A] border border-[#334155] rounded-lg pl-10 pr-4 py-2 font-['Inter'] text-[14px] text-[#dae2fd] focus:outline-none focus:border-[#6366f1] focus:ring-1 focus:ring-[#6366f1]/50 transition-all placeholder:text-[#c4c6cd]/50"
+                            className="w-full bg-[#FAF8F5] border border-[#E2DDD5] rounded-xl pl-10 pr-4 py-2 font-['Inter'] text-[14px] text-[#0F172A] focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-[#94A3B8]"
                             placeholder="Search interviews, skills, metrics..."
                             type="text"
                         />
@@ -268,14 +266,14 @@ const Dashboard = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/interview/setup')}
-                            className="btn-primary rounded-lg px-4 py-2 font-['JetBrains_Mono'] text-[13px] font-bold flex items-center gap-2"
+                            className="btn-primary rounded-xl px-4 py-2 font-['JetBrains_Mono'] text-[13px] font-semibold flex items-center gap-2 shadow-sm"
                         >
                             <span className="material-symbols-outlined text-[16px]">play_arrow</span>
                             Start Session
                         </button>
-                        <button className="p-2 text-[#c4c6cd] hover:text-[#E2E8F0] transition-colors relative">
+                        <button className="p-2 text-[#64748B] hover:text-[#0F172A] transition-colors relative rounded-xl hover:bg-[#F5F2EB]">
                             <span className="material-symbols-outlined text-[22px]">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-[#6366f1] rounded-full ring-2 ring-[#0b1326] animate-pulse"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full ring-2 ring-white"></span>
                         </button>
                     </div>
                 </header>
@@ -286,28 +284,28 @@ const Dashboard = () => {
                     {/* Welcome Header */}
                     <div className={`stagger-item ${animated ? 'fade-up' : ''} flex flex-col md:flex-row md:items-center justify-between gap-4`}>
                         <div>
-                            <div className="flex items-center gap-2.5 mb-1">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] font-semibold bg-indigo-500/10 text-[#818cf8] border border-indigo-500/20">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                            <div className="flex items-center gap-2.5 mb-1.5">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mr-1.5"></span>
                                     AI Readiness: Ready to Interview
                                 </span>
                             </div>
-                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#E2E8F0] font-bold tracking-tight">
+                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#0F172A] font-bold tracking-tight">
                                 Good evening, Sumit 👋
                             </h2>
-                            <p className="font-['Inter'] text-[15px] md:text-[16px] text-[#c4c6cd] mt-0.5">
-                                Your mock interview performance is up <span className="text-emerald-400 font-semibold">+18%</span> this week.
+                            <p className="font-['Inter'] text-[15px] md:text-[16px] text-[#64748B] mt-0.5">
+                                Your mock interview performance is up <span className="text-emerald-600 font-semibold">+18%</span> this week.
                             </p>
                         </div>
 
                         {/* Top Quick Resume Badge */}
-                        <div className="hidden sm:flex items-center gap-3 bg-[#0F172A]/80 border border-[#334155] rounded-xl px-4 py-2.5 backdrop-blur-sm self-start md:self-auto shadow-sm">
-                            <div className="w-8 h-8 rounded-lg bg-indigo-950/60 border border-indigo-500/30 flex items-center justify-center text-[#818cf8]">
+                        <div className="hidden sm:flex items-center gap-3 bg-white border border-[#E8E4DC] rounded-xl px-4 py-2.5 shadow-sm self-start md:self-auto">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                                 <span className="material-symbols-outlined text-[18px]">verified_user</span>
                             </div>
                             <div className="text-left">
-                                <div className="font-['Hanken_Grotesk'] text-xs font-semibold text-[#E2E8F0]">Target Role</div>
-                                <div className="font-['JetBrains_Mono'] text-xs text-[#818cf8]">Senior Full Stack Dev</div>
+                                <div className="font-['Hanken_Grotesk'] text-xs font-semibold text-[#64748B]">Target Role</div>
+                                <div className="font-['JetBrains_Mono'] text-xs text-blue-700 font-semibold">Senior Full Stack Dev</div>
                             </div>
                         </div>
                     </div>
@@ -316,28 +314,24 @@ const Dashboard = () => {
                         PRIMARY CARD (HERO WITH UPGRADED CTA)
                     ========================================================= */}
                     <div
-                        className={`glass-modal rounded-2xl p-6 lg:p-8 stagger-item ${
+                        className={`bg-gradient-to-br from-white via-[#FCFAF7] to-[#EFF6FF] rounded-2xl p-6 lg:p-8 stagger-item ${
                             animated ? 'fade-up delay-100' : ''
-                        } relative overflow-hidden group border border-[#334155] shadow-[0_20px_45px_rgba(0,0,0,0.35)]`}
+                        } relative overflow-hidden group border border-[#E8E4DC] shadow-sm`}
                     >
-                        {/* Decorative Gradient Glows */}
-                        <div className="absolute -right-24 -top-24 w-80 h-80 bg-gradient-to-br from-purple-600/20 via-indigo-600/15 to-transparent blur-[90px] rounded-full pointer-events-none group-hover:from-purple-600/30 transition-all duration-700"></div>
-                        <div className="absolute -left-20 -bottom-20 w-60 h-60 bg-blue-600/10 blur-[80px] rounded-full pointer-events-none"></div>
-
                         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                             <div className="max-w-xl">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#1E293B] border border-[#334155] mb-3">
-                                    <span className="material-symbols-outlined text-[#818cf8] text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white border border-[#E8E4DC] mb-3 shadow-sm">
+                                    <span className="material-symbols-outlined text-blue-600 text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                                         auto_awesome
                                     </span>
-                                    <span className="font-['JetBrains_Mono'] text-[12px] text-[#c4c6cd]">
-                                        Next Milestone: <strong className="text-[#E2E8F0]">System Design Mastery</strong>
+                                    <span className="font-['JetBrains_Mono'] text-[12px] text-[#64748B]">
+                                        Next Milestone: <strong className="text-[#0F172A]">System Design Mastery</strong>
                                     </span>
                                 </div>
-                                <h3 className="font-['Hanken_Grotesk'] text-[22px] md:text-[26px] font-bold text-[#E2E8F0] leading-snug">
+                                <h3 className="font-['Hanken_Grotesk'] text-[22px] md:text-[26px] font-bold text-[#0F172A] leading-snug">
                                     Continue Your Interview Journey
                                 </h3>
-                                <p className="font-['Inter'] text-[14px] md:text-[15px] text-[#c4c6cd] mt-1.5 leading-relaxed">
+                                <p className="font-['Inter'] text-[14px] md:text-[15px] text-[#475569] mt-1.5 leading-relaxed">
                                     Simulate high-pressure behavioral and technical rounds with adaptive AI feedback tuned for top-tier engineering roles.
                                 </p>
                             </div>
@@ -345,33 +339,31 @@ const Dashboard = () => {
                             {/* Upgraded Primary CTA Button */}
                             <button
                                 onClick={() => navigate('/interview/setup')}
-                                className="group relative overflow-hidden rounded-xl px-7 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-500 bg-[length:200%_auto] hover:bg-right text-white font-['JetBrains_Mono'] text-[14px] font-bold shadow-[0_0_25px_rgba(99,102,241,0.35)] hover:shadow-[0_0_35px_rgba(147,51,234,0.55)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] flex items-center gap-3 shrink-0 cursor-pointer border border-white/10"
+                                className="rounded-xl px-7 py-4 bg-blue-600 hover:bg-blue-700 text-white font-['JetBrains_Mono'] text-[14px] font-semibold shadow-sm hover:shadow transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-3 shrink-0 cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[20px] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                                <span className="material-symbols-outlined text-[20px]">
                                     play_arrow
                                 </span>
                                 <span className="tracking-wide">Start New Interview</span>
-                                <span className="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:translate-x-1.5">
+                                <span className="material-symbols-outlined text-[18px]">
                                     arrow_forward
                                 </span>
-                                {/* Ambient Sheen Layer */}
-                                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none"></div>
                             </button>
                         </div>
 
                         {/* Module Progress Bar */}
-                        <div className="mt-8 pt-6 border-t border-[#334155]/60 relative z-10">
-                            <div className="flex flex-wrap justify-between items-center font-['JetBrains_Mono'] text-[12px] text-[#c4c6cd] mb-2.5 gap-2">
+                        <div className="mt-8 pt-6 border-t border-[#E8E4DC] relative z-10">
+                            <div className="flex flex-wrap justify-between items-center font-['JetBrains_Mono'] text-[12px] text-[#64748B] mb-2.5 gap-2">
                                 <span className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-[#818cf8]"></span>
+                                    <span className="w-2 h-2 rounded-full bg-blue-600"></span>
                                     <span>Curriculum Progress • Module 3: Behavioral & System Design</span>
                                 </span>
-                                <span className="text-[#818cf8] font-bold bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-500/30">
+                                <span className="text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                                     65% Completed
                                 </span>
                             </div>
-                            <div className="w-full h-2.5 bg-[#020617] rounded-full overflow-hidden border border-[#334155]/60 p-0.5">
-                                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 w-[65%] rounded-full shadow-[0_0_12px_rgba(99,102,241,0.6)] transition-all duration-1000"></div>
+                            <div className="w-full h-2 bg-[#EAE5DC] rounded-full overflow-hidden p-0.5">
+                                <div className="h-full bg-blue-600 w-[65%] rounded-full transition-all duration-1000"></div>
                             </div>
                         </div>
                     </div>
@@ -382,98 +374,94 @@ const Dashboard = () => {
                     <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 stagger-item ${animated ? 'fade-up delay-200' : ''}`}>
                         
                         {/* KPI 1: Total Interviews */}
-                        <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-indigo-500/40 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative group overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors pointer-events-none"></div>
+                        <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative group overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[13px] font-medium">
-                                    <span className="w-7 h-7 rounded-lg bg-[#0F172A] border border-[#334155] flex items-center justify-center text-[#818cf8] group-hover:border-indigo-500/40 transition-colors">
+                                <div className="flex items-center gap-2 text-[#64748B] font-['JetBrains_Mono'] text-[13px] font-medium">
+                                    <span className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                                         <span className="material-symbols-outlined text-[16px]">record_voice_over</span>
                                     </span>
                                     Total Interviews
                                 </div>
-                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                                     <span className="material-symbols-outlined text-[12px]">trending_up</span>
                                     +12% mo
                                 </span>
                             </div>
-                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-[#E2E8F0] font-bold tracking-tight">
+                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-[#0F172A] font-bold tracking-tight">
                                 {animated ? <AnimatedNumber value={24} duration={1200} /> : '0'}
                             </div>
-                            <div className="text-[12px] font-['Inter'] text-[#c4c6cd]/80 mt-1 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            <div className="text-[12px] font-['Inter'] text-[#64748B] mt-1 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                 6 completed in past 7 days
                             </div>
                         </div>
 
                         {/* KPI 2: Average Score */}
-                        <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-purple-500/40 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative group overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-colors pointer-events-none"></div>
+                        <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative group overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[13px] font-medium">
-                                    <span className="w-7 h-7 rounded-lg bg-[#0F172A] border border-[#334155] flex items-center justify-center text-purple-400 group-hover:border-purple-500/40 transition-colors">
+                                <div className="flex items-center gap-2 text-[#64748B] font-['JetBrains_Mono'] text-[13px] font-medium">
+                                    <span className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                                         <span className="material-symbols-outlined text-[16px]">query_stats</span>
                                     </span>
                                     Average Score
                                 </div>
-                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                                     <span className="material-symbols-outlined text-[12px]">trending_up</span>
                                     +4.2%
                                 </span>
                             </div>
-                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-[#818cf8] font-bold tracking-tight">
+                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-blue-600 font-bold tracking-tight">
                                 {animated ? <AnimatedNumber value={86} duration={1400} suffix="%" /> : '0%'}
                             </div>
-                            <div className="text-[12px] font-['Inter'] text-[#c4c6cd]/80 mt-1 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                            <div className="text-[12px] font-['Inter'] text-[#64748B] mt-1 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                                 Top 15% candidate tier
                             </div>
                         </div>
 
                         {/* KPI 3: Current Streak */}
-                        <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-amber-500/40 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative group overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors pointer-events-none"></div>
+                        <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-amber-300 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative group overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[13px] font-medium">
-                                    <span className="w-7 h-7 rounded-lg bg-[#0F172A] border border-[#334155] flex items-center justify-center text-amber-400 group-hover:border-amber-500/40 transition-colors">
+                                <div className="flex items-center gap-2 text-[#64748B] font-['JetBrains_Mono'] text-[13px] font-medium">
+                                    <span className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                                         <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                                             local_fire_department
                                         </span>
                                     </span>
                                     Current Streak
                                 </div>
-                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 font-semibold">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 font-semibold">
                                     Active 🔥
                                 </span>
                             </div>
-                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-amber-300 font-bold tracking-tight flex items-baseline gap-1.5">
+                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-amber-700 font-bold tracking-tight flex items-baseline gap-1.5">
                                 {animated ? <AnimatedNumber value={7} duration={1000} /> : '0'}
-                                <span className="text-[18px] text-[#c4c6cd] font-semibold">Days</span>
+                                <span className="text-[18px] text-[#64748B] font-semibold">Days</span>
                             </div>
-                            <div className="text-[12px] font-['Inter'] text-[#c4c6cd]/80 mt-1 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                            <div className="text-[12px] font-['Inter'] text-[#64748B] mt-1 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                 Personal best: 12 days
                             </div>
                         </div>
 
                         {/* KPI 4: Improvement */}
-                        <div className="glass-panel ai-feedback-card rounded-2xl p-5 border border-[#334155] hover:border-emerald-500/40 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative group overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors pointer-events-none"></div>
+                        <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-emerald-300 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative group overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2 text-[#c4c6cd] font-['JetBrains_Mono'] text-[13px] font-medium">
-                                    <span className="w-7 h-7 rounded-lg bg-[#0F172A] border border-[#334155] flex items-center justify-center text-emerald-400 group-hover:border-emerald-500/40 transition-colors">
+                                <div className="flex items-center gap-2 text-[#64748B] font-['JetBrains_Mono'] text-[13px] font-medium">
+                                    <span className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                                         <span className="material-symbols-outlined text-[16px]">insights</span>
                                     </span>
                                     Improvement
                                 </div>
-                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">
                                     +18% 🚀
                                 </span>
                             </div>
-                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-emerald-400 font-bold tracking-tight">
+                            <div className="font-['Hanken_Grotesk'] text-[32px] md:text-[36px] text-emerald-700 font-bold tracking-tight">
                                 {animated ? <AnimatedNumber value={18} duration={1300} prefix="+" suffix="%" /> : '+0%'}
                             </div>
-                            <div className="text-[12px] font-['Inter'] text-[#c4c6cd]/80 mt-1 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            <div className="text-[12px] font-['Inter'] text-[#64748B] mt-1 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                 Evaluated vs. initial baseline
                             </div>
                         </div>
@@ -481,36 +469,36 @@ const Dashboard = () => {
                     </div>
 
                     {/* =========================================================
-                        MAIN ANALYTICS SECTION (CHART + SIDE PANEL)
+                        CHART + SKILLS SECTION (8-COL vs 4-COL LAYOUT)
                     ========================================================= */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
                         
-                        {/* Left Column (8 cols): Main Performance Line Chart */}
+                        {/* Left Column (8 cols): Performance Trend Chart + Recent Activities */}
                         <div className="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
                             
+                            {/* Performance Trend Chart Card */}
                             <div
-                                className={`glass-panel rounded-2xl p-6 lg:p-8 stagger-item ${
+                                className={`bg-white rounded-2xl p-6 lg:p-8 stagger-item ${
                                     animated ? 'fade-up delay-300' : ''
-                               } border border-[#334155] relative shadow-lg`}
+                                } border border-[#E8E4DC] shadow-sm`}
                             >
-                                {/* Chart Header with Range Selector */}
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <h3 className="font-['Hanken_Grotesk'] text-[20px] md:text-[22px] font-semibold text-[#E2E8F0]">
+                                            <h3 className="font-['Hanken_Grotesk'] text-[20px] md:text-[22px] font-semibold text-[#0F172A]">
                                                 Performance Trend
                                             </h3>
-                                            <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-[#1E293B] text-[#818cf8] border border-[#334155]">
+                                            <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-blue-50 text-blue-700 border border-blue-200 font-semibold">
                                                 Avg {TIME_RANGES[timeRange].avg}
                                             </span>
                                         </div>
-                                        <p className="font-['Inter'] text-[13px] text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-[13px] text-[#64748B] mt-0.5">
                                             Score trajectory & accuracy rate across simulated AI rounds
                                         </p>
                                     </div>
 
                                     {/* Time Range Pills */}
-                                    <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] self-start sm:self-auto">
+                                    <div className="flex items-center bg-[#F5F2EB] p-1 rounded-xl border border-[#E2DDD5] self-start sm:self-auto">
                                         {['7D', '30D', '3M', 'ALL'].map((rangeKey) => (
                                             <button
                                                 key={rangeKey}
@@ -520,8 +508,8 @@ const Dashboard = () => {
                                                 }}
                                                 className={`px-3 py-1.5 rounded-lg font-['JetBrains_Mono'] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
                                                     timeRange === rangeKey
-                                                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm'
-                                                        : 'text-[#c4c6cd] hover:text-[#E2E8F0] hover:bg-white/5'
+                                                        ? 'bg-blue-600 text-white shadow-sm'
+                                                        : 'text-[#64748B] hover:text-[#0F172A]'
                                                 }`}
                                             >
                                                 {rangeKey === 'ALL' ? 'All Time' : rangeKey}
@@ -538,33 +526,27 @@ const Dashboard = () => {
                                         viewBox="0 0 800 200"
                                     >
                                         {/* Horizontal Grid Lines */}
-                                        <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="30" y2="30" />
-                                        <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="75" y2="75" />
-                                        <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="120" y2="120" />
-                                        <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="165" y2="165" />
+                                        <line stroke="#ECE7DF" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="30" y2="30" />
+                                        <line stroke="#ECE7DF" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="75" y2="75" />
+                                        <line stroke="#ECE7DF" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="120" y2="120" />
+                                        <line stroke="#ECE7DF" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="165" y2="165" />
 
                                         {/* Benchmark Target Reference Line (85% Score = Y: 60) */}
-                                        <line stroke="rgba(129, 140, 248, 0.3)" strokeDasharray="4 4" strokeWidth="1.2" x1="30" x2="770" y1="60" y2="60" />
-                                        <text x="765" y="55" fill="rgba(129, 140, 248, 0.6)" fontSize="9" fontFamily="JetBrains Mono" textAnchor="end">
+                                        <line stroke="#93C5FD" strokeDasharray="4 4" strokeWidth="1.2" x1="30" x2="770" y1="60" y2="60" />
+                                        <text x="765" y="55" fill="#2563EB" fontSize="10" fontFamily="JetBrains Mono" fontWeight="600" textAnchor="end">
                                             Target: 85%
                                         </text>
 
                                         {/* Gradients */}
                                         <defs>
                                             <linearGradient id="mainChartGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                <stop offset="0%" stopColor="#6366f1" />
-                                                <stop offset="50%" stopColor="#818cf8" />
-                                                <stop offset="100%" stopColor="#c084fc" />
+                                                <stop offset="0%" stopColor="#2563EB" />
+                                                <stop offset="100%" stopColor="#1D4ED8" />
                                             </linearGradient>
                                             <linearGradient id="mainFillGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" stopColor="rgba(99, 102, 241, 0.35)" />
-                                                <stop offset="60%" stopColor="rgba(147, 51, 234, 0.08)" />
-                                                <stop offset="100%" stopColor="rgba(147, 51, 234, 0.0)" />
+                                                <stop offset="0%" stopColor="rgba(37, 99, 235, 0.14)" />
+                                                <stop offset="100%" stopColor="rgba(37, 99, 235, 0.0)" />
                                             </linearGradient>
-                                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                                <feGaussianBlur stdDeviation="3" result="blur" />
-                                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                            </filter>
                                         </defs>
 
                                         {/* Gradient Area Fill */}
@@ -584,7 +566,6 @@ const Dashboard = () => {
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             strokeWidth="3.5"
-                                            filter="url(#glow)"
                                             className="path-draw"
                                         />
 
@@ -604,7 +585,7 @@ const Dashboard = () => {
                                                         cx={pt.cx}
                                                         cy={pt.cy}
                                                         r={isSelected ? 12 : 7}
-                                                        fill="rgba(99, 102, 241, 0.2)"
+                                                        fill="rgba(37, 99, 235, 0.15)"
                                                         className="transition-all duration-200"
                                                     />
                                                     {/* Node Core */}
@@ -612,8 +593,8 @@ const Dashboard = () => {
                                                         cx={pt.cx}
                                                         cy={pt.cy}
                                                         r={isSelected ? 6 : 4.5}
-                                                        fill="#0F172A"
-                                                        stroke={isSelected ? '#c084fc' : '#818cf8'}
+                                                        fill="#FFFFFF"
+                                                        stroke="#2563EB"
                                                         strokeWidth="2.5"
                                                         className="transition-all duration-200"
                                                     />
@@ -627,32 +608,32 @@ const Dashboard = () => {
                                     {/* Rich Interactive Floating Tooltip */}
                                     {activePoint && (
                                         <div
-                                            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0F172A]/95 border border-[#818cf8]/50 px-4 py-2.5 rounded-xl text-xs font-['JetBrains_Mono'] shadow-2xl backdrop-blur-md pointer-events-none flex items-center gap-4 z-20 animate-in fade-in zoom-in-95 duration-150"
+                                            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white border border-[#E2DDD5] px-4 py-2.5 rounded-xl text-xs font-['JetBrains_Mono'] shadow-lg pointer-events-none flex items-center gap-4 z-20 animate-in fade-in zoom-in-95 duration-150"
                                         >
                                             <div className="flex flex-col">
-                                                <span className="text-[#c4c6cd] text-[11px]">{activePoint.date} • {activePoint.round}</span>
-                                                <span className="text-[#E2E8F0] font-bold text-sm">
-                                                    Score: <span className="text-emerald-400">{activePoint.score}%</span>
+                                                <span className="text-[#64748B] text-[11px]">{activePoint.date} • {activePoint.round}</span>
+                                                <span className="text-[#0F172A] font-bold text-sm">
+                                                    Score: <span className="text-emerald-600">{activePoint.score}%</span>
                                                 </span>
                                             </div>
-                                            <div className="h-6 w-px bg-[#334155]"></div>
+                                            <div className="h-6 w-px bg-[#E2DDD5]"></div>
                                             <div className="flex flex-col">
-                                                <span className="text-[#c4c6cd] text-[11px]">Accuracy</span>
-                                                <span className="text-[#818cf8] font-bold text-sm">{activePoint.accuracy}</span>
+                                                <span className="text-[#64748B] text-[11px]">Accuracy</span>
+                                                <span className="text-blue-600 font-bold text-sm">{activePoint.accuracy}</span>
                                             </div>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* X-Axis Labels */}
-                                <div className="flex justify-between mt-3 px-2 font-['JetBrains_Mono'] text-[12px] text-[#c4c6cd] border-t border-[#334155]/40 pt-2.5">
+                                <div className="flex justify-between mt-3 px-2 font-['JetBrains_Mono'] text-[12px] text-[#64748B] border-t border-[#ECE7DF] pt-2.5">
                                     {currentPoints.map((pt, idx) => (
                                         <span
                                             key={idx}
                                             className={`transition-colors ${
                                                 activePoint?.label === pt.label
-                                                    ? 'text-[#818cf8] font-bold'
-                                                    : 'hover:text-[#E2E8F0]'
+                                                    ? 'text-blue-600 font-bold'
+                                                    : 'hover:text-[#0F172A]'
                                             }`}
                                         >
                                             {pt.label}
@@ -665,30 +646,30 @@ const Dashboard = () => {
                                 RECENT ACTIVITY SECTION
                             ========================================================= */}
                             <div
-                                className={`glass-panel rounded-2xl p-6 lg:p-8 stagger-item ${
+                                className={`bg-white rounded-2xl p-6 lg:p-8 stagger-item ${
                                     animated ? 'fade-up delay-400' : ''
-                                } border border-[#334155] shadow-lg`}
+                                } border border-[#E8E4DC] shadow-sm`}
                             >
                                 <div className="flex justify-between items-center mb-5">
                                     <div>
-                                        <h3 className="font-['Hanken_Grotesk'] text-[20px] md:text-[22px] font-semibold text-[#E2E8F0]">
+                                        <h3 className="font-['Hanken_Grotesk'] text-[20px] md:text-[22px] font-semibold text-[#0F172A]">
                                             Recent Activity
                                         </h3>
-                                        <p className="font-['Inter'] text-[13px] text-[#c4c6cd] mt-0.5">
+                                        <p className="font-['Inter'] text-[13px] text-[#64748B] mt-0.5">
                                             Log of your latest simulated rounds and AI evaluations
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => navigate('/history')}
-                                            className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] hover:text-white px-3 py-1.5 rounded-lg border border-[#334155] hover:border-indigo-500/40 bg-[#0F172A] transition-all flex items-center gap-1 cursor-pointer"
+                                            className="text-xs font-['JetBrains_Mono'] text-[#475569] hover:text-[#0F172A] px-3 py-1.5 rounded-lg border border-[#E2DDD5] bg-[#F5F2EB] hover:bg-[#EAE5DC] transition-all flex items-center gap-1 cursor-pointer font-medium"
                                         >
                                             <span>View All</span>
                                             <span className="material-symbols-outlined text-[14px]">history</span>
                                         </button>
                                         <button
                                             onClick={() => navigate('/interview/setup')}
-                                            className="text-xs font-['JetBrains_Mono'] text-[#818cf8] hover:text-white px-3 py-1.5 rounded-lg border border-indigo-500/20 hover:border-indigo-500/50 bg-indigo-500/10 transition-all flex items-center gap-1 cursor-pointer"
+                                            className="text-xs font-['JetBrains_Mono'] text-blue-700 hover:text-blue-800 px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 transition-all flex items-center gap-1 cursor-pointer font-semibold"
                                         >
                                             <span>New Round</span>
                                             <span className="material-symbols-outlined text-[14px]">add</span>
@@ -703,25 +684,25 @@ const Dashboard = () => {
                                             onClick={() => navigate('/interview/setup')}
                                             onMouseEnter={() => setHoveredActivity(activity.id)}
                                             onMouseLeave={() => setHoveredActivity(null)}
-                                            className="p-4 rounded-xl bg-[#0F172A]/70 hover:bg-[#1E293B]/80 border border-[#334155] hover:border-[#818cf8]/40 transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                                            className="p-4 rounded-xl bg-[#FAF8F5] hover:bg-[#F5F2EB] border border-[#E8E4DC] hover:border-blue-300 transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                                         >
                                             {/* Role & Details */}
                                             <div className="flex items-start gap-3.5">
-                                                <div className="w-10 h-10 rounded-xl bg-[#1E293B] border border-[#334155] group-hover:border-indigo-500/40 flex items-center justify-center text-[#818cf8] shrink-0 transition-colors">
+                                                <div className="w-10 h-10 rounded-xl bg-white border border-[#E8E4DC] flex items-center justify-center text-blue-600 shrink-0 shadow-sm">
                                                     <span className="material-symbols-outlined text-[20px]">
                                                         {activity.type.includes('Technical') ? 'terminal' : activity.type.includes('System') ? 'hub' : 'psychology'}
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2 flex-wrap">
-                                                        <span className="font-['Hanken_Grotesk'] text-[15px] font-semibold text-[#E2E8F0] group-hover:text-white transition-colors">
+                                                        <span className="font-['Hanken_Grotesk'] text-[15px] font-semibold text-[#0F172A] group-hover:text-blue-600 transition-colors">
                                                             {activity.role}
                                                         </span>
-                                                        <span className="text-[11px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-[#171f33] text-[#818cf8] border border-indigo-500/20">
+                                                        <span className="text-[11px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-medium">
                                                             {activity.type}
                                                         </span>
                                                     </div>
-                                                    <div className="flex items-center gap-3 text-[12px] font-['Inter'] text-[#c4c6cd] mt-1">
+                                                    <div className="flex items-center gap-3 text-[12px] font-['Inter'] text-[#64748B] mt-1">
                                                         <span className="flex items-center gap-1">
                                                             <span className="material-symbols-outlined text-[14px]">schedule</span>
                                                             {activity.date}
@@ -735,25 +716,25 @@ const Dashboard = () => {
                                             {/* Score & Status */}
                                             <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 pl-13 sm:pl-0">
                                                 <div className="text-right">
-                                                    <div className="font-['Hanken_Grotesk'] text-[18px] font-bold text-emerald-400">
+                                                    <div className="font-['Hanken_Grotesk'] text-[18px] font-bold text-emerald-600">
                                                         {activity.score}%
                                                     </div>
-                                                    <div className="text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd]">
+                                                    <div className="text-[11px] font-['JetBrains_Mono'] text-[#64748B]">
                                                         Overall Score
                                                     </div>
                                                 </div>
                                                 <span
                                                     className={`px-2.5 py-1 rounded-full text-[11px] font-['JetBrains_Mono'] font-medium border ${
                                                         activity.score >= 85
-                                                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                             : activity.score >= 80
-                                                            ? 'bg-indigo-500/10 text-[#818cf8] border-indigo-500/20'
-                                                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                                                            ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                                            : 'bg-amber-50 text-amber-700 border-amber-200'
                                                     }`}
                                                 >
                                                     {activity.status}
                                                 </span>
-                                                <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all text-[18px]">
+                                                <span className="material-symbols-outlined text-[#94A3B8] group-hover:text-blue-600 group-hover:translate-x-1 transition-all text-[18px]">
                                                     chevron_right
                                                 </span>
                                             </div>
@@ -769,20 +750,20 @@ const Dashboard = () => {
                             
                             {/* Dynamic Spider / Radar Skill Breakdown Chart */}
                             <div
-                                className={`glass-panel rounded-2xl p-6 stagger-item ${
+                                className={`bg-white rounded-2xl p-6 stagger-item ${
                                     animated ? 'fade-up delay-400' : ''
-                                } flex flex-col border border-[#334155] shadow-lg`}
+                                } flex flex-col border border-[#E8E4DC] shadow-sm`}
                             >
                                 <div className="flex justify-between items-center mb-2">
                                     <div>
-                                        <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#E2E8F0]">
+                                        <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#0F172A]">
                                             Skill Breakdown
                                         </h3>
-                                        <p className="font-['Inter'] text-[12px] text-[#c4c6cd]">
+                                        <p className="font-['Inter'] text-[12px] text-[#64748B]">
                                             Multi-axis AI competency assessment
                                         </p>
                                     </div>
-                                    <span className="material-symbols-outlined text-[#818cf8] text-[20px]">
+                                    <span className="material-symbols-outlined text-blue-600 text-[20px]">
                                         radar
                                     </span>
                                 </div>
@@ -803,22 +784,22 @@ const Dashboard = () => {
                                                 <polygon
                                                     key={level}
                                                     points={pts}
-                                                    fill={level === 100 ? 'rgba(30, 41, 59, 0.25)' : 'none'}
-                                                    stroke="rgba(255, 255, 255, 0.08)"
-                                                    strokeWidth={level === 100 ? '1.2' : '0.8'}
+                                                    fill={level === 100 ? 'rgba(245, 242, 235, 0.4)' : 'none'}
+                                                    stroke="#E8E4DC"
+                                                    strokeWidth="1"
                                                 />
                                             )
                                         })}
 
                                         {/* Web Axes Lines */}
-                                        <line x1={radarCenter.x} y1={radarCenter.y - radarMaxRadius} x2={radarCenter.x} y2={radarCenter.y + radarMaxRadius} stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" />
-                                        <line x1={radarCenter.x - radarMaxRadius} y1={radarCenter.y} x2={radarCenter.x + radarMaxRadius} y2={radarCenter.y} stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" />
+                                        <line x1={radarCenter.x} y1={radarCenter.y - radarMaxRadius} x2={radarCenter.x} y2={radarCenter.y + radarMaxRadius} stroke="#E8E4DC" strokeWidth="1" />
+                                        <line x1={radarCenter.x - radarMaxRadius} y1={radarCenter.y} x2={radarCenter.x + radarMaxRadius} y2={radarCenter.y} stroke="#E8E4DC" strokeWidth="1" />
 
                                         {/* Filled Data Polygon */}
                                         <polygon
                                             points={radarPolyPoints}
-                                            fill="rgba(99, 102, 241, 0.25)"
-                                            stroke="#818cf8"
+                                            fill="rgba(37, 99, 235, 0.14)"
+                                            stroke="#2563EB"
                                             strokeWidth="2"
                                             className="path-draw"
                                         />
@@ -838,8 +819,8 @@ const Dashboard = () => {
                                                         cx={coords.x}
                                                         cy={coords.y}
                                                         r={isHovered ? 6 : 4}
-                                                        fill="#0F172A"
-                                                        stroke="#c084fc"
+                                                        fill="#FFFFFF"
+                                                        stroke="#2563EB"
                                                         strokeWidth="2"
                                                         className="transition-all duration-200"
                                                     />
@@ -848,39 +829,39 @@ const Dashboard = () => {
                                         })}
 
                                         {/* Radar Axis Labels */}
-                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="middle" x="110" y="24">
+                                        <text fill="#0F172A" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="middle" x="110" y="24">
                                             Technical (92%)
                                         </text>
-                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="start" x="188" y="113">
+                                        <text fill="#0F172A" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="start" x="188" y="113">
                                             Comm (85%)
                                         </text>
-                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="middle" x="110" y="202">
+                                        <text fill="#0F172A" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="middle" x="110" y="202">
                                             Confidence (78%)
                                         </text>
-                                        <text fill="#E2E8F0" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="end" x="32" y="113">
+                                        <text fill="#0F172A" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" textAnchor="end" x="32" y="113">
                                             Logic (88%)
                                         </text>
                                     </svg>
                                 </div>
 
                                 {/* Detailed Skill Breakdown Progress Bars */}
-                                <div className="flex flex-col gap-2.5 mt-2 pt-3 border-t border-[#334155]/60">
+                                <div className="flex flex-col gap-2.5 mt-2 pt-3 border-t border-[#E8E4DC]">
                                     {SKILLS_DATA.map((skill) => (
                                         <div
                                             key={skill.key}
                                             onMouseEnter={() => setHoveredSkill(skill)}
                                             onMouseLeave={() => setHoveredSkill(null)}
                                             className={`p-2 rounded-lg transition-colors ${
-                                                hoveredSkill?.key === skill.key ? 'bg-[#1E293B]/80' : ''
+                                                hoveredSkill?.key === skill.key ? 'bg-[#F5F2EB]' : ''
                                             }`}
                                         >
                                             <div className="flex justify-between items-center text-xs font-['JetBrains_Mono'] mb-1">
-                                                <span className="text-[#c4c6cd]">{skill.name}</span>
-                                                <span className="text-[#818cf8] font-bold">{skill.score}%</span>
+                                                <span className="text-[#475569]">{skill.name}</span>
+                                                <span className="text-blue-600 font-bold">{skill.score}%</span>
                                             </div>
-                                            <div className="w-full h-1.5 bg-[#020617] rounded-full overflow-hidden">
+                                            <div className="w-full h-1.5 bg-[#EAE5DC] rounded-full overflow-hidden">
                                                 <div
-                                                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
+                                                    className="h-full bg-blue-600 rounded-full transition-all duration-700"
                                                     style={{ width: `${skill.score}%` }}
                                                 ></div>
                                             </div>
@@ -891,15 +872,15 @@ const Dashboard = () => {
 
                             {/* Quick Actions Card */}
                             <div
-                                className={`glass-panel rounded-2xl p-6 stagger-item ${
+                                className={`bg-white rounded-2xl p-6 stagger-item ${
                                     animated ? 'fade-up delay-500' : ''
-                                } border border-[#334155] shadow-lg`}
+                                } border border-[#E8E4DC] shadow-sm`}
                             >
                                 <div className="flex justify-between items-center mb-4">
-                                    <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#E2E8F0]">
+                                    <h3 className="font-['Hanken_Grotesk'] text-[20px] font-semibold text-[#0F172A]">
                                         Quick Actions
                                     </h3>
-                                    <span className="material-symbols-outlined text-[#c4c6cd] text-[18px]">
+                                    <span className="material-symbols-outlined text-[#64748B] text-[18px]">
                                         bolt
                                     </span>
                                 </div>
@@ -908,62 +889,62 @@ const Dashboard = () => {
                                     {/* Action 1: Start New Interview */}
                                     <button
                                         onClick={() => navigate('/interview/setup')}
-                                        className="w-full bg-gradient-to-r from-[#1E293B] to-[#0F172A] hover:from-[#2d3748] hover:to-[#1a202c] border border-[#334155] hover:border-indigo-500/50 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200 shadow-sm"
+                                        className="w-full bg-[#FAF8F5] hover:bg-[#F5F2EB] border border-[#E8E4DC] hover:border-blue-300 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200"
                                     >
-                                        <div className="flex items-center gap-3 text-[#E2E8F0]">
-                                            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-[#818cf8] group-hover:scale-110 transition-transform">
+                                        <div className="flex items-center gap-3 text-[#0F172A]">
+                                            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform">
                                                 <span className="material-symbols-outlined text-[18px]">
                                                     play_circle
                                                 </span>
                                             </div>
                                             <div className="text-left">
-                                                <div className="font-bold text-[#E2E8F0]">Start New Interview</div>
-                                                <div className="text-[11px] text-[#c4c6cd] font-['Inter']">Launch full simulation</div>
+                                                <div className="font-bold text-[#0F172A]">Start New Interview</div>
+                                                <div className="text-[11px] text-[#64748B] font-['Inter']">Launch full simulation</div>
                                             </div>
                                         </div>
-                                        <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all">
+                                        <span className="material-symbols-outlined text-[#94A3B8] group-hover:text-blue-600 group-hover:translate-x-1 transition-all">
                                             arrow_forward
                                         </span>
                                     </button>
 
                                     {/* Action 2: Practice Questions */}
                                     <button
-                                        onClick={() => navigate('/interview/setup')}
-                                        className="w-full bg-[#0F172A] hover:bg-[#1E293B] border border-[#334155] hover:border-purple-500/50 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200"
+                                        onClick={() => navigate('/practice')}
+                                        className="w-full bg-[#FAF8F5] hover:bg-[#F5F2EB] border border-[#E8E4DC] hover:border-blue-300 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200"
                                     >
-                                        <div className="flex items-center gap-3 text-[#E2E8F0]">
-                                            <div className="w-8 h-8 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                                        <div className="flex items-center gap-3 text-[#0F172A]">
+                                            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform">
                                                 <span className="material-symbols-outlined text-[18px]">
                                                     model_training
                                                 </span>
                                             </div>
                                             <div className="text-left">
-                                                <div className="font-bold text-[#E2E8F0]">Practice Questions</div>
-                                                <div className="text-[11px] text-[#c4c6cd] font-['Inter']">Drill role-specific prompts</div>
+                                                <div className="font-bold text-[#0F172A]">Practice Questions</div>
+                                                <div className="text-[11px] text-[#64748B] font-['Inter']">Drill role-specific prompts</div>
                                             </div>
                                         </div>
-                                        <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all">
+                                        <span className="material-symbols-outlined text-[#94A3B8] group-hover:text-blue-600 group-hover:translate-x-1 transition-all">
                                             arrow_forward
                                         </span>
                                     </button>
 
                                     {/* Action 3: Analyze Resume */}
                                     <button
-                                        onClick={() => navigate('/interview/setup')}
-                                        className="w-full bg-[#0F172A] hover:bg-[#1E293B] border border-[#334155] hover:border-blue-500/50 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200"
+                                        onClick={() => navigate('/resume')}
+                                        className="w-full bg-[#FAF8F5] hover:bg-[#F5F2EB] border border-[#E8E4DC] hover:border-blue-300 rounded-xl p-3.5 font-['JetBrains_Mono'] text-[13px] flex items-center justify-between group cursor-pointer transition-all duration-200"
                                     >
-                                        <div className="flex items-center gap-3 text-[#E2E8F0]">
-                                            <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                        <div className="flex items-center gap-3 text-[#0F172A]">
+                                            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform">
                                                 <span className="material-symbols-outlined text-[18px]">
                                                     upload_file
                                                 </span>
                                             </div>
                                             <div className="text-left">
-                                                <div className="font-bold text-[#E2E8F0]">Analyze Resume</div>
-                                                <div className="text-[11px] text-[#c4c6cd] font-['Inter']">Tailor rounds to your CV</div>
+                                                <div className="font-bold text-[#0F172A]">Analyze Resume</div>
+                                                <div className="text-[11px] text-[#64748B] font-['Inter']">Tailor rounds to your CV</div>
                                             </div>
                                         </div>
-                                        <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all">
+                                        <span className="material-symbols-outlined text-[#94A3B8] group-hover:text-blue-600 group-hover:translate-x-1 transition-all">
                                             arrow_forward
                                         </span>
                                     </button>
@@ -976,22 +957,22 @@ const Dashboard = () => {
             </main>
 
             {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-0 w-full bg-[#0F172A]/95 backdrop-blur-xl border-t border-[#334155] flex justify-around items-center py-3 px-4 z-50">
-                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#818cf8]">
+            <nav className="md:hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#E8E4DC] flex justify-around items-center py-3 px-4 z-50">
+                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-blue-600">
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                         dashboard
                     </span>
-                    <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
+                    <span className="text-[10px] font-['JetBrains_Mono'] font-bold">Overview</span>
                 </button>
-                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">history</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">History</span>
                 </button>
-                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/practice')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">psychology</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Practice</span>
                 </button>
-                <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">home</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Home</span>
                 </button>

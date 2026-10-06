@@ -30,17 +30,17 @@ export const Navbar = () => {
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
                 {/* Brand Logo */}
                 <Link to="/" className="flex items-center gap-3 group">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-cyan-500 text-white shadow-md shadow-primary/25 transition-transform group-hover:scale-105">
-                        <Sparkles className="h-5 w-5 animate-pulse" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition-transform group-hover:scale-105">
+                        <Sparkles className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-base font-bold leading-tight tracking-tight text-foreground flex items-center gap-1.5">
+                        <span className="text-base font-bold leading-tight tracking-tight text-[#0F172A] flex items-center gap-1.5">
                             Interview AI
-                            <span className="inline-flex items-center rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                            <span className="inline-flex items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-200">
                                 PRO
                             </span>
                         </span>
-                        <span className="text-xs text-muted-foreground font-medium">Smart Role Strategist</span>
+                        <span className="text-xs text-[#64748B] font-medium">Smart Role Strategist</span>
                     </div>
                 </Link>
 

@@ -32,10 +32,10 @@ const TIMELINE_DATA = {
 }
 
 const FILLER_BREAKDOWN = [
-    { word: 'um / uh', count: 14, percentage: 42, color: '#818cf8' },
-    { word: 'like', count: 9, percentage: 28, color: '#c084fc' },
-    { word: 'you know', count: 6, percentage: 18, color: '#60a5fa' },
-    { word: 'basically / actually', count: 4, percentage: 12, color: '#34d399' }
+    { word: 'um / uh', count: 14, percentage: 42, color: '#2563EB' },
+    { word: 'like', count: 9, percentage: 28, color: '#3B82F6' },
+    { word: 'you know', count: 6, percentage: 18, color: '#60A5FA' },
+    { word: 'basically / actually', count: 4, percentage: 12, color: '#93C5FD' }
 ]
 
 const SKILLS_IMPROVING = [
@@ -216,18 +216,18 @@ export const Analytics = () => {
     }, [currentTimeline])
 
     return (
-        <div className="bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-[#b8c8e0] selection:text-[#223144]">
+        <div className="bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-blue-100 selection:text-blue-900">
             {/* Mobile Top Header */}
-            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
-                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#E2E8F0] cursor-pointer flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center text-white text-base font-bold shadow-md shadow-indigo-500/30">
+            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-[#E8E4DC] shadow-sm">
+                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#0F172A] cursor-pointer flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white text-base font-bold shadow-sm shadow-blue-500/20">
                         AI
                     </span>
                     Interview AI
                 </div>
                 <button
                     onClick={() => navigate('/interview/setup')}
-                    className="p-2 text-[#dae2fd] hover:text-[#b8c8e0] transition-colors"
+                    className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors"
                 >
                     <span className="material-symbols-outlined text-[24px]">add_circle</span>
                 </button>
@@ -237,30 +237,29 @@ export const Analytics = () => {
             <SlateSidebar />
 
             {/* Main Content Area */}
-            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12">
-                <div className="scanline"></div>
+            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12 bg-[#FAF8F5]">
 
                 {/* Top Desktop Bar */}
-                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#334155] bg-[#0b1326]/80 backdrop-blur-md sticky top-0 z-30">
+                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#E8E4DC] bg-white/80 backdrop-blur-md sticky top-0 z-30">
                     <div className="flex items-center gap-3">
-                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                             AI Performance Intelligence
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-indigo-500/10 text-[#818cf8] border border-indigo-500/20">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-blue-50 text-[#2563EB] border border-blue-200 font-medium">
                             Telemetry Active • Real-Time Diagnostics
                         </span>
                     </div>
 
                     {/* Time Range Filter Header */}
-                    <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155]">
+                    <div className="flex items-center bg-[#FAF8F5] p-1 rounded-xl border border-[#E8E4DC]">
                         {['7D', '30D', '3M', 'ALL'].map((r) => (
                             <button
                                 key={r}
                                 onClick={() => setTimeRange(r)}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-['JetBrains_Mono'] font-semibold transition-all cursor-pointer ${
                                     timeRange === r
-                                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm'
-                                        : 'text-[#c4c6cd] hover:text-white'
+                                        ? 'bg-[#2563EB] text-white shadow-sm'
+                                        : 'text-[#64748B] hover:text-[#0F172A]'
                                 }`}
                             >
                                 {r === 'ALL' ? 'All Time' : r}
@@ -276,34 +275,34 @@ export const Analytics = () => {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="material-symbols-outlined text-[#818cf8] text-[18px]">query_stats</span>
-                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#818cf8] font-bold">
+                                <span className="material-symbols-outlined text-[#2563EB] text-[18px]">query_stats</span>
+                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#2563EB] font-bold">
                                     Deep Diagnostics & Rubric Analysis
                                 </span>
                             </div>
-                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#E2E8F0] font-bold tracking-tight">
+                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#0F172A] font-bold tracking-tight">
                                 Performance Intelligence
                             </h2>
-                            <p className="font-['Inter'] text-[15px] text-[#c4c6cd] mt-0.5">
+                            <p className="font-['Inter'] text-[15px] text-[#64748B] mt-0.5">
                                 Multi-dimensional evaluation of delivery cadence, acoustic clarity, algorithmic rigor, and peer percentiles.
                             </p>
                         </div>
 
                         {/* Top Readiness Index Card */}
-                        <div className="flex items-center gap-4 bg-[#0F172A] border border-[#334155] px-5 py-3 rounded-2xl shadow-lg self-start md:self-auto">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold font-['Hanken_Grotesk'] text-xl shadow-md shadow-indigo-500/30">
+                        <div className="flex items-center gap-4 bg-white border border-[#E8E4DC] px-5 py-3 rounded-2xl shadow-sm self-start md:self-auto">
+                            <div className="w-12 h-12 rounded-xl bg-[#2563EB] flex items-center justify-center text-white font-bold font-['Hanken_Grotesk'] text-xl shadow-sm">
                                 88%
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                    <span className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                         Readiness Score
                                     </span>
-                                    <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-semibold">
+                                    <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-semibold">
                                         +12% mo
                                     </span>
                                 </div>
-                                <span className="text-xs font-['Inter'] text-[#c4c6cd]">
+                                <span className="text-xs font-['Inter'] text-[#64748B]">
                                     Ready for L5/L6 Senior Tech Rounds
                                 </span>
                             </div>
@@ -313,27 +312,24 @@ export const Analytics = () => {
                     {/* =========================================================
                         HIGHLIGHTED AI INSIGHT CARD
                     ========================================================= */}
-                    <div className="glass-modal rounded-2xl p-6 lg:p-7 border border-[#334155] relative overflow-hidden group shadow-xl">
-                        {/* Ambient glow backdrop */}
-                        <div className="absolute -right-20 -top-20 w-80 h-80 bg-gradient-to-br from-indigo-600/25 via-purple-600/20 to-transparent blur-[80px] rounded-full pointer-events-none group-hover:from-indigo-600/35 transition-all duration-700"></div>
-
+                    <div className="bg-white rounded-2xl p-6 lg:p-7 border border-[#E8E4DC] relative overflow-hidden shadow-sm">
                         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                             <div className="flex items-start gap-4 max-w-3xl">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-950/80 border border-indigo-500/40 flex items-center justify-center text-[#818cf8] shrink-0 shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB] shrink-0 shadow-sm">
                                     <span className="material-symbols-outlined text-[26px]">auto_awesome</span>
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-['JetBrains_Mono'] text-xs font-bold text-[#818cf8] uppercase tracking-wider">
+                                        <span className="font-['JetBrains_Mono'] text-xs font-bold text-[#2563EB] uppercase tracking-wider">
                                             AI Predictive Intelligence
                                         </span>
-                                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">High Impact Opportunity</span>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">High Impact Opportunity</span>
                                     </div>
-                                    <h3 className="font-['Hanken_Grotesk'] text-[18px] md:text-[20px] font-bold text-[#E2E8F0] leading-snug">
-                                        "Based on your last 10 interviews, improving your system design explanations could increase your average score by approximately <strong className="text-emerald-400">8–12%</strong>."
+                                    <h3 className="font-['Hanken_Grotesk'] text-[18px] md:text-[20px] font-bold text-[#0F172A] leading-snug">
+                                        "Based on your last 10 interviews, improving your system design explanations could increase your average score by approximately <strong className="text-[#2563EB]">8–12%</strong>."
                                     </h3>
-                                    <p className="font-['Inter'] text-xs md:text-sm text-[#c4c6cd] mt-2 leading-relaxed">
+                                    <p className="font-['Inter'] text-xs md:text-sm text-[#64748B] mt-2 leading-relaxed">
                                         Your technical fundamentals in React and asynchronous concurrency are already in the top 8th percentile. Focusing revision on database isolation and replication trade-offs will bridge your remaining gap to Staff level.
                                     </p>
                                 </div>
@@ -341,10 +337,10 @@ export const Analytics = () => {
 
                             <button
                                 onClick={() => navigate('/interview/setup')}
-                                className="group relative overflow-hidden rounded-xl px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shrink-0 cursor-pointer"
+                                className="btn-primary rounded-xl px-6 py-3.5 font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2.5 shadow-sm shrink-0 cursor-pointer"
                             >
                                 <span>Target System Design Drill</span>
-                                <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
+                                <span className="material-symbols-outlined text-[16px]">
                                     arrow_forward
                                 </span>
                             </button>
@@ -354,13 +350,13 @@ export const Analytics = () => {
                     {/* =========================================================
                         PRIMARY NAVIGATION TABS
                     ========================================================= */}
-                    <div className="flex items-center border-b border-[#334155] gap-2 overflow-x-auto scrollbar-none">
+                    <div className="flex items-center border-b border-[#E8E4DC] gap-2 overflow-x-auto scrollbar-none">
                         <button
                             onClick={() => setActiveTab('speech')}
                             className={`py-3.5 px-5 font-['Hanken_Grotesk'] text-[15px] font-bold flex items-center gap-2.5 border-b-2 transition-all cursor-pointer ${
                                 activeTab === 'speech'
-                                    ? 'text-[#818cf8] border-[#818cf8] bg-indigo-500/5'
-                                    : 'text-[#c4c6cd] border-transparent hover:text-white'
+                                    ? 'text-[#2563EB] border-[#2563EB] bg-blue-50/50'
+                                    : 'text-[#64748B] border-transparent hover:text-[#0F172A]'
                             }`}
                         >
                             <span className="material-symbols-outlined text-[20px]">mic</span>
@@ -371,8 +367,8 @@ export const Analytics = () => {
                             onClick={() => setActiveTab('technical')}
                             className={`py-3.5 px-5 font-['Hanken_Grotesk'] text-[15px] font-bold flex items-center gap-2.5 border-b-2 transition-all cursor-pointer ${
                                 activeTab === 'technical'
-                                    ? 'text-[#818cf8] border-[#818cf8] bg-indigo-500/5'
-                                    : 'text-[#c4c6cd] border-transparent hover:text-white'
+                                    ? 'text-[#2563EB] border-[#2563EB] bg-blue-50/50'
+                                    : 'text-[#64748B] border-transparent hover:text-[#0F172A]'
                             }`}
                         >
                             <span className="material-symbols-outlined text-[20px]">terminal</span>
@@ -390,65 +386,65 @@ export const Analytics = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
                                 
                                 {/* Filler Words per Minute */}
-                                <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-indigo-500/40 hover:-translate-y-0.5 transition-all">
+                                <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 transition-all shadow-sm">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">Filler Words / Min</span>
-                                        <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">Filler Words / Min</span>
+                                        <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">
                                             -32% (Improved)
                                         </span>
                                     </div>
-                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-[#E2E8F0]">
-                                        1.8 <span className="text-base text-[#c4c6cd] font-normal">WPM</span>
+                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-[#0F172A]">
+                                        1.8 <span className="text-base text-[#64748B] font-normal">WPM</span>
                                     </div>
-                                    <p className="text-xs font-['Inter'] text-[#c4c6cd]/80 mt-1.5">
+                                    <p className="text-xs font-['Inter'] text-[#64748B] mt-1.5">
                                         Down from 2.6 WPM baseline (Target: &lt; 2.0)
                                     </p>
                                 </div>
 
                                 {/* Speaking Pace */}
-                                <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-purple-500/40 hover:-translate-y-0.5 transition-all">
+                                <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 transition-all shadow-sm">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">Speaking Pace</span>
-                                        <span className="text-[11px] font-['JetBrains_Mono'] text-[#818cf8] bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20 font-bold">
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">Speaking Pace</span>
+                                        <span className="text-[11px] font-['JetBrains_Mono'] text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-bold">
                                             Sweet Spot
                                         </span>
                                     </div>
-                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-[#818cf8]">
-                                        138 <span className="text-base text-[#c4c6cd] font-normal">WPM</span>
+                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-[#2563EB]">
+                                        138 <span className="text-base text-[#64748B] font-normal">WPM</span>
                                     </div>
-                                    <p className="text-xs font-['Inter'] text-[#c4c6cd]/80 mt-1.5">
+                                    <p className="text-xs font-['Inter'] text-[#64748B] mt-1.5">
                                         Ideal conversational range: 130–150 WPM
                                     </p>
                                 </div>
 
                                 {/* Response Length */}
-                                <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-blue-500/40 hover:-translate-y-0.5 transition-all">
+                                <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 transition-all shadow-sm">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">Avg Response Length</span>
-                                        <span className="text-[11px] font-['JetBrains_Mono'] text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 font-bold">
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">Avg Response Length</span>
+                                        <span className="text-[11px] font-['JetBrains_Mono'] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-bold">
                                             STAR Adherent
                                         </span>
                                     </div>
-                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-blue-400">
+                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-blue-600">
                                         2m 14s
                                     </div>
-                                    <p className="text-xs font-['Inter'] text-[#c4c6cd]/80 mt-1.5">
+                                    <p className="text-xs font-['Inter'] text-[#64748B] mt-1.5">
                                         Target concise range: 1.5m to 3.0m
                                     </p>
                                 </div>
 
                                 {/* Pause Frequency & Cadence */}
-                                <div className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all">
+                                <div className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 transition-all shadow-sm">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">Pause Frequency</span>
-                                        <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">
+                                        <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">Pause Frequency</span>
+                                        <span className="text-[11px] font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">
                                             Natural
                                         </span>
                                     </div>
-                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-emerald-400">
-                                        2.1s <span className="text-base text-[#c4c6cd] font-normal">avg pause</span>
+                                    <div className="font-['Hanken_Grotesk'] text-3xl font-bold text-emerald-600">
+                                        2.1s <span className="text-base text-[#64748B] font-normal">avg pause</span>
                                     </div>
-                                    <p className="text-xs font-['Inter'] text-[#c4c6cd]/80 mt-1.5">
+                                    <p className="text-xs font-['Inter'] text-[#64748B] mt-1.5">
                                         Zero awkward dead air (&gt;5s) detected
                                     </p>
                                 </div>
@@ -463,20 +459,20 @@ export const Analytics = () => {
                                     <div>
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                                             <div>
-                                                <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                                <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                                     Fluency Progression & Delivery Confidence
                                                 </h4>
-                                                <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5">
+                                                <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5">
                                                     Confidence climb vs. filler reduction across simulated rounds
                                                 </p>
                                             </div>
                                             <div className="flex items-center gap-3 text-xs font-['JetBrains_Mono']">
-                                                <span className="flex items-center gap-1.5 text-[#818cf8]">
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-[#818cf8]"></span>
+                                                <span className="flex items-center gap-1.5 text-[#2563EB] font-medium">
+                                                    <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]"></span>
                                                     Confidence %
                                                 </span>
-                                                <span className="flex items-center gap-1.5 text-emerald-400">
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                                <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
+                                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                                                     Fluency (Inverted Filler)
                                                 </span>
                                             </div>
@@ -486,14 +482,14 @@ export const Analytics = () => {
                                         <div className="h-64 w-full relative">
                                             <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 200">
                                                 {/* Grid Lines */}
-                                                <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="30" y2="30" />
-                                                <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="80" y2="80" />
-                                                <line stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="130" y2="130" />
+                                                <line stroke="#E8E4DC" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="30" y2="30" />
+                                                <line stroke="#E8E4DC" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="80" y2="80" />
+                                                <line stroke="#E8E4DC" strokeDasharray="3 3" strokeWidth="1" x1="30" x2="770" y1="130" y2="130" />
 
                                                 <defs>
                                                     <linearGradient id="scoreFillGrad" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="0%" stopColor="rgba(99, 102, 241, 0.3)" />
-                                                        <stop offset="100%" stopColor="rgba(99, 102, 241, 0.0)" />
+                                                        <stop offset="0%" stopColor="rgba(37, 99, 235, 0.15)" />
+                                                        <stop offset="100%" stopColor="rgba(37, 99, 235, 0.0)" />
                                                     </linearGradient>
                                                 </defs>
 
@@ -504,7 +500,7 @@ export const Analytics = () => {
                                                 <path
                                                     d={chartPaths.scoreLine}
                                                     fill="none"
-                                                    stroke="#818cf8"
+                                                    stroke="#2563EB"
                                                     strokeWidth="3"
                                                     strokeLinecap="round"
                                                     className="path-draw"
@@ -514,7 +510,7 @@ export const Analytics = () => {
                                                 <path
                                                     d={chartPaths.fillerLine}
                                                     fill="none"
-                                                    stroke="#34d399"
+                                                    stroke="#10B981"
                                                     strokeWidth="2.5"
                                                     strokeDasharray="4 4"
                                                     strokeLinecap="round"
@@ -532,8 +528,8 @@ export const Analytics = () => {
                                                             cx={pt.x}
                                                             cy={pt.yScore}
                                                             r={hoveredPoint?.label === pt.label ? 7 : 4.5}
-                                                            fill="#0F172A"
-                                                            stroke="#818cf8"
+                                                            fill="#FFFFFF"
+                                                            stroke="#2563EB"
                                                             strokeWidth="2.5"
                                                             className="transition-all duration-150"
                                                         />
@@ -543,15 +539,15 @@ export const Analytics = () => {
 
                                             {/* Hover Tooltip */}
                                             {hoveredPoint && (
-                                                <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-[#0F172A]/95 border border-[#818cf8]/50 px-4 py-2 rounded-xl text-xs font-['JetBrains_Mono'] shadow-xl backdrop-blur-md pointer-events-none flex items-center gap-4 z-20">
+                                                <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-white border border-[#E8E4DC] px-4 py-2 rounded-xl text-xs font-['JetBrains_Mono'] shadow-xl backdrop-blur-md pointer-events-none flex items-center gap-4 z-20">
                                                     <div>
-                                                        <span className="text-[#c4c6cd]">{hoveredPoint.date}: </span>
-                                                        <span className="text-[#818cf8] font-bold">{hoveredPoint.confidence}% Confidence</span>
+                                                        <span className="text-[#64748B]">{hoveredPoint.date}: </span>
+                                                        <span className="text-[#2563EB] font-bold">{hoveredPoint.confidence}% Confidence</span>
                                                     </div>
-                                                    <div className="h-4 w-px bg-[#334155]"></div>
+                                                    <div className="h-4 w-px bg-[#E8E4DC]"></div>
                                                     <div>
-                                                        <span className="text-[#c4c6cd]">Filler: </span>
-                                                        <span className="text-emerald-400 font-bold">{hoveredPoint.fillerWpm} WPM</span>
+                                                        <span className="text-[#64748B]">Filler: </span>
+                                                        <span className="text-emerald-600 font-bold">{hoveredPoint.fillerWpm} WPM</span>
                                                     </div>
                                                 </div>
                                             )}
@@ -559,7 +555,7 @@ export const Analytics = () => {
                                     </div>
 
                                     {/* X-axis Labels */}
-                                    <div className="flex justify-between font-['JetBrains_Mono'] text-xs text-[#c4c6cd] pt-2 border-t border-[#334155]/60 px-2">
+                                    <div className="flex justify-between font-['JetBrains_Mono'] text-xs text-[#64748B] pt-2 border-t border-[#E8E4DC] px-2">
                                         {chartPaths.coords.map((pt, idx) => (
                                             <span key={idx}>{pt.label}</span>
                                         ))}
@@ -570,20 +566,20 @@ export const Analytics = () => {
                                 <div className="lg:col-span-4 flex flex-col gap-6">
                                     
                                     {/* Filler Breakdown */}
-                                    <div className="glass-panel rounded-2xl p-6 border border-[#334155] shadow-lg">
-                                        <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0] mb-3 flex items-center justify-between">
+                                    <div className="bg-white rounded-2xl p-6 border border-[#E8E4DC] shadow-sm">
+                                        <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A] mb-3 flex items-center justify-between">
                                             <span>Filler Word Breakdown</span>
-                                            <span className="text-xs font-['JetBrains_Mono'] text-[#818cf8]">33 Total Logged</span>
+                                            <span className="text-xs font-['JetBrains_Mono'] text-[#2563EB] font-semibold">33 Total Logged</span>
                                         </h4>
 
                                         <div className="flex flex-col gap-3">
                                             {FILLER_BREAKDOWN.map((item, i) => (
                                                 <div key={i} className="flex flex-col gap-1">
                                                     <div className="flex justify-between text-xs font-['JetBrains_Mono']">
-                                                        <span className="text-[#E2E8F0]">"{item.word}"</span>
-                                                        <span className="text-[#c4c6cd]">{item.count}x ({item.percentage}%)</span>
+                                                        <span className="text-[#0F172A]">"{item.word}"</span>
+                                                        <span className="text-[#64748B]">{item.count}x ({item.percentage}%)</span>
                                                     </div>
-                                                    <div className="w-full h-2 bg-[#020617] rounded-full overflow-hidden">
+                                                    <div className="w-full h-2 bg-[#F5F2EB] rounded-full overflow-hidden">
                                                         <div
                                                             className="h-full rounded-full transition-all duration-700"
                                                             style={{ width: `${item.percentage}%`, backgroundColor: item.color }}
@@ -595,20 +591,20 @@ export const Analytics = () => {
                                     </div>
 
                                     {/* Tone & Emotion Spectrum */}
-                                    <div className="glass-panel rounded-2xl p-6 border border-[#334155] shadow-lg">
-                                        <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0] mb-3">
+                                    <div className="bg-white rounded-2xl p-6 border border-[#E8E4DC] shadow-sm">
+                                        <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A] mb-3">
                                             Tone & Acoustic Analysis
                                         </h4>
 
                                         <div className="flex flex-col gap-2.5 text-xs font-['JetBrains_Mono']">
                                             {[
-                                                { trait: 'Confidence & Assertiveness', score: 88, color: 'text-indigo-400' },
-                                                { trait: 'Engagement & Energy', score: 84, color: 'text-purple-400' },
-                                                { trait: 'Composure Under Stress', score: 82, color: 'text-blue-400' },
-                                                { trait: 'Enunciation & Clarity', score: 91, color: 'text-emerald-400' }
+                                                { trait: 'Confidence & Assertiveness', score: 88, color: 'text-blue-600' },
+                                                { trait: 'Engagement & Energy', score: 84, color: 'text-blue-500' },
+                                                { trait: 'Composure Under Stress', score: 82, color: 'text-blue-700' },
+                                                { trait: 'Enunciation & Clarity', score: 91, color: 'text-emerald-600' }
                                             ].map((t, i) => (
-                                                <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-[#0F172A] border border-[#334155]">
-                                                    <span className="text-[#c4c6cd]">{t.trait}</span>
+                                                <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-[#FAF8F5] border border-[#E8E4DC]">
+                                                    <span className="text-[#475569]">{t.trait}</span>
                                                     <span className={`font-bold ${t.color}`}>{t.score}%</span>
                                                 </div>
                                             ))}
@@ -633,30 +629,30 @@ export const Analytics = () => {
                                 
                                 {[
                                     { title: 'Keyword & Terminology Coverage', score: 94, subtitle: 'Senior L5/L6 Rubric Match', icon: 'spellcheck', color: 'emerald' },
-                                    { title: 'Technical Concept Accuracy', score: 89, subtitle: 'Algorithmic Invariants & Proofs', icon: 'verified', color: 'indigo' },
-                                    { title: 'Problem Solving & Decomposition', score: 91, subtitle: 'STAR Framework Compliance', icon: 'account_tree', color: 'purple' },
+                                    { title: 'Technical Concept Accuracy', score: 89, subtitle: 'Algorithmic Invariants & Proofs', icon: 'verified', color: 'blue' },
+                                    { title: 'Problem Solving & Decomposition', score: 91, subtitle: 'STAR Framework Compliance', icon: 'account_tree', color: 'blue' },
                                     { title: 'Algorithm Explanation Quality', score: 86, subtitle: 'Time & Space Complexity Articulation', icon: 'data_object', color: 'blue' },
                                     { title: 'System Design Understanding', score: 84, subtitle: 'Distributed Primitives & CAP', icon: 'hub', color: 'amber' },
-                                    { title: 'Answer Structure & Synthesis', score: 88, subtitle: 'Clear Executive Conclusion', icon: 'view_agenda', color: 'indigo' }
+                                    { title: 'Answer Structure & Synthesis', score: 88, subtitle: 'Clear Executive Conclusion', icon: 'view_agenda', color: 'blue' }
                                 ].map((card, i) => (
-                                    <div key={i} className="glass-panel rounded-2xl p-5 border border-[#334155] hover:border-[#818cf8]/40 hover:-translate-y-0.5 transition-all">
+                                    <div key={i} className="bg-white rounded-2xl p-5 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 transition-all shadow-sm">
                                         <div className="flex justify-between items-start mb-3">
-                                            <div className="w-10 h-10 rounded-xl bg-[#0F172A] border border-[#334155] flex items-center justify-center text-[#818cf8]">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
                                                 <span className="material-symbols-outlined text-[20px]">{card.icon}</span>
                                             </div>
-                                            <span className="font-['Hanken_Grotesk'] text-2xl font-bold text-emerald-400">
+                                            <span className="font-['Hanken_Grotesk'] text-2xl font-bold text-emerald-600">
                                                 {card.score}%
                                             </span>
                                         </div>
-                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                             {card.title}
                                         </h4>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-1">
+                                        <p className="font-['Inter'] text-xs text-[#64748B] mt-1">
                                             {card.subtitle}
                                         </p>
-                                        <div className="w-full h-1.5 bg-[#020617] rounded-full overflow-hidden mt-3">
+                                        <div className="w-full h-1.5 bg-[#F5F2EB] rounded-full overflow-hidden mt-3">
                                             <div
-                                                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                                                className="h-full bg-[#2563EB] rounded-full"
                                                 style={{ width: `${card.score}%` }}
                                             />
                                         </div>
@@ -669,30 +665,30 @@ export const Analytics = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                                 
                                 {/* Skills Improving */}
-                                <div className="glass-panel rounded-2xl p-6 border border-emerald-500/20 bg-emerald-950/5 shadow-lg">
+                                <div className="bg-white rounded-2xl p-6 border border-emerald-200 shadow-sm">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-2">
-                                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-emerald-300">
+                                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-emerald-800">
                                                 Skills on Upward Trajectory
                                             </h4>
                                         </div>
-                                        <span className="text-xs font-['JetBrains_Mono'] text-emerald-400 font-bold">+11% avg gain</span>
+                                        <span className="text-xs font-['JetBrains_Mono'] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">+11% avg gain</span>
                                     </div>
 
                                     <div className="flex flex-col gap-3.5">
                                         {SKILLS_IMPROVING.map((s, i) => (
-                                            <div key={i} className="p-3.5 rounded-xl bg-[#0F172A] border border-[#334155]">
+                                            <div key={i} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC]">
                                                 <div className="flex justify-between items-center text-xs font-['JetBrains_Mono'] mb-1.5">
-                                                    <span className="text-[#E2E8F0] font-medium">{s.name}</span>
-                                                    <span className="text-emerald-400 font-bold">{s.delta}</span>
+                                                    <span className="text-[#0F172A] font-semibold">{s.name}</span>
+                                                    <span className="text-emerald-600 font-bold">{s.delta}</span>
                                                 </div>
-                                                <div className="flex items-center justify-between text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd] mb-1">
+                                                <div className="flex items-center justify-between text-[11px] font-['JetBrains_Mono'] text-[#64748B] mb-1">
                                                     <span>{s.category}</span>
-                                                    <span className="font-bold text-[#818cf8]">{s.score}% Mastery</span>
+                                                    <span className="font-bold text-[#2563EB]">{s.score}% Mastery</span>
                                                 </div>
-                                                <div className="w-full h-1.5 bg-[#020617] rounded-full overflow-hidden">
-                                                    <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${s.score}%` }} />
+                                                <div className="w-full h-1.5 bg-[#E8E4DC] rounded-full overflow-hidden">
+                                                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${s.score}%` }} />
                                                 </div>
                                             </div>
                                         ))}
@@ -700,32 +696,32 @@ export const Analytics = () => {
                                 </div>
 
                                 {/* Skills Needing Attention */}
-                                <div className="glass-panel rounded-2xl p-6 border border-amber-500/20 bg-amber-950/5 shadow-lg">
+                                <div className="bg-white rounded-2xl p-6 border border-amber-200 shadow-sm">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-2">
-                                            <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-amber-300">
+                                            <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                            <h4 className="font-['Hanken_Grotesk'] text-base font-bold text-amber-800">
                                                 Skills Needing Targeted Practice
                                             </h4>
                                         </div>
-                                        <span className="text-xs font-['JetBrains_Mono'] text-amber-400 font-bold">Action Required</span>
+                                        <span className="text-xs font-['JetBrains_Mono'] text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-bold">Action Required</span>
                                     </div>
 
                                     <div className="flex flex-col gap-3.5">
                                         {SKILLS_NEEDS_ATTENTION.map((s, i) => (
-                                            <div key={i} className="p-3.5 rounded-xl bg-[#0F172A] border border-[#334155]">
+                                            <div key={i} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC]">
                                                 <div className="flex justify-between items-center text-xs font-['JetBrains_Mono'] mb-1.5">
-                                                    <span className="text-[#E2E8F0] font-medium">{s.name}</span>
-                                                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                                    <span className="text-[#0F172A] font-semibold">{s.name}</span>
+                                                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
                                                         {s.urgency} Priority
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center justify-between text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd] mb-1">
+                                                <div className="flex items-center justify-between text-[11px] font-['JetBrains_Mono'] text-[#64748B] mb-1">
                                                     <span>{s.category}</span>
-                                                    <span className="font-bold text-amber-400">{s.score}% Mastery</span>
+                                                    <span className="font-bold text-amber-600">{s.score}% Mastery</span>
                                                 </div>
-                                                <div className="w-full h-1.5 bg-[#020617] rounded-full overflow-hidden">
-                                                    <div className="h-full bg-amber-400 rounded-full" style={{ width: `${s.score}%` }} />
+                                                <div className="w-full h-1.5 bg-[#E8E4DC] rounded-full overflow-hidden">
+                                                    <div className="h-full bg-amber-500 rounded-full" style={{ width: `${s.score}%` }} />
                                                 </div>
                                             </div>
                                         ))}
@@ -744,33 +740,33 @@ export const Analytics = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className="material-symbols-outlined text-[#818cf8] text-[18px]">leaderboard</span>
-                                    <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#818cf8] font-bold">
+                                    <span className="material-symbols-outlined text-[#2563EB] text-[18px]">leaderboard</span>
+                                    <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#2563EB] font-bold">
                                         Verified Peer Cohort Comparison
                                     </span>
                                 </div>
-                                <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#E2E8F0]">
+                                <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#0F172A]">
                                     Percentile Rankings vs. 4,500+ Senior Candidates
                                 </h3>
                             </div>
-                            <span className="px-3 py-1 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-indigo-600/20 text-[#818cf8] border border-indigo-500/30 self-start sm:self-auto">
+                            <span className="px-3 py-1 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-blue-50 text-[#2563EB] border border-blue-200 self-start sm:self-auto">
                                 🏆 Tier 1 Competitive Profile
                             </span>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             {BENCHMARKS.map((b, i) => (
-                                <div key={i} className="p-5 rounded-xl bg-[#0F172A] border border-[#334155] flex flex-col justify-between gap-4">
+                                <div key={i} className="p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex flex-col justify-between gap-4">
                                     <div>
                                         <div className="flex justify-between items-start gap-2 mb-1">
-                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                                 {b.title}
                                             </h4>
-                                            <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm shrink-0">
+                                            <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-[#2563EB] text-white shadow-sm shrink-0">
                                                 {b.badge}
                                             </span>
                                         </div>
-                                        <p className="font-['Inter'] text-xs text-[#c4c6cd]">
+                                        <p className="font-['Inter'] text-xs text-[#64748B]">
                                             Benchmark against {b.cohort}
                                         </p>
                                     </div>
@@ -778,16 +774,16 @@ export const Analytics = () => {
                                     {/* Percentile Progress Bar */}
                                     <div className="flex flex-col gap-1.5">
                                         <div className="flex justify-between text-xs font-['JetBrains_Mono']">
-                                            <span className="text-[#c4c6cd]">Cohort Avg: {b.cohortAvg}</span>
-                                            <span className="text-emerald-400 font-bold">Your Score: {b.userScore}</span>
+                                            <span className="text-[#64748B]">Cohort Avg: {b.cohortAvg}</span>
+                                            <span className="text-[#2563EB] font-bold">Your Score: {b.userScore}</span>
                                         </div>
-                                        <div className="w-full h-3 bg-[#020617] rounded-full relative overflow-hidden border border-[#334155]/60 p-0.5">
+                                        <div className="w-full h-3 bg-[#E8E4DC] rounded-full relative overflow-hidden border border-[#E8E4DC] p-0.5">
                                             <div
-                                                className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-1000"
+                                                className="h-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full transition-all duration-1000"
                                                 style={{ width: `${b.percentile}%` }}
                                             />
                                         </div>
-                                        <div className="flex justify-between text-[10px] font-['JetBrains_Mono'] text-[#c4c6cd]/70">
+                                        <div className="flex justify-between text-[10px] font-['JetBrains_Mono'] text-[#94A3B8]">
                                             <span>0th Pct</span>
                                             <span>50th Median</span>
                                             <span>99th Elite</span>
@@ -804,27 +800,27 @@ export const Analytics = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                         
                         {/* LEFT: Top Strengths */}
-                        <div className="glass-panel rounded-2xl p-6 lg:p-7 border border-emerald-500/30 bg-[#0F172A]/80 shadow-lg flex flex-col gap-4">
-                            <div className="flex items-center gap-2.5 pb-3 border-b border-[#334155]">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <div className="bg-white rounded-2xl p-6 lg:p-7 border border-emerald-200 shadow-sm flex flex-col gap-4">
+                            <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E4DC]">
+                                <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                                     <span className="material-symbols-outlined text-[20px]">thumb_up</span>
                                 </div>
-                                <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-400">
+                                <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-800">
                                     Top Validated Strengths
                                 </h3>
                             </div>
 
                             <div className="flex flex-col gap-3">
                                 {TOP_STRENGTHS.map((st, i) => (
-                                    <div key={i} className="p-3.5 rounded-xl bg-[#1E293B]/40 border border-[#334155]/60 flex items-start gap-3">
-                                        <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold font-['JetBrains_Mono'] shrink-0 mt-0.5">
+                                    <div key={i} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex items-start gap-3">
+                                        <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold font-['JetBrains_Mono'] shrink-0 mt-0.5">
                                             {i + 1}
                                         </span>
                                         <div>
-                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                                 {st.title}
                                             </h4>
-                                            <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5 leading-relaxed">
+                                            <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5 leading-relaxed">
                                                 {st.desc}
                                             </p>
                                         </div>
@@ -834,27 +830,27 @@ export const Analytics = () => {
                         </div>
 
                         {/* RIGHT: Recurring Weaknesses */}
-                        <div className="glass-panel rounded-2xl p-6 lg:p-7 border border-amber-500/30 bg-[#0F172A]/80 shadow-lg flex flex-col gap-4">
-                            <div className="flex items-center gap-2.5 pb-3 border-b border-[#334155]">
-                                <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                        <div className="bg-white rounded-2xl p-6 lg:p-7 border border-amber-200 shadow-sm flex flex-col gap-4">
+                            <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E4DC]">
+                                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                                     <span className="material-symbols-outlined text-[20px]">flag</span>
                                 </div>
-                                <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-amber-400">
+                                <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-amber-800">
                                     Recurring Weaknesses to Overcome
                                 </h3>
                             </div>
 
                             <div className="flex flex-col gap-3">
                                 {RECURRING_WEAKNESSES.map((wk, i) => (
-                                    <div key={i} className="p-3.5 rounded-xl bg-[#1E293B]/40 border border-[#334155]/60 flex items-start gap-3">
-                                        <span className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold font-['JetBrains_Mono'] shrink-0 mt-0.5">
+                                    <div key={i} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] flex items-start gap-3">
+                                        <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold font-['JetBrains_Mono'] shrink-0 mt-0.5">
                                             {i + 1}
                                         </span>
                                         <div>
-                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                            <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                                 {wk.title}
                                             </h4>
-                                            <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-0.5 leading-relaxed">
+                                            <p className="font-['Inter'] text-xs text-[#64748B] mt-0.5 leading-relaxed">
                                                 {wk.desc}
                                             </p>
                                         </div>
@@ -868,20 +864,20 @@ export const Analytics = () => {
                     {/* =========================================================
                         THIRD SECTION: HIGH PRIORITY TOPICS TO REVISE
                     ========================================================= */}
-                    <div className="glass-panel rounded-2xl p-6 lg:p-8 border border-[#334155] shadow-lg flex flex-col gap-5">
+                    <div className="bg-white rounded-2xl p-6 lg:p-8 border border-[#E8E4DC] shadow-sm flex flex-col gap-5">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className="material-symbols-outlined text-purple-400 text-[18px]">menu_book</span>
-                                    <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-purple-400 font-bold">
+                                    <span className="material-symbols-outlined text-[#2563EB] text-[18px]">menu_book</span>
+                                    <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#2563EB] font-bold">
                                         Targeted Curriculum Recommendations
                                     </span>
                                 </div>
-                                <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#E2E8F0]">
+                                <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#0F172A]">
                                     High Priority Topics to Revise
                                 </h3>
                             </div>
-                            <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">
+                            <span className="text-xs font-['JetBrains_Mono'] text-[#64748B]">
                                 Ranked by projected interview score bump
                             </span>
                         </div>
@@ -890,39 +886,39 @@ export const Analytics = () => {
                             {HIGH_PRIORITY_TOPICS.map((topic) => (
                                 <div
                                     key={topic.id}
-                                    className="p-5 rounded-xl bg-[#0F172A] border border-[#334155] hover:border-indigo-500/50 hover:shadow-lg transition-all flex flex-col justify-between gap-4 group"
+                                    className="p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between gap-4 group"
                                 >
                                     <div>
                                         <div className="flex justify-between items-start mb-3">
-                                            <div className="w-10 h-10 rounded-lg bg-indigo-950/60 border border-indigo-500/30 flex items-center justify-center text-[#818cf8]">
+                                            <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
                                                 <span className="material-symbols-outlined text-[20px]">{topic.icon}</span>
                                             </div>
-                                            <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                                            <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200">
                                                 {topic.scoreImpact}
                                             </span>
                                         </div>
 
-                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0] group-hover:text-white transition-colors">
+                                        <h4 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A] group-hover:text-[#2563EB] transition-colors">
                                             {topic.title}
                                         </h4>
 
                                         <div className="flex items-center gap-1.5 flex-wrap mt-2.5">
                                             {topic.tags.map((t, idx) => (
-                                                <span key={idx} className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-[#171f33] text-[#c4c6cd] border border-[#334155]">
+                                                <span key={idx} className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-white text-[#475569] border border-[#E8E4DC]">
                                                     {t}
                                                 </span>
                                             ))}
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-2 pt-2 border-t border-[#334155]/60">
-                                        <div className="flex justify-between text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd]">
+                                    <div className="flex flex-col gap-2 pt-2 border-t border-[#E8E4DC]">
+                                        <div className="flex justify-between text-[11px] font-['JetBrains_Mono'] text-[#64748B]">
                                             <span>Current Mastery</span>
-                                            <span className="font-bold text-amber-400">{topic.mastery}%</span>
+                                            <span className="font-bold text-amber-600">{topic.mastery}%</span>
                                         </div>
                                         <button
                                             onClick={() => navigate('/interview/setup')}
-                                            className="w-full py-2 rounded-lg btn-secondary text-xs font-['JetBrains_Mono'] font-bold flex items-center justify-center gap-1.5 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent transition-all cursor-pointer"
+                                            className="w-full py-2 rounded-lg btn-secondary text-xs font-['JetBrains_Mono'] font-bold flex items-center justify-center gap-1.5 hover:bg-[#2563EB] hover:text-white hover:border-transparent transition-all cursor-pointer"
                                         >
                                             <span>Start Drill</span>
                                             <span className="material-symbols-outlined text-[14px]">play_arrow</span>
@@ -937,22 +933,22 @@ export const Analytics = () => {
             </main>
 
             {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-0 w-full bg-[#0F172A]/95 backdrop-blur-xl border-t border-[#334155] flex justify-around items-center py-3 px-4 z-50">
-                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+            <nav className="md:hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#E8E4DC] flex justify-around items-center py-3 px-4 z-50">
+                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">dashboard</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
                 </button>
-                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">history</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">History</span>
                 </button>
-                <button onClick={() => navigate('/analytics')} className="flex flex-col items-center gap-1 text-[#818cf8]">
+                <button onClick={() => navigate('/analytics')} className="flex flex-col items-center gap-1 text-[#2563EB]">
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                         insights
                     </span>
-                    <span className="text-[10px] font-['JetBrains_Mono']">Analytics</span>
+                    <span className="text-[10px] font-['JetBrains_Mono'] font-bold">Analytics</span>
                 </button>
-                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">psychology</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Practice</span>
                 </button>

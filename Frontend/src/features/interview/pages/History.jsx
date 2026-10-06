@@ -637,18 +637,18 @@ export const History = () => {
     }
 
     return (
-        <div className="bg-[#0b1326] text-[#dae2fd] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-[#b8c8e0] selection:text-[#223144]">
+        <div className="bg-[#FAF8F5] text-[#0F172A] font-['Inter',sans-serif] antialiased overflow-x-hidden min-h-screen flex selection:bg-blue-100 selection:text-blue-900">
             {/* Mobile Top Header */}
-            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-b border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
-                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#E2E8F0] cursor-pointer flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center text-white text-base font-bold shadow-md shadow-indigo-500/30">
+            <nav className="md:hidden flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-[#E8E4DC] shadow-sm">
+                <div onClick={() => navigate('/')} className="font-['Hanken_Grotesk'] text-[20px] font-bold text-[#0F172A] cursor-pointer flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white text-base font-bold shadow-sm shadow-blue-500/20">
                         AI
                     </span>
                     Interview AI
                 </div>
                 <button
                     onClick={() => navigate('/interview/setup')}
-                    className="p-2 text-[#dae2fd] hover:text-[#b8c8e0] transition-colors"
+                    className="p-2 text-[#64748B] hover:text-[#2563EB] transition-colors"
                 >
                     <span className="material-symbols-outlined text-[24px]">add_circle</span>
                 </button>
@@ -658,16 +658,15 @@ export const History = () => {
             <SlateSidebar />
 
             {/* Main Content Area */}
-            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12">
-                <div className="scanline"></div>
+            <main className="flex-1 md:ml-64 pt-20 md:pt-0 min-h-screen flex flex-col relative pb-20 md:pb-12 bg-[#FAF8F5]">
 
                 {/* Top Desktop Bar */}
-                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#334155] bg-[#0b1326]/80 backdrop-blur-md sticky top-0 z-30">
+                <header className="hidden md:flex justify-between items-center px-8 py-4 border-b border-[#E8E4DC] bg-white/80 backdrop-blur-md sticky top-0 z-30">
                     <div className="flex items-center gap-3">
-                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                        <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                             Interview History & Archives
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-indigo-500/10 text-[#818cf8] border border-indigo-500/20">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-['JetBrains_Mono'] bg-blue-50 text-[#2563EB] border border-blue-200">
                             {filteredInterviews.length} Sessions Logged
                         </span>
                     </div>
@@ -690,29 +689,29 @@ export const History = () => {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="material-symbols-outlined text-[#818cf8] text-[18px]">history_edu</span>
-                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#818cf8] font-bold">
+                                <span className="material-symbols-outlined text-[#2563EB] text-[18px]">history_edu</span>
+                                <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider text-[#2563EB] font-bold">
                                     Performance Archive
                                 </span>
                             </div>
-                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#E2E8F0] font-bold tracking-tight">
+                            <h2 className="font-['Hanken_Grotesk'] text-[28px] sm:text-[34px] md:text-[38px] text-[#0F172A] font-bold tracking-tight">
                                 Past Interview Evaluations
                             </h2>
-                            <p className="font-['Inter'] text-[15px] text-[#c4c6cd] mt-0.5">
+                            <p className="font-['Inter'] text-[15px] text-[#64748B] mt-0.5">
                                 Search, analyze, and review full transcripts, audio playbacks, and question scores from your AI mock rounds.
                             </p>
                         </div>
 
                         {/* Quick Stats Pill */}
-                        <div className="flex items-center gap-3 self-start md:self-auto bg-[#0F172A] border border-[#334155] px-4 py-2.5 rounded-xl shadow-sm">
+                        <div className="flex items-center gap-3 self-start md:self-auto bg-white border border-[#E8E4DC] px-4 py-2.5 rounded-xl shadow-sm">
                             <div className="flex flex-col">
-                                <span className="text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd]">Average Score</span>
-                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-400">87.5%</span>
+                                <span className="text-[11px] font-['JetBrains_Mono'] text-[#64748B]">Average Score</span>
+                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-600">87.5%</span>
                             </div>
-                            <div className="h-7 w-px bg-[#334155]"></div>
+                            <div className="h-7 w-px bg-[#E8E4DC]"></div>
                             <div className="flex flex-col">
-                                <span className="text-[11px] font-['JetBrains_Mono'] text-[#c4c6cd]">Completion Rate</span>
-                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#818cf8]">100%</span>
+                                <span className="text-[11px] font-['JetBrains_Mono'] text-[#64748B]">Completion Rate</span>
+                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-[#2563EB]">100%</span>
                             </div>
                         </div>
                     </div>
@@ -720,12 +719,12 @@ export const History = () => {
                     {/* =========================================================
                         FILTERS AND SEARCH SYSTEM
                     ========================================================= */}
-                    <div className="glass-panel rounded-2xl p-5 lg:p-6 border border-[#334155] shadow-lg flex flex-col gap-5">
+                    <div className="bg-white rounded-2xl p-5 lg:p-6 border border-[#E8E4DC] shadow-sm flex flex-col gap-5">
                         
                         {/* Search Input Bar */}
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                             <div className="relative flex-1">
-                                <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#c4c6cd] text-[18px]">
+                                <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] text-[18px]">
                                     search
                                 </span>
                                 <input
@@ -733,12 +732,12 @@ export const History = () => {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search by role, company (Google, Amazon), technical topic, or keyword..."
-                                    className="w-full bg-[#0F172A] border border-[#334155] rounded-xl pl-10 pr-10 py-3 font-['Inter'] text-[14px] text-[#dae2fd] focus:outline-none focus:border-[#6366f1] focus:ring-1 focus:ring-[#6366f1]/50 transition-all placeholder:text-[#c4c6cd]/50"
+                                    className="w-full bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl pl-10 pr-10 py-3 font-['Inter'] text-[14px] text-[#0F172A] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all placeholder:text-[#94A3B8]"
                                 />
                                 {searchQuery && (
                                     <button
                                         onClick={() => setSearchQuery('')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c4c6cd] hover:text-white p-1 rounded-full hover:bg-white/10"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#0F172A] p-1 rounded-full hover:bg-slate-100"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">close</span>
                                     </button>
@@ -749,7 +748,7 @@ export const History = () => {
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleResetFilters}
-                                    className="px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/10 text-red-300 hover:bg-red-500/20 text-xs font-['JetBrains_Mono'] font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
+                                    className="px-4 py-3 rounded-xl border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 text-xs font-['JetBrains_Mono'] font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">filter_alt_off</span>
                                     Reset Filters
@@ -758,11 +757,11 @@ export const History = () => {
                         </div>
 
                         {/* Filter Pill Rows */}
-                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2 border-t border-[#334155]/60">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2 border-t border-[#E8E4DC]">
                             
                             {/* Left: Interview Type Pills */}
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] shrink-0 font-medium">
+                                <span className="text-xs font-['JetBrains_Mono'] text-[#64748B] shrink-0 font-medium">
                                     Type:
                                 </span>
                                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
@@ -772,8 +771,8 @@ export const History = () => {
                                             onClick={() => setSelectedType(type)}
                                             className={`px-3 py-1.5 rounded-lg text-xs font-['JetBrains_Mono'] font-medium whitespace-nowrap transition-all cursor-pointer ${
                                                 selectedType === type
-                                                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm font-bold'
-                                                    : 'bg-[#0F172A] text-[#c4c6cd] hover:text-[#E2E8F0] border border-[#334155] hover:border-[#4A5568]'
+                                                    ? 'bg-[#2563EB] text-white shadow-sm font-bold'
+                                                    : 'bg-[#FAF8F5] text-[#475569] hover:text-[#0F172A] border border-[#E8E4DC] hover:border-blue-200'
                                             }`}
                                         >
                                             {type}
@@ -784,18 +783,18 @@ export const History = () => {
 
                             {/* Right: Date Range Selector */}
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] shrink-0 font-medium">
+                                <span className="text-xs font-['JetBrains_Mono'] text-[#64748B] shrink-0 font-medium">
                                     Date:
                                 </span>
-                                <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155]">
+                                <div className="flex items-center bg-[#FAF8F5] p-1 rounded-xl border border-[#E8E4DC]">
                                     {DATE_RANGES.map(range => (
                                         <button
                                             key={range.id}
                                             onClick={() => setSelectedDateRange(range.id)}
                                             className={`px-2.5 py-1 rounded-lg text-xs font-['JetBrains_Mono'] transition-all cursor-pointer ${
                                                 selectedDateRange === range.id
-                                                    ? 'bg-indigo-600/40 text-[#818cf8] font-bold border border-indigo-500/40'
-                                                    : 'text-[#c4c6cd] hover:text-white'
+                                                    ? 'bg-[#2563EB] text-white font-bold shadow-sm'
+                                                    : 'text-[#64748B] hover:text-[#0F172A]'
                                             }`}
                                         >
                                             {range.label}
@@ -807,8 +806,8 @@ export const History = () => {
                         </div>
 
                         {/* Company Filter Tags */}
-                        <div className="flex flex-wrap items-center gap-2 pt-2">
-                            <span className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd] shrink-0 font-medium mr-1">
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E8E4DC]">
+                            <span className="text-xs font-['JetBrains_Mono'] text-[#64748B] shrink-0 font-medium mr-1">
                                 Company:
                             </span>
                             {COMPANIES.map(company => (
@@ -817,15 +816,15 @@ export const History = () => {
                                     onClick={() => setSelectedCompany(company)}
                                     className={`px-3 py-1 rounded-full text-xs font-['JetBrains_Mono'] transition-all cursor-pointer flex items-center gap-1.5 ${
                                         selectedCompany === company
-                                            ? 'bg-indigo-500/20 text-[#818cf8] border border-indigo-500/50 font-bold'
-                                            : 'bg-[#0F172A] text-[#c4c6cd] hover:text-[#E2E8F0] border border-[#334155] hover:border-[#4A5568]'
+                                            ? 'bg-blue-50 text-[#2563EB] border border-blue-300 font-bold'
+                                            : 'bg-[#FAF8F5] text-[#475569] hover:text-[#0F172A] border border-[#E8E4DC] hover:border-blue-200'
                                     }`}
                                 >
                                     <span className={`w-1.5 h-1.5 rounded-full ${
-                                        company === 'Google' ? 'bg-red-400' :
-                                        company === 'Amazon' ? 'bg-amber-400' :
-                                        company === 'Microsoft' ? 'bg-blue-400' :
-                                        company === 'Meta' ? 'bg-indigo-400' :
+                                        company === 'Google' ? 'bg-red-500' :
+                                        company === 'Amazon' ? 'bg-amber-500' :
+                                        company === 'Microsoft' ? 'bg-blue-500' :
+                                        company === 'Meta' ? 'bg-indigo-500' :
                                         company === 'Netflix' ? 'bg-rose-500' : 'bg-slate-400'
                                     }`}></span>
                                     {company}
@@ -841,22 +840,22 @@ export const History = () => {
                     <div className="flex flex-col gap-3.5">
                         
                         <div className="flex justify-between items-center px-1">
-                            <span className="font-['JetBrains_Mono'] text-xs text-[#c4c6cd]">
-                                Showing <strong className="text-[#E2E8F0]">{filteredInterviews.length}</strong> archived sessions
+                            <span className="font-['JetBrains_Mono'] text-xs text-[#64748B]">
+                                Showing <strong className="text-[#0F172A]">{filteredInterviews.length}</strong> archived sessions
                             </span>
                         </div>
 
                         {filteredInterviews.length === 0 ? (
                             /* Empty State */
-                            <div className="glass-panel rounded-2xl p-12 text-center border border-[#334155] flex flex-col items-center justify-center gap-4">
-                                <div className="w-16 h-16 rounded-full bg-[#1E293B] border border-[#334155] flex items-center justify-center text-[#c4c6cd]">
+                            <div className="bg-white rounded-2xl p-12 text-center border border-[#E8E4DC] shadow-sm flex flex-col items-center justify-center gap-4">
+                                <div className="w-16 h-16 rounded-full bg-[#FAF8F5] border border-[#E8E4DC] flex items-center justify-center text-[#64748B]">
                                     <span className="material-symbols-outlined text-[32px]">manage_search</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#E2E8F0]">
+                                    <h3 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#0F172A]">
                                         No interviews found
                                     </h3>
-                                    <p className="font-['Inter'] text-sm text-[#c4c6cd] mt-1 max-w-md mx-auto">
+                                    <p className="font-['Inter'] text-sm text-[#64748B] mt-1 max-w-md mx-auto">
                                         No mock interviews match your current search and filter selections. Try clearing your filters or starting a new session.
                                     </p>
                                 </div>
@@ -873,12 +872,12 @@ export const History = () => {
                                 <div
                                     key={interview.id}
                                     onClick={() => handleOpenDrawer(interview)}
-                                    className="glass-panel rounded-2xl p-5 md:p-6 border border-[#334155] hover:border-[#818cf8]/50 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.35)] transition-all duration-200 cursor-pointer group relative overflow-hidden"
+                                    className="bg-white rounded-2xl p-5 md:p-6 border border-[#E8E4DC] hover:border-blue-300 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer group relative overflow-hidden"
                                 >
                                     {/* Accent line on left */}
                                     <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                                        interview.overallScore >= 90 ? 'bg-emerald-400' :
-                                        interview.overallScore >= 80 ? 'bg-[#818cf8]' : 'bg-amber-400'
+                                        interview.overallScore >= 90 ? 'bg-emerald-500' :
+                                        interview.overallScore >= 80 ? 'bg-[#2563EB]' : 'bg-amber-500'
                                     }`}></div>
 
                                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pl-2">
@@ -886,7 +885,7 @@ export const History = () => {
                                         {/* Left: Role, Company, Type, Topics */}
                                         <div className="flex items-start gap-4">
                                             {/* Company Avatar / Icon */}
-                                            <div className="w-12 h-12 rounded-xl bg-[#0F172A] border border-[#334155] group-hover:border-indigo-500/50 flex items-center justify-center text-lg font-bold font-['Hanken_Grotesk'] text-[#818cf8] shrink-0 transition-colors shadow-inner">
+                                            <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E4DC] group-hover:border-blue-300 flex items-center justify-center text-lg font-bold font-['Hanken_Grotesk'] text-[#2563EB] shrink-0 transition-colors shadow-sm">
                                                 {interview.company === 'Google' ? 'G' :
                                                  interview.company === 'Amazon' ? 'A' :
                                                  interview.company === 'Microsoft' ? 'M' :
@@ -897,23 +896,23 @@ export const History = () => {
 
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-2.5 flex-wrap">
-                                                    <h3 className="font-['Hanken_Grotesk'] text-[17px] md:text-[18px] font-bold text-[#E2E8F0] group-hover:text-white transition-colors">
+                                                    <h3 className="font-['Hanken_Grotesk'] text-[17px] md:text-[18px] font-bold text-[#0F172A] group-hover:text-[#2563EB] transition-colors">
                                                         {interview.role}
                                                     </h3>
                                                     
                                                     {/* Company Tag */}
-                                                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-['JetBrains_Mono'] font-semibold bg-[#0F172A] text-[#E2E8F0] border border-[#334155]">
+                                                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-['JetBrains_Mono'] font-semibold bg-[#FAF8F5] text-[#475569] border border-[#E8E4DC]">
                                                         {interview.company}
                                                     </span>
 
                                                     {/* Type Badge */}
-                                                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-['JetBrains_Mono'] bg-indigo-500/10 text-[#818cf8] border border-indigo-500/20">
+                                                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-['JetBrains_Mono'] bg-blue-50 text-[#2563EB] border border-blue-200">
                                                         {interview.type}
                                                     </span>
                                                 </div>
 
                                                 {/* Summary excerpt */}
-                                                <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-1.5 line-clamp-1 max-w-2xl">
+                                                <p className="font-['Inter'] text-xs text-[#64748B] mt-1.5 line-clamp-1 max-w-2xl">
                                                     {interview.summary}
                                                 </p>
 
@@ -922,13 +921,13 @@ export const History = () => {
                                                     {interview.topics.slice(0, 3).map((topic, i) => (
                                                         <span
                                                             key={i}
-                                                            className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-[#171f33]/80 text-[#c4c6cd] border border-[#334155]/60"
+                                                            className="text-[10px] font-['JetBrains_Mono'] px-2 py-0.5 rounded bg-[#FAF8F5] text-[#475569] border border-[#E8E4DC]"
                                                         >
                                                             {topic}
                                                         </span>
                                                     ))}
                                                     {interview.topics.length > 3 && (
-                                                        <span className="text-[10px] font-['JetBrains_Mono'] text-[#818cf8]">
+                                                        <span className="text-[10px] font-['JetBrains_Mono'] text-[#2563EB] font-medium">
                                                             +{interview.topics.length - 3} more
                                                         </span>
                                                     )}
@@ -937,15 +936,15 @@ export const History = () => {
                                         </div>
 
                                         {/* Right: Date, Duration, Score, Status, CTA */}
-                                        <div className="flex items-center justify-between lg:justify-end gap-6 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#334155]/40 shrink-0">
+                                        <div className="flex items-center justify-between lg:justify-end gap-6 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#E8E4DC] shrink-0">
                                             
                                             {/* Date & Duration */}
-                                            <div className="flex flex-col text-left lg:text-right font-['JetBrains_Mono'] text-xs text-[#c4c6cd]">
-                                                <div className="flex items-center lg:justify-end gap-1 text-[#E2E8F0]">
+                                            <div className="flex flex-col text-left lg:text-right font-['JetBrains_Mono'] text-xs text-[#64748B]">
+                                                <div className="flex items-center lg:justify-end gap-1 text-[#0F172A] font-medium">
                                                     <span className="material-symbols-outlined text-[14px]">calendar_today</span>
                                                     {interview.date}
                                                 </div>
-                                                <div className="text-[11px] text-[#c4c6cd]/70 mt-0.5">
+                                                <div className="text-[11px] text-[#64748B] mt-0.5">
                                                     {interview.duration} • {interview.time}
                                                 </div>
                                             </div>
@@ -954,23 +953,23 @@ export const History = () => {
                                             <div className="flex items-center gap-3">
                                                 <div className="flex flex-col items-end">
                                                     <div className={`font-['Hanken_Grotesk'] text-[22px] font-bold ${
-                                                        interview.overallScore >= 90 ? 'text-emerald-400' :
-                                                        interview.overallScore >= 80 ? 'text-[#818cf8]' : 'text-amber-400'
+                                                        interview.overallScore >= 90 ? 'text-emerald-600' :
+                                                        interview.overallScore >= 80 ? 'text-[#2563EB]' : 'text-amber-600'
                                                     }`}>
                                                         {interview.overallScore}%
                                                     </div>
                                                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-['JetBrains_Mono'] font-semibold border ${
                                                         interview.status === 'Completed'
-                                                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                             : interview.status === 'Passed'
-                                                            ? 'bg-indigo-500/10 text-[#818cf8] border-indigo-500/20'
-                                                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                                                            ? 'bg-blue-50 text-[#2563EB] border-blue-200'
+                                                            : 'bg-amber-50 text-amber-700 border-amber-200'
                                                     }`}>
                                                         {interview.status}
                                                     </span>
                                                 </div>
 
-                                                <span className="material-symbols-outlined text-[#c4c6cd] group-hover:text-white group-hover:translate-x-1 transition-all text-[22px]">
+                                                <span className="material-symbols-outlined text-[#94A3B8] group-hover:text-[#2563EB] group-hover:translate-x-1 transition-all text-[22px]">
                                                     chevron_right
                                                 </span>
                                             </div>
@@ -995,23 +994,23 @@ export const History = () => {
                     {/* Backdrop */}
                     <div
                         onClick={handleCloseDrawer}
-                        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-200"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-200"
                     />
 
                     {/* Drawer Canvas */}
-                    <aside className="fixed inset-y-0 right-0 max-w-2xl w-full bg-[#0F172A] border-l border-[#334155] shadow-2xl z-50 overflow-y-auto flex flex-col animate-in slide-in-from-right duration-300 select-none">
+                    <aside className="fixed inset-y-0 right-0 max-w-2xl w-full bg-white border-l border-[#E8E4DC] shadow-2xl z-50 overflow-y-auto flex flex-col animate-in slide-in-from-right duration-300 select-none">
                         
                         {/* Drawer Header */}
-                        <div className="p-6 border-b border-[#334155] bg-[#0F172A]/90 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between">
+                        <div className="p-6 border-b border-[#E8E4DC] bg-white/95 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-indigo-950/60 border border-indigo-500/30 flex items-center justify-center text-[#818cf8] font-bold">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB] font-bold">
                                     <span className="material-symbols-outlined text-[20px]">assignment</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                         Session Evaluation
                                     </h3>
-                                    <p className="font-['JetBrains_Mono'] text-xs text-[#c4c6cd]">
+                                    <p className="font-['JetBrains_Mono'] text-xs text-[#64748B]">
                                         {selectedInterview.id} • {selectedInterview.date}
                                     </p>
                                 </div>
@@ -1019,14 +1018,14 @@ export const History = () => {
 
                             <button
                                 onClick={handleCloseDrawer}
-                                className="p-2 text-[#c4c6cd] hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+                                className="p-2 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-slate-100 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[22px]">close</span>
                             </button>
                         </div>
 
                         {/* Navigation Tabs Inside Drawer */}
-                        <div className="flex border-b border-[#334155] bg-[#1E293B]/40 px-6 overflow-x-auto scrollbar-none">
+                        <div className="flex border-b border-[#E8E4DC] bg-[#FAF8F5] px-6 overflow-x-auto scrollbar-none">
                             {[
                                 { id: 'overview', label: 'Overview & AI Feedback', icon: 'insights' },
                                 { id: 'transcript', label: 'Transcript', icon: 'chat' },
@@ -1039,8 +1038,8 @@ export const History = () => {
                                     onClick={() => setDrawerTab(tab.id)}
                                     className={`py-3.5 px-3 font-['JetBrains_Mono'] text-xs font-semibold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition-all cursor-pointer ${
                                         drawerTab === tab.id
-                                            ? 'text-[#818cf8] border-[#818cf8] bg-indigo-500/5'
-                                            : 'text-[#c4c6cd] border-transparent hover:text-white'
+                                            ? 'text-[#2563EB] border-[#2563EB] bg-blue-50/50'
+                                            : 'text-[#64748B] border-transparent hover:text-[#0F172A]'
                                     }`}
                                 >
                                     <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
@@ -1050,31 +1049,31 @@ export const History = () => {
                         </div>
 
                         {/* Drawer Content Body */}
-                        <div className="p-6 flex-1 flex flex-col gap-6">
+                        <div className="p-6 flex-1 flex flex-col gap-6 bg-white">
                             
                             {/* TAB 1: OVERVIEW & AI FEEDBACK SUMMARY */}
                             {drawerTab === 'overview' && (
                                 <div className="flex flex-col gap-6">
                                     
                                     {/* Primary Info Card */}
-                                    <div className="glass-panel rounded-xl p-5 border border-[#334155] relative overflow-hidden">
+                                    <div className="bg-[#FAF8F5] rounded-xl p-5 border border-[#E8E4DC] relative overflow-hidden">
                                         <div className="flex justify-between items-start gap-4">
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <span className="px-2.5 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] font-bold bg-[#1E293B] text-white border border-[#334155]">
+                                                    <span className="px-2.5 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] font-bold bg-white text-[#0F172A] border border-[#E8E4DC]">
                                                         {selectedInterview.company}
                                                     </span>
-                                                    <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-indigo-500/10 text-[#818cf8] border border-indigo-500/20">
+                                                    <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-blue-50 text-[#2563EB] border border-blue-200">
                                                         {selectedInterview.type}
                                                     </span>
-                                                    <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-slate-800 text-[#c4c6cd]">
+                                                    <span className="px-2 py-0.5 rounded text-[11px] font-['JetBrains_Mono'] bg-[#E8E4DC] text-[#475569]">
                                                         {selectedInterview.difficulty}
                                                     </span>
                                                 </div>
-                                                <h4 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#E2E8F0]">
+                                                <h4 className="font-['Hanken_Grotesk'] text-xl font-bold text-[#0F172A]">
                                                     {selectedInterview.role}
                                                 </h4>
-                                                <div className="flex items-center gap-3 text-xs font-['JetBrains_Mono'] text-[#c4c6cd] mt-2">
+                                                <div className="flex items-center gap-3 text-xs font-['JetBrains_Mono'] text-[#64748B] mt-2">
                                                     <span>Duration: {selectedInterview.duration}</span>
                                                     <span>•</span>
                                                     <span>Completed: {selectedInterview.date}</span>
@@ -1082,9 +1081,9 @@ export const History = () => {
                                             </div>
 
                                             {/* Score circle badge */}
-                                            <div className="flex flex-col items-center justify-center w-20 h-20 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 p-2 text-center shrink-0">
-                                                <span className="text-[10px] font-['JetBrains_Mono'] text-[#818cf8]">Overall</span>
-                                                <span className="font-['Hanken_Grotesk'] text-2xl font-bold text-emerald-400">
+                                            <div className="flex flex-col items-center justify-center w-20 h-20 rounded-2xl bg-white border border-[#E8E4DC] p-2 text-center shrink-0 shadow-sm">
+                                                <span className="text-[10px] font-['JetBrains_Mono'] text-[#64748B]">Overall</span>
+                                                <span className="font-['Hanken_Grotesk'] text-2xl font-bold text-emerald-600">
                                                     {selectedInterview.overallScore}%
                                                 </span>
                                             </div>
@@ -1092,12 +1091,12 @@ export const History = () => {
                                     </div>
 
                                     {/* AI Executive Summary */}
-                                    <div className="glass-panel rounded-xl p-5 border border-[#334155]">
-                                        <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0] mb-2 flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-[#818cf8] text-[18px]">psychology</span>
+                                    <div className="bg-[#FAF8F5] rounded-xl p-5 border border-[#E8E4DC]">
+                                        <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A] mb-2 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-[#2563EB] text-[18px]">psychology</span>
                                             AI Executive Feedback
                                         </h5>
-                                        <p className="font-['Inter'] text-sm text-[#c4c6cd] leading-relaxed">
+                                        <p className="font-['Inter'] text-sm text-[#475569] leading-relaxed">
                                             {selectedInterview.summary}
                                         </p>
                                     </div>
@@ -1106,15 +1105,15 @@ export const History = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         
                                         {/* Key Strengths */}
-                                        <div className="glass-panel rounded-xl p-4 border border-emerald-500/20 bg-emerald-950/10">
-                                            <h6 className="font-['Hanken_Grotesk'] text-xs font-bold text-emerald-400 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
+                                        <div className="bg-emerald-50/60 rounded-xl p-4 border border-emerald-200">
+                                            <h6 className="font-['Hanken_Grotesk'] text-xs font-bold text-emerald-700 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
                                                 <span className="material-symbols-outlined text-[16px]">check_circle</span>
                                                 Key Strengths
                                             </h6>
                                             <ul className="flex flex-col gap-2">
                                                 {selectedInterview.strengths.map((st, i) => (
-                                                    <li key={i} className="font-['Inter'] text-xs text-[#c4c6cd] flex items-start gap-2">
-                                                        <span className="text-emerald-400 font-bold">•</span>
+                                                    <li key={i} className="font-['Inter'] text-xs text-emerald-900 flex items-start gap-2">
+                                                        <span className="text-emerald-600 font-bold">•</span>
                                                         <span>{st}</span>
                                                     </li>
                                                 ))}
@@ -1122,15 +1121,15 @@ export const History = () => {
                                         </div>
 
                                         {/* Areas to Refine */}
-                                        <div className="glass-panel rounded-xl p-4 border border-amber-500/20 bg-amber-950/10">
-                                            <h6 className="font-['Hanken_Grotesk'] text-xs font-bold text-amber-400 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
+                                        <div className="bg-amber-50/60 rounded-xl p-4 border border-amber-200">
+                                            <h6 className="font-['Hanken_Grotesk'] text-xs font-bold text-amber-700 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
                                                 <span className="material-symbols-outlined text-[16px]">warning</span>
                                                 Areas for Improvement
                                             </h6>
                                             <ul className="flex flex-col gap-2">
                                                 {selectedInterview.weaknesses.map((wk, i) => (
-                                                    <li key={i} className="font-['Inter'] text-xs text-[#c4c6cd] flex items-start gap-2">
-                                                        <span className="text-amber-400 font-bold">•</span>
+                                                    <li key={i} className="font-['Inter'] text-xs text-amber-900 flex items-start gap-2">
+                                                        <span className="text-amber-600 font-bold">•</span>
                                                         <span>{wk}</span>
                                                     </li>
                                                 ))}
@@ -1145,7 +1144,7 @@ export const History = () => {
                             {/* TAB 2: FULL TRANSCRIPT */}
                             {drawerTab === 'transcript' && (
                                 <div className="flex flex-col gap-4">
-                                    <div className="flex justify-between items-center text-xs font-['JetBrains_Mono'] text-[#c4c6cd] px-1">
+                                    <div className="flex justify-between items-center text-xs font-['JetBrains_Mono'] text-[#64748B] px-1">
                                         <span>Full dialogue history between AI and candidate</span>
                                         <span>{selectedInterview.transcript.length} Messages</span>
                                     </div>
@@ -1156,26 +1155,26 @@ export const History = () => {
                                                 key={msg.id}
                                                 className={`p-4 rounded-xl border ${
                                                     msg.role === 'ai'
-                                                        ? 'bg-[#1E293B]/60 border-indigo-500/30 self-start max-w-[90%]'
-                                                        : 'bg-indigo-950/30 border-purple-500/30 self-end max-w-[90%]'
+                                                        ? 'bg-[#FAF8F5] border-[#E8E4DC] self-start max-w-[90%]'
+                                                        : 'bg-blue-50/70 border-blue-200 self-end max-w-[90%]'
                                                 }`}
                                             >
                                                 <div className="flex items-center justify-between gap-3 mb-1.5">
                                                     <div className="flex items-center gap-2">
                                                         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                                                            msg.role === 'ai' ? 'bg-indigo-600 text-white' : 'bg-purple-600 text-white'
+                                                            msg.role === 'ai' ? 'bg-[#2563EB] text-white' : 'bg-[#1D4ED8] text-white'
                                                         }`}>
                                                             {msg.role === 'ai' ? 'AI' : 'U'}
                                                         </span>
-                                                        <span className="font-['JetBrains_Mono'] text-xs font-bold text-[#E2E8F0]">
+                                                        <span className="font-['JetBrains_Mono'] text-xs font-bold text-[#0F172A]">
                                                             {msg.sender}
                                                         </span>
                                                     </div>
-                                                    <span className="font-['JetBrains_Mono'] text-[10px] text-[#c4c6cd]/70">
+                                                    <span className="font-['JetBrains_Mono'] text-[10px] text-[#64748B]">
                                                         {msg.timestamp}
                                                     </span>
                                                 </div>
-                                                <p className="font-['Inter'] text-xs text-[#dae2fd] leading-relaxed">
+                                                <p className="font-['Inter'] text-xs text-[#334155] leading-relaxed">
                                                     {msg.text}
                                                 </p>
                                             </div>
@@ -1188,33 +1187,33 @@ export const History = () => {
                             {drawerTab === 'audio' && (
                                 <div className="flex flex-col gap-6">
                                     
-                                    <div className="glass-panel rounded-2xl p-6 border border-[#334155] flex flex-col gap-5">
+                                    <div className="bg-[#FAF8F5] rounded-2xl p-6 border border-[#E8E4DC] flex flex-col gap-5">
                                         
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                                                <div className="w-12 h-12 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shadow-md shadow-blue-500/20">
                                                     <span className="material-symbols-outlined text-[24px]">graphic_eq</span>
                                                 </div>
                                                 <div>
-                                                    <h5 className="font-['Hanken_Grotesk'] text-base font-bold text-[#E2E8F0]">
+                                                    <h5 className="font-['Hanken_Grotesk'] text-base font-bold text-[#0F172A]">
                                                         Mock Session Recording
                                                     </h5>
-                                                    <p className="font-['JetBrains_Mono'] text-xs text-[#c4c6cd]">
+                                                    <p className="font-['JetBrains_Mono'] text-xs text-[#64748B]">
                                                         Synthetic voice reproduction • High Fidelity
                                                     </p>
                                                 </div>
                                             </div>
 
                                             {/* Speed Selector */}
-                                            <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
+                                            <div className="flex items-center bg-white p-1 rounded-lg border border-[#E8E4DC]">
                                                 {[0.75, 1, 1.25, 1.5, 2].map(speed => (
                                                     <button
                                                         key={speed}
                                                         onClick={() => setPlaybackSpeed(speed)}
                                                         className={`px-2 py-0.5 rounded text-[10px] font-['JetBrains_Mono'] ${
                                                             playbackSpeed === speed
-                                                                ? 'bg-indigo-600 text-white font-bold'
-                                                                : 'text-[#c4c6cd] hover:text-white'
+                                                                ? 'bg-[#2563EB] text-white font-bold'
+                                                                : 'text-[#64748B] hover:text-[#0F172A]'
                                                         }`}
                                                     >
                                                         {speed}x
@@ -1224,17 +1223,17 @@ export const History = () => {
                                         </div>
 
                                         {/* Animated Audio Waveform */}
-                                        <div className="h-16 bg-[#020617] rounded-xl border border-[#334155]/60 flex items-center justify-center gap-1 px-4 overflow-hidden">
+                                        <div className="h-16 bg-[#F5F2EB] rounded-xl border border-[#E8E4DC] flex items-center justify-center gap-1 px-4 overflow-hidden">
                                             {Array.from({ length: 42 }).map((_, idx) => {
                                                 const heightPercent = Math.sin((idx * 0.4) + (currentTime * 0.5)) * 40 + 50
                                                 return (
                                                     <div
                                                         key={idx}
                                                         className={`w-1 rounded-full transition-all duration-150 ${
-                                                            isPlaying ? 'bg-gradient-to-t from-indigo-500 to-purple-400' : 'bg-slate-700'
+                                                            isPlaying ? 'bg-[#2563EB]' : 'bg-[#CBD5E1]'
                                                         }`}
                                                         style={{
-                                                            height: isPlaying ? `${Math.max(15, heightPercent)}%` : '20%'
+                                                             height: isPlaying ? `${Math.max(15, heightPercent)}%` : '20%'
                                                         }}
                                                     />
                                                 )
@@ -1249,9 +1248,9 @@ export const History = () => {
                                                 max={selectedInterview.durationSec}
                                                 value={currentTime}
                                                 onChange={(e) => setCurrentTime(Number(e.target.value))}
-                                                className="w-full h-1.5 bg-[#1E293B] rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                                className="w-full h-1.5 bg-[#E8E4DC] rounded-lg appearance-none cursor-pointer accent-[#2563EB]"
                                             />
-                                            <div className="flex justify-between font-['JetBrains_Mono'] text-xs text-[#c4c6cd]">
+                                            <div className="flex justify-between font-['JetBrains_Mono'] text-xs text-[#64748B]">
                                                 <span>{formatSeconds(currentTime)}</span>
                                                 <span>{formatSeconds(selectedInterview.durationSec)}</span>
                                             </div>
@@ -1261,7 +1260,7 @@ export const History = () => {
                                         <div className="flex items-center justify-center gap-4 pt-2">
                                             <button
                                                 onClick={() => setCurrentTime(Math.max(0, currentTime - 10))}
-                                                className="p-2 text-[#c4c6cd] hover:text-white rounded-full hover:bg-white/5"
+                                                className="p-2 text-[#64748B] hover:text-[#0F172A] rounded-full hover:bg-[#E8E4DC]/50"
                                                 title="Rewind 10s"
                                             >
                                                 <span className="material-symbols-outlined text-[24px]">replay_10</span>
@@ -1269,7 +1268,7 @@ export const History = () => {
 
                                             <button
                                                 onClick={() => setIsPlaying(!isPlaying)}
-                                                className="w-14 h-14 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/40 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                                                className="w-14 h-14 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center shadow-md shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                                             >
                                                 <span className="material-symbols-outlined text-[32px]">
                                                     {isPlaying ? 'pause' : 'play_arrow'}
@@ -1278,7 +1277,7 @@ export const History = () => {
 
                                             <button
                                                 onClick={() => setCurrentTime(Math.min(selectedInterview.durationSec, currentTime + 10))}
-                                                className="p-2 text-[#c4c6cd] hover:text-white rounded-full hover:bg-white/5"
+                                                className="p-2 text-[#64748B] hover:text-[#0F172A] rounded-full hover:bg-[#E8E4DC]/50"
                                                 title="Forward 10s"
                                             >
                                                 <span className="material-symbols-outlined text-[24px]">forward_10</span>
@@ -1296,39 +1295,39 @@ export const History = () => {
                                     {selectedInterview.questionsBreakdown.map((q, idx) => (
                                         <div
                                             key={idx}
-                                            className="glass-panel rounded-xl p-5 border border-[#334155] flex flex-col gap-3"
+                                            className="bg-[#FAF8F5] rounded-xl p-5 border border-[#E8E4DC] flex flex-col gap-3"
                                         >
                                             <div className="flex justify-between items-start gap-3">
                                                 <div>
-                                                    <span className="text-[10px] font-['JetBrains_Mono'] text-[#818cf8] uppercase tracking-wider font-bold">
+                                                    <span className="text-[10px] font-['JetBrains_Mono'] text-[#2563EB] uppercase tracking-wider font-bold">
                                                         Question {q.qNumber} • {q.category}
                                                     </span>
-                                                    <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0] mt-0.5">
+                                                    <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A] mt-0.5">
                                                         {q.title}
                                                     </h5>
                                                 </div>
-                                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-400">
+                                                <span className="font-['Hanken_Grotesk'] text-lg font-bold text-emerald-600">
                                                     {q.overall}%
                                                 </span>
                                             </div>
 
                                             {/* Multi-Dimensional Scores */}
-                                            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#334155]/60 text-xs font-['JetBrains_Mono']">
-                                                <div className="bg-[#0F172A] p-2 rounded-lg text-center border border-[#334155]">
-                                                    <span className="text-[#c4c6cd] text-[10px]">Technical</span>
-                                                    <div className="font-bold text-indigo-400">{q.technicalScore}%</div>
+                                            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#E8E4DC] text-xs font-['JetBrains_Mono']">
+                                                <div className="bg-white p-2 rounded-lg text-center border border-[#E8E4DC]">
+                                                    <span className="text-[#64748B] text-[10px]">Technical</span>
+                                                    <div className="font-bold text-[#2563EB]">{q.technicalScore}%</div>
                                                 </div>
-                                                <div className="bg-[#0F172A] p-2 rounded-lg text-center border border-[#334155]">
-                                                    <span className="text-[#c4c6cd] text-[10px]">Communication</span>
-                                                    <div className="font-bold text-purple-400">{q.communicationScore}%</div>
+                                                <div className="bg-white p-2 rounded-lg text-center border border-[#E8E4DC]">
+                                                    <span className="text-[#64748B] text-[10px]">Communication</span>
+                                                    <div className="font-bold text-[#2563EB]">{q.communicationScore}%</div>
                                                 </div>
-                                                <div className="bg-[#0F172A] p-2 rounded-lg text-center border border-[#334155]">
-                                                    <span className="text-[#c4c6cd] text-[10px]">Confidence</span>
-                                                    <div className="font-bold text-amber-400">{q.confidenceScore}%</div>
+                                                <div className="bg-white p-2 rounded-lg text-center border border-[#E8E4DC]">
+                                                    <span className="text-[#64748B] text-[10px]">Confidence</span>
+                                                    <div className="font-bold text-amber-600">{q.confidenceScore}%</div>
                                                 </div>
                                             </div>
 
-                                            <p className="text-xs font-['Inter'] text-[#c4c6cd] bg-[#171f33]/60 p-2.5 rounded-lg border border-[#334155]/40">
+                                            <p className="text-xs font-['Inter'] text-[#475569] bg-white p-2.5 rounded-lg border border-[#E8E4DC]">
                                                 💡 <strong>AI Note:</strong> {q.aiNotes}
                                             </p>
                                         </div>
@@ -1342,16 +1341,16 @@ export const History = () => {
                                     {selectedInterview.improvementTips.map((tip, idx) => (
                                         <div
                                             key={idx}
-                                            className="glass-panel rounded-xl p-5 border border-[#334155] flex items-start gap-4"
+                                            className="bg-[#FAF8F5] rounded-xl p-5 border border-[#E8E4DC] flex items-start gap-4"
                                         >
-                                            <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB] shrink-0">
                                                 <span className="material-symbols-outlined text-[20px]">{tip.icon}</span>
                                             </div>
                                             <div>
-                                                <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#E2E8F0]">
+                                                <h5 className="font-['Hanken_Grotesk'] text-sm font-bold text-[#0F172A]">
                                                     {tip.title}
                                                 </h5>
-                                                <p className="font-['Inter'] text-xs text-[#c4c6cd] mt-1 leading-relaxed">
+                                                <p className="font-['Inter'] text-xs text-[#475569] mt-1 leading-relaxed">
                                                     {tip.description}
                                                 </p>
                                             </div>
@@ -1363,11 +1362,11 @@ export const History = () => {
                         </div>
 
                         {/* Drawer Footer Actions (Export & Share) */}
-                        <div className="p-6 border-t border-[#334155] bg-[#0F172A]/95 sticky bottom-0 z-20 flex flex-col sm:flex-row items-center gap-3">
+                        <div className="p-6 border-t border-[#E8E4DC] bg-white sticky bottom-0 z-20 flex flex-col sm:flex-row items-center gap-3">
                             <button
                                 onClick={handleExportPdf}
                                 disabled={isExporting}
-                                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition-all cursor-pointer disabled:opacity-50"
+                                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer disabled:opacity-50"
                             >
                                 {isExporting ? (
                                     <>
@@ -1399,26 +1398,26 @@ export const History = () => {
                 SHARE WITH MENTOR MODAL
             ========================================================= */}
             {isShareModalOpen && (
-                <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="glass-modal max-w-md w-full rounded-2xl p-6 border border-[#334155] flex flex-col gap-5 animate-in zoom-in-95 duration-150">
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white max-w-md w-full rounded-2xl p-6 border border-[#E8E4DC] shadow-2xl flex flex-col gap-5 animate-in zoom-in-95 duration-150">
                         
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-[#818cf8]">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
                                     <span className="material-symbols-outlined text-[20px]">send</span>
                                 </div>
                                 <div>
-                                    <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#E2E8F0]">
+                                    <h4 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#0F172A]">
                                         Share Review Session
                                     </h4>
-                                    <p className="font-['Inter'] text-xs text-[#c4c6cd]">
+                                    <p className="font-['Inter'] text-xs text-[#64748B]">
                                         Allow mentors or peers to review your AI session
                                     </p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsShareModalOpen(false)}
-                                className="text-[#c4c6cd] hover:text-white p-1"
+                                className="text-[#64748B] hover:text-[#0F172A] p-1"
                             >
                                 <span className="material-symbols-outlined text-[20px]">close</span>
                             </button>
@@ -1426,18 +1425,18 @@ export const History = () => {
 
                         {/* Link Box */}
                         <div className="flex flex-col gap-2">
-                            <label className="text-xs font-['JetBrains_Mono'] text-[#c4c6cd]">
+                            <label className="text-xs font-['JetBrains_Mono'] text-[#64748B]">
                                 Shareable Evaluation URL
                             </label>
-                            <div className="flex items-center gap-2 bg-[#020617] border border-[#334155] rounded-xl p-2 pl-3">
+                            <div className="flex items-center gap-2 bg-[#FAF8F5] border border-[#E8E4DC] rounded-xl p-2 pl-3">
                                 <input
                                     readOnly
                                     value={`https://interview.ai/review/share-${selectedInterview?.id || 'session'}`}
-                                    className="bg-transparent text-xs font-['JetBrains_Mono'] text-[#dae2fd] flex-1 focus:outline-none"
+                                    className="bg-transparent text-xs font-['JetBrains_Mono'] text-[#0F172A] flex-1 focus:outline-none"
                                 />
                                 <button
                                     onClick={handleCopyLink}
-                                    className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-['JetBrains_Mono'] font-bold transition-all flex items-center gap-1"
+                                    className="px-3 py-1.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-['JetBrains_Mono'] font-bold transition-all flex items-center gap-1"
                                 >
                                     <span className="material-symbols-outlined text-[14px]">
                                         {isCopied ? 'check' : 'content_copy'}
@@ -1448,13 +1447,13 @@ export const History = () => {
                         </div>
 
                         {/* Permissions Options */}
-                        <div className="flex flex-col gap-2.5 pt-2 border-t border-[#334155]/60 text-xs font-['Inter'] text-[#c4c6cd]">
+                        <div className="flex flex-col gap-2.5 pt-2 border-t border-[#E8E4DC] text-xs font-['Inter'] text-[#475569]">
                             <label className="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" defaultChecked className="rounded accent-indigo-500" />
+                                <input type="checkbox" defaultChecked className="rounded accent-[#2563EB]" />
                                 <span>Include AI per-question score rubric</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" defaultChecked className="rounded accent-indigo-500" />
+                                <input type="checkbox" defaultChecked className="rounded accent-[#2563EB]" />
                                 <span>Allow mentor to leave timestamped annotations</span>
                             </label>
                         </div>
@@ -1474,29 +1473,29 @@ export const History = () => {
 
             {/* Export Success Toast Notification */}
             {exportSuccessToast && (
-                <div className="fixed bottom-6 right-6 bg-[#0F172A] border border-emerald-500/50 px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-3 text-xs font-['JetBrains_Mono'] text-emerald-300 animate-in slide-in-from-bottom duration-200">
-                    <span className="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
+                <div className="fixed bottom-6 right-6 bg-white border border-emerald-300 px-4 py-3 rounded-xl shadow-xl z-50 flex items-center gap-3 text-xs font-['JetBrains_Mono'] text-emerald-800 animate-in slide-in-from-bottom duration-200">
+                    <span className="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
                     <span>Interview Evaluation PDF downloaded successfully!</span>
                 </div>
             )}
 
             {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-0 w-full bg-[#0F172A]/95 backdrop-blur-xl border-t border-[#334155] flex justify-around items-center py-3 px-4 z-50">
-                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+            <nav className="md:hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#E8E4DC] flex justify-around items-center py-3 px-4 z-50">
+                <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">dashboard</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Overview</span>
                 </button>
-                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#818cf8]">
+                <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-1 text-[#2563EB]">
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                         history
                     </span>
-                    <span className="text-[10px] font-['JetBrains_Mono']">History</span>
+                    <span className="text-[10px] font-['JetBrains_Mono'] font-bold">History</span>
                 </button>
-                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/interview/setup')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">psychology</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Practice</span>
                 </button>
-                <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#c4c6cd] hover:text-[#E2E8F0]">
+                <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 text-[#64748B] hover:text-[#0F172A]">
                     <span className="material-symbols-outlined text-[20px]">home</span>
                     <span className="text-[10px] font-['JetBrains_Mono']">Home</span>
                 </button>

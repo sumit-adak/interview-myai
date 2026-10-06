@@ -11,10 +11,10 @@ const Practice = lazy(() => import("./features/interview/pages/Practice"));
 const Settings = lazy(() => import("./features/interview/pages/Settings"));
 
 const PageLoader = () => (
-    <main className="min-h-screen flex items-center justify-center bg-[#0b1326] text-[#dae2fd]">
-        <div className="glass-panel rounded-2xl px-6 py-4 flex items-center gap-3 border border-[#334155]">
-            <span className="h-4 w-4 rounded-full border-2 border-[#b8c8e0] border-t-transparent animate-spin"></span>
-            <span className="font-['JetBrains_Mono'] text-sm text-[#c4c6cd]">Loading Interview AI...</span>
+    <main className="min-h-screen flex items-center justify-center bg-[#FAF8F5] text-[#0F172A]">
+        <div className="bg-white rounded-2xl px-6 py-4 flex items-center gap-3 border border-[#E8E4DC] shadow-sm">
+            <span className="h-4 w-4 rounded-full border-2 border-[#2563EB] border-t-transparent animate-spin"></span>
+            <span className="font-['JetBrains_Mono'] text-sm text-[#475569]">Loading Interview AI...</span>
         </div>
     </main>
 )

@@ -10,7 +10,7 @@ export const ThemeProvider = ({ children }) => {
                 return saved
             }
         }
-        return "system"
+        return "light"
     })
 
     const [resolvedTheme, setResolvedTheme] = useState("light")
