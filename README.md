@@ -5,10 +5,10 @@
   Smart insights • Personalized questions • Skill gap analysis • Preparation roadmap
 </p>
 
----
+\---
 
 ## ✨ Overview
-hiiii this is the final overview 
+
 AI Interview Report Generator is a modern full-stack web application that helps users prepare for interviews by analyzing their **resume, self-description, and job description**.
 
 It uses AI to generate:
@@ -17,7 +17,7 @@ It uses AI to generate:
 * 🧠 Skill gap insights
 * 📈 Personalized preparation plan
 
----
+\---
 
 ## 🌟 Key Features
 
@@ -27,9 +27,9 @@ It uses AI to generate:
 * 🧠 **Skill Gap Detection**
 * 📅 **Step-by-Step Preparation Plan**
 * 📥 **Download AI-Generated Resume**
-* ⚡ **Fast & Responsive UI**
+* ⚡ **Fast \& Responsive UI**
 
----
+\---
 
 ## 🖥️ Tech Stack
 
@@ -48,7 +48,7 @@ It uses AI to generate:
 * PDF-Parse (Text Extraction)
 * AI Integration
 
----
+\---
 
 ## 📂 Project Structure
 
@@ -67,7 +67,7 @@ Frontend/
  └── api/
 ```
 
----
+\---
 
 ## ⚙️ Getting Started
 
@@ -78,7 +78,7 @@ git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
 ```
 
----
+\---
 
 ### 2️⃣ Setup Backend
 
@@ -91,8 +91,8 @@ Create `.env` file:
 
 ```env id="m3p2x1"
 PORT=3000
-MONGO_URI=your_mongodb_uri
-AI_API_KEY=your_api_key
+MONGO\\\_URI=your\\\_mongodb\\\_uri
+AI\\\_API\\\_KEY=your\\\_api\\\_key
 ```
 
 Run server:
@@ -101,7 +101,7 @@ Run server:
 npm run dev
 ```
 
----
+\---
 
 ### 3️⃣ Setup Frontend
 
@@ -111,7 +111,7 @@ npm install
 npm run dev
 ```
 
----
+\---
 
 ## 🔗 API Endpoints
 
@@ -139,7 +139,7 @@ GET /api/interview
 GET /api/interview/resume/:interviewReportId
 ```
 
----
+\---
 
 ## 🧠 How It Works
 
@@ -153,16 +153,16 @@ GET /api/interview/resume/:interviewReportId
    * Preparation roadmap
 5. View and download your report
 
----
+\---
 
 ## 🎨 UI Highlights
 
-* Clean & modern design
+* Clean \& modern design
 * Dark theme friendly
 * Smooth user experience
 * Mobile responsive
 
----
+\---
 
 ## 📌 Future Enhancements
 
@@ -172,7 +172,7 @@ GET /api/interview/resume/:interviewReportId
 * 🧾 Resume scoring system
 * 🤝 Job matching feature
 
----
+\---
 
 ## 👨‍💻 Author
 
@@ -180,8 +180,9 @@ GET /api/interview/resume/:interviewReportId
 
 * 🔗 GitHub: https://github.com/sumit-adak
 
----
+\---
 
 ## ⭐ Show Your Support
 
 If you like this project, consider giving it a ⭐ on GitHub!
+
